@@ -13,7 +13,7 @@ $theme-colors: (
 
 );
 
-$height_header : 100px;
+$height_header : 50px;
 
 * {
   box-sizing: border-box;
@@ -29,8 +29,8 @@ header {
 }
 
 #accountButton {
-  width: 45px;
-  height: 45px;
+  width: $height_header * 0.75;
+  height: $height_header * 0.75;
 }
 
 .leftMenu {
