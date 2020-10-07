@@ -10,10 +10,10 @@ $theme-colors: (
         "dark":#2F2F2F,
         "danger":#B34646,
         "light": #fff,
-
+        "muted":#E6E6E6,
 );
 
-$height_header : 50px;
+$height_header: 50px;
 
 * {
   box-sizing: border-box;
@@ -21,11 +21,11 @@ $height_header : 50px;
 
 html {
   width: 100%;
-  height:100%;
+  height: 100%;
 }
 
 header {
-  height:$height_header;
+  height: $height_header;
 }
 
 #accountButton {
@@ -71,6 +71,43 @@ header {
   }
 }
 
+.custom-select {
+  height: 100%;
+}
+
+.filtre-materiel {
+  height: 60px;
+
+
+
+  .modeSlection {
+    li:not(:first-child):before {
+      content: "|";
+      position: absolute;
+      left: -0.5rem;
+    }
+
+    li {
+      margin: 0 0 0 1rem;
+      position: relative;
+    }
+
+    li>a {
+      text-underline: none;
+      font-weight: bold;
+    }
+
+    li > a:not(.selected) {
+      color: map.get($theme-colors, "muted");
+      cursor: pointer;
+    }
+
+    li > a.selected {
+      color: map.get($theme-colors, "dark");;
+    }
+  }
+
+}
 
 
 @import "../node_modules/bootstrap/scss/bootstrap";
