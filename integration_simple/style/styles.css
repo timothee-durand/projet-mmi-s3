@@ -22,9 +22,13 @@ header {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  position: relative;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  z-index: 10;
   min-width: 150px;
   max-width: 600px;
+  width: 15%;
 }
 .leftMenu a {
   margin-bottom: 2rem;
@@ -10117,6 +10121,11 @@ h3 {
   .table .thead-dark th {
     color: inherit;
     border-color: #dee2e6;
+  }
+}
+@media (min-width: 768px) {
+  main {
+    margin-left: 15%;
   }
 }
 

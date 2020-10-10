@@ -6,7 +6,7 @@
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>PictumAdmin | Réservations</title>
     <!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">-->
-    <link href="style/styles.css" rel="stylesheet">
+    <link href="../style/styles.css" rel="stylesheet">
     <script crossorigin="anonymous"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -21,7 +21,7 @@
 </head>
 <body class="h-100 w-100 bg-muted">
 <header class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between  p-2">
-    <img alt="Logo Pictum" class="logo h-100" src="img/logo_blanc@1.svg">
+    <img alt="Logo Pictum" class="logo h-100" src="../img/logo_blanc@1.svg">
 
     <div class="dropdown">
         <button aria-expanded="false" aria-haspopup="true" class="rounded-circle bg-primary border-0"
@@ -35,7 +35,7 @@
                   fill-rule="evenodd"/>
         </svg>
 
-        <div aria-labelledby="accountButton" class="dropdown-menu">
+        <div aria-labelledby="accountButton" class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="#">Voir vue étudiant</a>
             <a class="dropdown-item text-danger" href="#">Se déconnecter</a>
         </div>
@@ -45,7 +45,7 @@
 <main class="d-flex h-100">
     <section
             class="leftMenu bg-dark text-light w-md-25 d-none h-100 d-md-flex flex-column align-items-center pt-md-3 pt-1">
-        <a class="selected" href="#">Réservations</a>
+        <a class="selected" href="index.html">Réservations</a>
         <a href="#">Matériel</a>
         <a href="#">Créneaux</a>
         <a href="#">Mails</a>
@@ -114,7 +114,7 @@
         <!--        Liste Matériel ou autre -->
         <section id="liste" >
             <div class="card row w-100 bg-white rounded d-flex justify-content-between flex-row align-items-center p-2 filtre-materiel mt-3">
-                <img alt="Image zoom h4n" class="img-circle h-75 img-fluid" src="img/zoom_h4n.jpg">
+                <img alt="Image zoom h4n" class="img-circle h-75 img-fluid" src="../img/zoom_h4n.jpg">
                 <p class="nom-appareil m-0">ZOOM H4N</p>
                 <p class="reference-appareil text-capitalize  m-0">L2-ENR-ZOOM-01</p>
                 <p class="text-primary  m-0">Disponible</p>

@@ -14,8 +14,8 @@ $theme-colors: (
 );
 
 $height_header: 50px;
-
 $size_button_icon: 25px;
+$width_left_menu : 15%;
 
 * {
   box-sizing: border-box;
@@ -40,9 +40,13 @@ header {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  position: relative;
+  position: fixed;
+  top: $height_header;
+  left: 0;
+  z-index: 10;
   min-width: 150px;
   max-width: 600px;
+  width: $width_left_menu;
 
   a {
     margin-bottom: 2rem;
@@ -72,6 +76,10 @@ header {
 
   }
 }
+
+
+
+
 
 .custom-select {
   height: 100%;
@@ -124,3 +132,11 @@ header {
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
+
+//personalised responsive
+
+@include media-breakpoint-up(md) {
+  main {
+    margin-left: $width_left_menu;
+  }
+}
