@@ -17,6 +17,7 @@ $height_header: 50px;
 $size_button_icon: 25px;
 $width_left_menu : 15%;
 
+
 * {
   box-sizing: border-box;
 }
@@ -130,6 +131,14 @@ header {
   clip-path: circle(40%);
 
 }
+
+.pres-mat {
+  width: 50%;
+  height: 340px;
+}
+
+
+
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 

@@ -92,6 +92,11 @@ header {
   clip-path: circle(40%);
 }
 
+.pres-mat {
+  width: 50%;
+  height: 340px;
+}
+
 /*!
  * Bootstrap v4.5.2 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
