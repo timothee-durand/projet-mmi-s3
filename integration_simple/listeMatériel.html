@@ -19,7 +19,7 @@
 
 
 </head>
-<body class="h-100 w-100">
+<body class="h-100 w-100 bg-muted">
 <header class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between  p-2">
     <img alt="Logo Pictum" class="logo h-100" src="img/logo_blanc@1.svg">
 
@@ -61,12 +61,14 @@
     </section>
 
     <div class="w-100 w-md-75 m-1 m-md-3 container-fluid">
+
+        <!--        carte recherche  -->
         <div class="card row w-100 bg-white rounded d-flex justify-content-between flex-row align-items-center p-2 filtre-materiel">
-<!--            Recherche -->
+            <!--            Recherche -->
             <form class="form-inline w-25">
                 <div class="input-group">
                     <input class="form-control input-group-append" id="search" placeholder="Recherche" type="search">
-                    <button type="submit" class="btn-primary input-group-prepend btn">
+                    <button class="btn-primary input-group-prepend btn" type="submit">
                         <svg class="bi bi-search" fill="currentColor" height="1em" viewBox="0 0 16 16" width="1em"
                              xmlns="http://www.w3.org/2000/svg">
                             <path d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"
@@ -77,22 +79,21 @@
                     </button>
                 </div>
             </form>
-<!--Mode-->
+            <!--Mode-->
             <div class="w-25 h-50 d-inline-flex  ">
                 <p>Mode : </p>
                 <ul class="modeSlection list-unstyled d-inline-flex w-50">
                     <li><a href="#">Kit</a></li>
-                    <li><a href="#" class="selected">Matériel</a></li>
+                    <li><a class="selected" href="#">Matériel</a></li>
                     <li><a href="#">Type</a></li>
                     <li><a href="#">Département</a></li>
                 </ul>
             </div>
 
-
             <div class="input-group w-25 h-100">
-                <select class="custom-select" id="typeMateriel" aria-label="Example select with button addon">
+                <select aria-label="Example select with button addon" class="custom-select" id="typeMateriel">
                     <option selected>Type de matériel</option>
-                    <option value="" >Bridge</option>
+                    <option value="">Bridge</option>
                     <option value="">Zoom</option>
                     <option value="">Mandarine</option>
                     <option value="">Micro</option>
@@ -102,12 +103,42 @@
                 </div>
             </div>
 
-            <button id="add" class="btn btn-primary h-50" type="button">
-                <svg viewBox="0 0 16 16" class="bi bi-plus text-light w-100 h-100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg></button>
+            <a class="btn text-primary p-0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21" class="btn-icon">
+                    <path id="Icon_material-add" data-name="Icon material-add" d="M28.5,19.5h-9v9h-3v-9h-9v-3h9v-9h3v9h9Z" transform="translate(-7.5 -7.5)"/>
+                </svg>
+            </a>
+
         </div>
+
+        <!--        Liste Matériel ou autre -->
+        <section id="liste" >
+            <div class="card row w-100 bg-white rounded d-flex justify-content-between flex-row align-items-center p-2 filtre-materiel mt-3">
+                <img alt="Image zoom h4n" class="img-circle h-75 img-fluid" src="img/zoom_h4n.jpg">
+                <p class="nom-appareil m-0">ZOOM H4N</p>
+                <p class="reference-appareil text-capitalize  m-0">L2-ENR-ZOOM-01</p>
+                <p class="text-primary  m-0">Disponible</p>
+
+                <div>
+                  <a class="btn text-primary p-0">
+                        <svg class="bi bi-pencil-fill btn-icon" fill="currentColor" height="1em" viewBox="0 0 16 16"
+                             width="1em" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"
+                                  fill-rule="evenodd"/>
+                        </svg>
+                    </a>
+
+                    <a class="btn text-primary p-0">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill btn-icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
     </div>
+
 
 </main>
 </body>

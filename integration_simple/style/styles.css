@@ -79,6 +79,15 @@ header {
   color: #2F2F2F;
 }
 
+.btn-icon {
+  width: 25px;
+  height: 25px;
+}
+
+.img-circle {
+  clip-path: circle(40%);
+}
+
 /*!
  * Bootstrap v4.5.2 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
