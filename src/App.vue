@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <header class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3">
-      <img alt="Logo Pictum" class="logo w-auto h-75" src="./assets/img/fond_sombre_st_logo.svg">
+    <header class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
+      <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
 
       <div class="dropdown">
         <button aria-expanded="false" aria-haspopup="true" id="accountButton" class="rounded-circle bg-primary border-0"
@@ -19,6 +19,7 @@
           <a class="dropdown-item text-danger" href="#">Se déconnecter</a>
         </div>
       </div>
+
     </header>
     <router-view/>
   </div>
@@ -29,10 +30,20 @@ export default {
   name: 'App'
 }
 </script>
-// lang="scss"
+
 <style >
-  header {
-    height: 100px;
+  :root
+  {
+    --header-height: 70px;
+    --navbar-height: 40px;
+    --sidebar-width: 20%;
+  }
+  .spacer
+  {
+    margin-top: var(--navbar-height);
+  }
+  .appHeader {
+    height: var(--header-height);
   }
   #accountButton {
     width: 45px;

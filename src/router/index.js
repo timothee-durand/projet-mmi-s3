@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Accueil from '@/components/Accueil'
+
+import Accueil from '@/components/client/Accueil'
 
 Vue.use(Router)
 
