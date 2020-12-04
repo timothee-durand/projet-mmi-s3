@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar type="secondary" style="margin-top: 70px" fixed="top" variant="secondary" :class="adaptToSidebar">
-      <b-navbar-nav class="ml-auto mr-auto" style="min-width: 50%" justified>
+      <b-navbar-nav class="ml-auto mr-auto" style="min-width: 75%" justified>
         <b-nav-item class="active-nav" v-for="categorie in verifiedCategories" :key="categorie" href="#" link-classes="text-light">{{categorie}}</b-nav-item>
       </b-navbar-nav>
     </b-navbar>

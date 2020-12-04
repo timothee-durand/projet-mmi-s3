@@ -31,7 +31,8 @@ export default {
 }
 </script>
 
-<style >
+<style>
+
   :root
   {
     --header-height: 70px;
