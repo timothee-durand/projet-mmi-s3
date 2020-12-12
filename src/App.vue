@@ -21,13 +21,23 @@
       </div>
 
     </header>
+    <sidebar-admin v-if="admin"></sidebar-admin>
     <router-view/>
   </div>
 </template>
 
 <script>
+import SidebarAdmin from '@/components/SidebarAdmin.vue'
 export default {
-  name: 'App'
+  name: 'App',
+  components:{
+    SidebarAdmin
+  },
+  data () {
+    return {
+      admin: true
+    }
+  },
 }
 </script>
 
