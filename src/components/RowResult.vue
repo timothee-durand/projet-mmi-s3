@@ -1,27 +1,20 @@
 <template>
   <b-card>
-    <b-row  align-v="center">
-      <b-col cols="1" >
+    <b-row  align-v="center" align-h="around">
+      <div>
         <b-img rounded="circle" :src="img" width="20px" height="20px"></b-img>
-      </b-col>
-
-      <b-col cols="3" >
+      </div>
          <p>{{nom}}</p>
-      </b-col>
-
-      <b-col cols="3" >
         <p>{{ref}}</p>
-      </b-col>
+        <p :class="'text-'+dispo.variant" v-if="!disableDispo">{{dispo.text}}</p>
 
-      <b-col cols="3" >
-        <p :class="'text-'+dispo.variant">{{dispo.text}}</p>
-      </b-col>
+        <div class="buttons">
+          <b-button v-for="button in buttons" @click="$emit(button.eventName, nom)" :key="button.icon" variant="light" size="sm">
+            <b-icon :icon="button.icon" :variant="button.variant"></b-icon>
+          </b-button>
+        </div>
 
-      <b-col cols="2" >
-        <b-button v-for="button in buttons" @click="$emit(button.eventName, nom)" :key="button.icon" variant="light" size="sm">
-          <b-icon :icon="button.icon" :variant="button.variant"></b-icon>
-        </b-button>
-      </b-col>
+
 
     </b-row>
   </b-card>
@@ -55,6 +48,10 @@ export default {
           variant:"success"
         }
       }
+    },
+    disableDispo:{
+      type:Boolean,
+      default:false
     },
     buttons:{
       type:Array,
