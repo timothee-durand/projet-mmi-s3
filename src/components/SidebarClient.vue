@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-sidebar :width="this.sidebarWidth" id="sidebar-1" title="Sidebar" fixed="top" shadow visible no-header class="d-flex justify-content-center">
+    <b-sidebar :width="this.sidebarWidth" id="sidebar-1" title="Sidebar" fixed="top" shadow no-close-on-route-change visible no-header class="d-flex justify-content-center position-relative">
       <slot></slot>
     </b-sidebar>
   </div>

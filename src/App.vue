@@ -21,7 +21,7 @@
       </div>
 
     </header>
-    <sidebar-admin v-if="admin"></sidebar-admin>
+    <sidebar-admin ></sidebar-admin>
     <router-view/>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
   },
   data () {
     return {
-      admin: true
+
     }
   },
 }
