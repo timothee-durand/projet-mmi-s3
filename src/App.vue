@@ -60,4 +60,9 @@ export default {
     width: 45px;
     height: 45px;
   }
+
+  .containerRight {
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
+  }
 </style>

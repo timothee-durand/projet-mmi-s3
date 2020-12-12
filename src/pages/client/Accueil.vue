@@ -87,6 +87,7 @@ export default {
     width: calc(100% - var(--sidebar-width));
     margin-left: var(--sidebar-width);
   }
+
   h3
   {
     font-size: 1.2rem;

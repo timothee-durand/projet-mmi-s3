@@ -5,6 +5,7 @@ import Accueil from '@/pages/client/Accueil'
 import Search from '@/pages/client/Search'
 import Reservation from '@/pages/client/Reservation'
 import Accueil_Admin from '@/pages/admin/Accueil_Admin.vue'
+import Materiel_Admin from '@/pages/admin/Materiel_Admin.vue'
 
 Vue.use(Router)
 
@@ -18,5 +19,6 @@ export default new Router({
 
     //admin
     {path: '/admin/', name: 'Accueil', component: Accueil_Admin},
+    {path: '/materiel/', name: 'MaterielAdmin', component: Materiel_Admin},
   ]
 })

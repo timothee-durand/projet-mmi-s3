@@ -1,7 +1,6 @@
 <template>
-  <div class="admin">
-
-
+  <div class="containerRight">
+    <h1>Réservation</h1>
   </div>
 </template>
 
