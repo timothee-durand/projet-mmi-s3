@@ -173,7 +173,7 @@
 </template>
 
 <script>
-import SidebarClient from '@/components/client/SidebarClient'
+import SidebarClient from '@/components/SidebarClient'
 
 export default {
   name: 'Reservation',

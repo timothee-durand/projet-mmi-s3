@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Accueil from '@/components/client/Accueil'
-import Search from '@/components/client/Search'
-import Reservation from '@/components/client/Reservation'
+import Accueil from '@/pages/client/Accueil'
+import Search from '@/pages/client/Search'
+import Reservation from '@/pages/client/Reservation'
 
 Vue.use(Router)
 

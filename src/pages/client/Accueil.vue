@@ -61,8 +61,8 @@
 </template>
 
 <script>
-import CategoriesHeader from '@/components/client/CategoriesHeader'
-import SidebarClient from '@/components/client/SidebarClient'
+import CategoriesHeader from '@/components/CategoriesHeader'
+import SidebarClient from '@/components/SidebarClient'
 
 export default {
   name: 'Accueil',
