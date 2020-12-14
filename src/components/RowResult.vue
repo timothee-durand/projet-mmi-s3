@@ -5,7 +5,7 @@
         <img  src="../assets/img/person.png" />
       </div>
          <p>{{nom}}</p>
-        <p v-if="!disableRef">{{ref}}</p>
+        <p v-if="!disableRef">{{reference}}</p>
         <p :class="'text-'+dispo.variant" v-if="!disableDispo">{{dispo.text}}</p>
 
         <div class="buttons">

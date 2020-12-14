@@ -10,7 +10,7 @@
             <h2 class="text-center">Rendez-vous</h2>
             <p>Prochains rendez-vous :</p>
 
-            <row-result id="0" :ref="'Grégoire DURAND'" nom="Jeu 12 Sept"  :buttons="buttonsRdv" disable-dispo></row-result>
+            <row-result id="0" reference="Grégoire DURAND" nom="Jeu 12 Sept"  :buttons="buttonsRdv" disable-dispo></row-result>
 
             <router-link to="" class="btn rounded-pill bg-success text-light p-2 mx-auto d-block mt-4"  style="max-width: 15rem;">Voir tous mes rendez-vous</router-link>
           </b-card>
@@ -24,7 +24,7 @@
             <h2 class="text-center">Créneaux</h2>
             <p>Prochaines indisponibilités :</p>
 
-            <row-result id="0" ref="Mardi 21 sept. - 14h00" nom="Lundi 20 sept. - 14h00"  :buttons="buttonsCrnx" disable-dispo></row-result>
+            <row-result id="0" reference="Mardi 21 sept. - 14h00" nom="Lundi 20 sept. - 14h00"  :buttons="buttonsCrnx" disable-dispo></row-result>
 
             <router-link to="" class="btn rounded-pill bg-success text-light p-2 mx-auto d-block mt-4"  style="max-width: 15rem;">Configurer mes créneaux</router-link>
           </b-card>
