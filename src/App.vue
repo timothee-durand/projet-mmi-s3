@@ -7,15 +7,18 @@
         <b-dropdown-item><router-link to="/">Voir vue étudiant</router-link></b-dropdown-item>
         <b-dropdown-item class="text-danger" @click="console.log('disconnect')">Se déconnecter</b-dropdown-item>
       </b-dropdown>
-
+      <b-button @click="login">Login</b-button>
     </header>
     <sidebar-admin ></sidebar-admin>
+
     <router-view/>
   </div>
 </template>
 
 <script>
 import SidebarAdmin from '@/components/SidebarAdmin.vue'
+import ajaxService from '@/services/ajaxService.js'
+import param from '@/param/param.js'
 export default {
   name: 'App',
   components:{
@@ -23,7 +26,19 @@ export default {
   },
   data () {
     return {
+      isConnected:false,
+    }
+  },
+  created () {
 
+   // if(!this.isConnected) {
+   //   window.location = param.login;
+   // }
+  },
+
+  methods: {
+    login () {
+      ajaxService.getApi("login").then(data => console.log(data)).catch(error => console.log(error));
     }
   },
 }

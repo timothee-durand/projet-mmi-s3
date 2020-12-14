@@ -2,21 +2,26 @@ import axios from 'axios'
 import param from '@/param/param.js'
 
 export default {
-  headers:{
-
-  },
-
   getApi(type) {
-    return axios({
-      method:"get",
+    // var config = {
+    //   method: 'get',
+    //   url: 'https://mmi-projet.pu-pm.univ-fcomte.fr/~mmiprojet2021_01/api/login',
+    //   auth: {
+    //     username: param.username,
+    //     password: param.password
+    //   }
+    // };
+
+    console.log(type, param);
+
+    return axios.get(param.login, {
       auth: {
         username: param.username,
         password: param.password
-      },
-      url: param[type]
+      }
     }).then(
       response => {
-        return response.data;
+        return response;
       }
     )
   }
