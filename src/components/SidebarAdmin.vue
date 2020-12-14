@@ -11,7 +11,7 @@
 
     <ul class="m-0 p-0"  style="margin-top: 20rem !important;">
       <li>
-        <router-link to="/contat-admin" class="text-decoration-none text-white">Contact Admin</router-link>
+        <router-link to="/contact-admin" class="text-decoration-none text-white">Contact Admin</router-link>
       </li>
       <li>
         <router-link to="/mentions-legales" class="text-decoration-none text-white">Mentions légales</router-link>
