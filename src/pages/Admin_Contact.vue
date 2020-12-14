@@ -21,7 +21,18 @@
 
 <script>
 export default {
-name: "Admin_Contact"
+name: "Admin_Contact",
+  data () {
+    return {
+      subject:'',
+      message:''
+    }
+  },
+  methods: {
+    sendMail () {
+      
+    }
+  },
 }
 </script>
 
