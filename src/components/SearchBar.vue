@@ -19,14 +19,14 @@
     </b-form>
 
     <!--Mode-->
-    <b-form inline class="flex flex-nowrap">
+    <b-form inline class="flex flex-nowrap" v-if="modes.length !== 0">
       <label for="selectMode" class="mr-2">Mode: </label>
       <b-form-radio-group class="flex w-100" id="selectMode" v-model="mode" buttons size="sm"
                           @change="$emit('changeType', mode)" :options="modes">
       </b-form-radio-group>
     </b-form>
 
-    <b-form inline >
+    <b-form inline v-if="typesMateriel.length !== 0" >
       <b-select :disabled="mode === 'departements' || mode === 'types'" :options="typesMateriel" label-field="Types de matériel" v-model="typesMaterielSelect">
         <b-select-option disabled value="default" >Types de matériel</b-select-option>
       </b-select>

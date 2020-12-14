@@ -1,11 +1,11 @@
 <template>
   <b-card>
     <b-row  align-v="center" align-h="around">
-      <div>
-        <b-img rounded="circle" :src="img" width="20px" height="20px"></b-img>
+      <div >
+        <img  src="../assets/img/person.png" />
       </div>
          <p>{{nom}}</p>
-        <p>{{ref}}</p>
+        <p v-if="!disableRef">{{ref}}</p>
         <p :class="'text-'+dispo.variant" v-if="!disableDispo">{{dispo.text}}</p>
 
         <div class="buttons">
@@ -36,7 +36,7 @@ export default {
       type: String,
       default:"Kit 01"
     },
-    ref:{
+    reference:{
       type: String,
       default:"L1-MAL-PHOT-01"
     },
@@ -50,6 +50,10 @@ export default {
       }
     },
     disableDispo:{
+      type:Boolean,
+      default:false
+    },
+    disableRef:{
       type:Boolean,
       default:false
     },
