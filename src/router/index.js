@@ -23,7 +23,7 @@ export default new Router({
 
 
     //admin
-    {path: '/admin/', name: 'Accueil', component: Accueil_Admin},
+    {path: '/admin/', name: 'AccueilAdmin', component: Accueil_Admin},
     {path: '/materiel/', name: 'MaterielAdmin', component: Materiel_Admin},
     {path: '/creneaux/', name: 'CreneauxAdmin', component: Creneaux_Admin},
     {path: '/mails/', name: 'MailAdmin', component: Mail_Admin},

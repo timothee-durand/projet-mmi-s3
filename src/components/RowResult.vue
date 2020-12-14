@@ -25,7 +25,7 @@ export default {
   name: 'RowResult',
   props: {
     id:{
-      type: Number,
+      type: String,
       required:true
     },
     img: {

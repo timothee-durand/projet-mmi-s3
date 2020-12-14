@@ -30,7 +30,7 @@ name: "Admin_Contact",
   },
   methods: {
     sendMail () {
-      
+
     }
   },
 }
