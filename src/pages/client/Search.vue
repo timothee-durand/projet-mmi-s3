@@ -49,8 +49,8 @@
 
       </form>
     </SidebarClient>
-    <div class="containerRight bg-dark">
-      <div class="container-fluid bg-dark">
+    <div class="containerRight bg-almostWhite">
+      <div class="container-fluid bg-almostWhite">
         <b-row gutter-2>
           <div class="p-4 col-md-6 col-12 mt-3">
             <div class="c-card shadow p-4"

@@ -48,7 +48,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+  @import "../styles/custom-bootstrap.scss";
 
   .adaptSidebar{
     width: calc(100vw - var(--sidebar-width));
@@ -60,8 +62,8 @@ export default {
 
   .navbar {
     height: var(--navbar-height);
-    border-bottom: solid 4px #6c757d;
-    border-top: solid 6px #6c757d;
+    border-bottom: solid 4px $secondary;
+    border-top: solid 6px $secondary;
   }
 
   .navbar-nav{
@@ -73,7 +75,7 @@ export default {
   }
 
   .active-nav {
-    border-bottom: solid 4px lawngreen;
+    border-bottom: solid 4px $primary;
   }
 
   .inactive-nav {

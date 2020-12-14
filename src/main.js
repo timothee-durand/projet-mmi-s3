@@ -4,11 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+/*Bootstrap*/
 import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './styles/custom-bootstrap.scss'
 
-/* import './styles/custom-bootstrap.scss' */
+/*Fontawesome*/
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 // utiliser bootstrap vue
 Vue.use(BootstrapVue)
