@@ -14,7 +14,8 @@ export default {
     sidebarWidth: {
       type: String,
       default: 'var(--sidebar-width)'
-    }
+    },
+
   }
 }
 </script>
