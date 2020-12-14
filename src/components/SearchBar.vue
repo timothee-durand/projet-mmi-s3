@@ -20,7 +20,7 @@
 
     <!--Mode-->
     <b-form inline class="flex flex-nowrap" v-if="modes.length !== 0">
-      <label for="selectMode" class="mr-2">Mode: </label>
+      <label for="selectMode" class="mr-2 text-capitalize">{{ libMode }}: </label>
       <b-form-radio-group class="flex w-100" id="selectMode" v-model="mode" buttons size="sm"
                           @change="$emit('changeType', mode)" :options="modes">
       </b-form-radio-group>
@@ -28,7 +28,7 @@
 
     <b-form inline v-if="typesMateriel.length !== 0" >
       <b-select :disabled="mode === 'departements' || mode === 'types'" :options="typesMateriel" label-field="Types de matériel" v-model="typesMaterielSelect">
-        <b-select-option disabled value="default" >Types de matériel</b-select-option>
+        <b-select-option disabled value="default" class="text-capitalize">{{ libType }} :</b-select-option>
       </b-select>
     </b-form>
 
@@ -71,7 +71,15 @@ export default {
         {text: 'Lumière', value: 'lumieres'},
       ];
     }
-  }
+  },
+    libMode:{
+      type:String,
+      default:"Mode"
+    },
+    libType:{
+      type:String,
+      default:"Type"
+    }
   },
 }
 </script>

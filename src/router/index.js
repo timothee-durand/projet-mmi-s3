@@ -9,6 +9,7 @@ import Materiel_Admin from '@/pages/admin/Materiel_Admin.vue'
 import Creneaux_Admin from '@/pages/admin/Creneaux_Admin.vue'
 import Mail_Admin from '@/pages/admin/Mail_Admin.vue'
 import Blacklist_Admin from '@/pages/admin/Blacklist_Admin.vue'
+import Roles_Admin from '@/pages/admin/Roles_Admin.vue'
 
 Vue.use(Router)
 
@@ -26,5 +27,6 @@ export default new Router({
     {path: '/creneaux/', name: 'CreneauxAdmin', component: Creneaux_Admin},
     {path: '/mails/', name: 'MailAdmin', component: Mail_Admin},
     {path: '/blacklist/', name: 'BlacklistAdmin', component: Blacklist_Admin},
+    {path: '/roles/', name: 'RoleAdmin', component: Roles_Admin},
   ]
 })
