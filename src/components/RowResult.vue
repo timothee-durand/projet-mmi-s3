@@ -9,7 +9,7 @@
         <p :class="'text-'+dispo.variant" v-if="!disableDispo">{{dispo.text}}</p>
 
         <div class="buttons">
-          <b-button v-for="button in buttons" @click="$emit(button.eventName, nom)" :key="button.icon" variant="light" size="sm">
+          <b-button v-for="button in buttons" @click="$emit(button.eventName, nom)" :key="button.icon" variant="light" size="sm" class="mr-2">
             <b-icon :icon="button.icon" :variant="button.variant"></b-icon>
           </b-button>
         </div>
