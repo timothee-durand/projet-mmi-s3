@@ -6,6 +6,8 @@ import router from './router'
 import Vuex from 'vuex'
 import store from '@/store/index.js'
 
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -16,6 +18,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 // utiliser bootstrap vue
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
+
+//ajout axios vue
+Vue.use(VueAxios, axios)
 
 //ajout vueX
 Vue.use(Vuex)

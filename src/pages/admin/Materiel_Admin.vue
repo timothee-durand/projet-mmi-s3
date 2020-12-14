@@ -3,12 +3,10 @@
     <h1>Matériel</h1>
     <search-bar></search-bar>
 
-    <row-result id="0" :buttons="buttons" reference="L1-MAL-PHOT-01" @lock-mat="lockMatMeth"></row-result>
+    <row-result id="0" :buttons="buttons" reference="L1-MAL-PHOT-01" @lock-mat="lockMatMeth" class="mt-3"></row-result>
 
     <modal-pictum title="Test"  :id-modal="idModal" text-cancel-button="Fermer" :callback-ok="modifMatApi">
-
         <p>Êtes-vous sûrs de vouloir mettre ce matériel en indisponible ?</p>
-
 
     </modal-pictum>
   </div>
