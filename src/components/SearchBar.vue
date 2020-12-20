@@ -33,7 +33,7 @@
     </b-form>
 
 
-    <b-button @click="$emit('add', mode)" variant="light">
+    <b-button @click="$emit('addMat', mode)" variant="light">
       <b-icon-plus size="md"></b-icon-plus>
     </b-button>
   </div>
