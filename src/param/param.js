@@ -1,8 +1,14 @@
-const host = "https://mmi-projet.pu-pm.univ-fcomte.fr/~mmiprojet2021_01/api/";
+const host = "https://pictum.pu-pm.univ-fcomte.fr/api/";
 
 export default {
   login: host + "login",
-  //momentanné, pour mmi-projet
-  username: "tdurand5",
-  password:""
+  keyTokenLocal: "token",
+
+
+  //routes
+  materiels: host +  "materiels",
+  types: host +  "types",
+  malettes: host +  "malettes",
+  departements: host +  "departements",
+
 }

@@ -27,7 +27,7 @@
     </b-form>
 
     <b-form inline v-if="typesMateriel.length !== 0" >
-      <b-select :disabled="mode === 'departements' || mode === 'types'" :options="typesMateriel" label-field="Types de matériel" v-model="typesMaterielSelect">
+      <b-select @change="$emit('changeTypeMat', typesMaterielSelect)" :disabled="mode === 'departements' || mode === 'types' || mode === 'malettes'" :options="typesMateriel" label-field="Types de matériel" v-model="typesMaterielSelect">
         <b-select-option disabled value="default" class="text-capitalize">{{ libType }} :</b-select-option>
       </b-select>
     </b-form>

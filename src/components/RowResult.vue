@@ -2,7 +2,7 @@
   <b-card>
     <b-row  align-v="center" align-h="around">
       <div >
-        <img  src="../assets/img/person.png" />
+        <img  :src="img" class="rounded-pill" width="20px"  />
       </div>
          <p>{{nom}}</p>
         <p v-if="!disableRef">{{reference}}</p>

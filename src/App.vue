@@ -7,6 +7,7 @@
         <b-dropdown-item><router-link to="/">Voir vue étudiant</router-link></b-dropdown-item>
         <b-dropdown-item class="text-danger" @click="console.log('disconnect')">Se déconnecter</b-dropdown-item>
       </b-dropdown>
+
       <b-button @click="login">Login</b-button>
     </header>
     <sidebar-admin ></sidebar-admin>
@@ -18,7 +19,8 @@
 <script>
 import SidebarAdmin from '@/components/SidebarAdmin.vue'
 import ajaxService from '@/services/ajaxService.js'
-import param from '@/param/param.js'
+import appService from '@/services/appService.js'
+
 export default {
   name: 'App',
   components:{
@@ -30,16 +32,23 @@ export default {
     }
   },
   created () {
-
-   // if(!this.isConnected) {
-   //   window.location = param.login;
-   // }
+    this.login();
   },
 
   methods: {
     login () {
-      ajaxService.getApi("login").then(data => console.log(data)).catch(error => console.log(error));
-    }
+      //vérifie si on est identitifé par le CAS
+      //ajaxService.getApi("isAuthenticatedCAS").then(data => console.log(data)).catch(error => console.log(error));
+     // window.location = param.login;
+      //ajaxService.test();
+      let params = new FormData();
+      params.append("username", "tdurand5");
+      params.append("password", "tdurand5");
+      ajaxService.postAPI("login", params).then(result => {
+        console.log(result);
+        appService.setLocal(result.token)
+      });
+    },
   },
 }
 </script>
