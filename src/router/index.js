@@ -11,6 +11,7 @@ import Mail_Admin from '@/pages/admin/Mail_Admin.vue'
 import Blacklist_Admin from '@/pages/admin/Blacklist_Admin.vue'
 import Roles_Admin from '@/pages/admin/Roles_Admin.vue'
 import Admin_Contact from '@/pages/Admin_Contact.vue'
+import Article from "../pages/client/Article";
 
 Vue.use(Router)
 
@@ -20,6 +21,7 @@ export default new Router({
     {path: '/', name: 'Accueil', component: Accueil},
     {path: '/search', name: 'Search', component: Search},
     {path: '/reservation', name: 'Reservation', component: Reservation},
+    {path: '/article', name: 'Article', component: Article},
 
 
     //admin

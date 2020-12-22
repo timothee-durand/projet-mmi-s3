@@ -10,22 +10,19 @@
 
       <b-button @click="login">Login</b-button>
     </header>
-    <sidebar-admin ></sidebar-admin>
 
     <router-view/>
   </div>
 </template>
 
 <script>
-import SidebarAdmin from '@/components/SidebarAdmin.vue'
+
 import ajaxService from '@/services/ajaxService.js'
 import appService from '@/services/appService.js'
 
 export default {
   name: 'App',
-  components:{
-    SidebarAdmin
-  },
+
   data () {
     return {
       isConnected:false,
@@ -60,6 +57,7 @@ export default {
     --header-height: 70px;
     --navbar-height: 40px;
     --sidebar-width: 20%;
+    --sidebar-width-admin: 15%;
   }
   .spacer
   {
@@ -78,8 +76,18 @@ export default {
     margin-left: var(--sidebar-width);
   }
 
+  .containerRightAdmin {
+    width: calc(100% - var(--sidebar-width-admin));
+    margin-left: var(--sidebar-width-admin);
+  }
+
   .button-drop-pill{
     width: 45px;
     height: 45px;
+  }
+
+  .c-card
+  {
+    border-radius: 10px; background-color: #ffffff; overflow: hidden;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <sidebar-client >
+  <sidebar-client sidebarWidth="var(--sidebar-width-admin)">
     <b-nav vertical class="w-100" pills  >
         <b-nav-item><router-link to="/admin/" class="title-page" :active-class="'page-selected'">Réservations</router-link></b-nav-item>
         <b-nav-item><router-link to="/materiel/" class="title-page" :active-class="'page-selected'">Matériel</router-link></b-nav-item>

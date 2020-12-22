@@ -13,8 +13,8 @@
       </div>
     </SidebarClient>
 
-    <div class="containerRight bg-secondary">
-      <div class="container-fluid p-4 bg-secondary ">
+    <div class="containerRight">
+      <div class="container-fluid p-4 ">
       <b-row>
 
         <div class="c-card p-3 col-12 mt-3 shadow"
