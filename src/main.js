@@ -25,7 +25,7 @@ Vue.use(BootstrapVueIcons)
 Vue.use(VueAxios, axios)
 
 axios.defaults.headers = {
-  "Authorization": "Bearer " + appService.getLocal()
+  'Authorization': 'Bearer ' + appService.getLocal()
 }
 
 //ajout vueX
@@ -34,13 +34,11 @@ Vue.use(Vuex)
 // en dev
 Vue.config.productionTip = false
 
-
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

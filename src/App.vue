@@ -40,7 +40,7 @@ export default {
       //ajaxService.test();
       let params = new FormData();
       params.append("username", "tdurand5");
-      params.append("password", "tdurand");
+      params.append("password", "tdurand5");
       ajaxService.postAPI("login", params).then(result => {
         console.log(result);
         appService.setLocal(result.token)
@@ -49,7 +49,7 @@ export default {
     verifyLDAP(){
       let params = new FormData();
       params.append("id_univ", "tdurand5");
-      ajaxService.postAPI("getLDAP", params).then(result => console.log(result));
+      ajaxService.postAPI("getLDAP", params).then(result => console.log(result)).catch(error => console.log(error));
     }
   },
 }
