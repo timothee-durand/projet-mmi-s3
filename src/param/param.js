@@ -10,5 +10,7 @@ export default {
   types: host +  "types",
   malettes: host +  "malettes",
   departements: host +  "departements",
-
+  gestionnaires: host +  "gestionnaires",
+  allLDAP : host + "ldap/all",
+  getLDAP : host + "ldap/verify",
 }
