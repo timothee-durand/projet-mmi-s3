@@ -9,14 +9,15 @@ export default {
     return axios.get(param[type])
       .then(function (response) {
         return response.data;
-      })
-      .catch(function (error) {
-        console.log(error);
       });
 
   },
 
   postAPI(type, params) {
     return axios.post(param[type], params ).then(reponse => {return reponse.data} );
+  },
+
+  putApi(type, params){
+    return axios.put(param[type], params ).then(reponse => {return reponse.data} );
   }
 }
