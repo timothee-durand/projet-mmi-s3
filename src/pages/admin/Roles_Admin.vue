@@ -1,4 +1,6 @@
 <template>
+  <div>
+  <Sidebar-admin></sidebar-admin>
   <div class="containerRight p-4">
     <search-bar :modes="roles" :types-materiel="lieux" lib-mode="Rôle" lib-type="Lieux"></search-bar>
     <row-result nom="Martin Baumner" disable-dispo disable-ref img="../assets/img/person.png" :buttons="buttons" id="0"
@@ -18,6 +20,7 @@
       <b-button type="submit">Ajouter</b-button>
     </b-form>
   </div>
+  </div>
 </template>
 
 <script>
@@ -25,12 +28,14 @@
 import SearchBar from '@/components/SearchBar.vue'
 import RowResult from '@/components/RowResult.vue'
 import ajaxService from '@/services/ajaxService.js'
+import SidebarAdmin from '@/components/SidebarAdmin.vue'
 
 export default {
   name: 'Roles_Admin',
   components: {
     SearchBar,
-    RowResult
+    RowResult,
+    SidebarAdmin
   },
   data () {
     return {
@@ -40,7 +45,7 @@ export default {
         {
           icon: 'pencil-fill',
           variant: 'success',
-          eventName: 'editRole'
+          eventName: 'editRole' 
         },
         {
           icon: 'x',

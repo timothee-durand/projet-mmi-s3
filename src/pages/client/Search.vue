@@ -49,8 +49,8 @@
 
       </form>
     </SidebarClient>
-    <div class="containerRight bg-almostWhite">
-      <div class="container-fluid bg-almostWhite">
+    <div class="containerRight ">
+      <div class="container-fluid ">
         <b-row gutter-2>
           <div class="p-4 col-md-6 col-12 mt-3">
             <div class="c-card shadow p-4"
@@ -262,7 +262,7 @@
           </div>
           <div class="p-4 col-md-6 col-12 mt-3">
             <div class="c-card shadow p-4"
-                 style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
+                 style="height: 270px;">
               <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
               <div class="d-flex flex-row align-items-center mb-2">
                 <b-carousel

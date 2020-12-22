@@ -9,9 +9,8 @@ import store from '@/store/index.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import './styles/custom-bootstrap.scss'
 
 /*Fontawesome*/
 import '@fortawesome/fontawesome-free/css/all.css'
