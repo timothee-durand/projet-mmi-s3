@@ -9,7 +9,7 @@ import store from '@/store/index.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -26,7 +26,7 @@ Vue.use(BootstrapVueIcons)
 Vue.use(VueAxios, axios)
 
 axios.defaults.headers = {
-  "Authorization": "Bearer " + appService.getLocal()
+  'Authorization': 'Bearer ' + appService.getLocal()
 }
 
 //ajout vueX
@@ -35,13 +35,11 @@ Vue.use(Vuex)
 // en dev
 Vue.config.productionTip = false
 
-
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })
