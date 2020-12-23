@@ -22,8 +22,10 @@
         <p>{{ modal.message }}</p>
       </modal-pictum>
 
+
       <mat-edit :modal="modal" id-perso="modif-mat"  :mode="modeMatEdit" :callback-ok="getListe"/>
 
+      <type-edit :callback-ok="callbackTypeCreation" :mode="modeMatEdit" id-perso="modif-type" ></type-edit>
     </div>
   </div>
 </template>
@@ -36,11 +38,12 @@ import ModalPictum from '@/components/ModalPictum.vue'
 import ajaxService from '@/services/ajaxService.js'
 import MatEdit from '@/components/admin/MatEdit.vue'
 import SidebarAdmin from '@/components/SidebarAdmin.vue'
+import TypeEdit from '@/components/admin/TypeEdit.vue'
 //import param from '@/param/param.js'
 
 export default {
   name: 'Materiel_Admin',
-  components: {MatEdit, ModalPictum, RowResult, SearchBar, SidebarAdmin},
+  components: {TypeEdit, MatEdit, ModalPictum, RowResult, SearchBar, SidebarAdmin},
   data () {
     return {
       buttons: [
@@ -159,7 +162,8 @@ export default {
     },
     changeModeSearch (mode) {
       this.listeMat = []
-      this.modeSearch = mode
+      this.modeSearch = mode;
+      this.typeMatSearch = "";
       this.getListe()
     },
     filterString (search) {
@@ -186,8 +190,19 @@ export default {
     },
     addMat () {
       this.modeMatEdit = 'add'
-      this.$bvModal.show('modif-mat')
 
+      switch (this.modeSearch) {
+        case 'materiels':
+          this.$bvModal.show('modif-mat')
+          break;
+        case 'types':
+          this.$bvModal.show("modif-type")
+          break
+      }
+    },
+    callbackTypeCreation(){
+      this.modeSearch = 'types';
+      this.getListe();
     }
 
   },
