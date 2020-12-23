@@ -20,8 +20,8 @@ export default new Router({
     //client
     {path: '/', name: 'Accueil', component: Accueil},
     {path: '/search', name: 'Search', component: Search},
-    {path: '/reservation', name: 'Reservation', component: Reservation},
-    {path: '/article', name: 'Article', component: Article},
+    {path: '/reservation/:state', name: 'Reservation', component: Reservation},
+    {path: '/article/:id', name: 'Article', component: Article},
 
 
     //admin
