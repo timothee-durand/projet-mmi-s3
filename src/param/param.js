@@ -8,6 +8,7 @@ export default {
     sending:"Votre nouvelle entrée est en cours d'envoi",
     stored:"Votre nouvelle entrée est enregistrée !",
     problem:"Un problème à l'enregistrement a eu lieu :",
+    getting:"Chargement de l'entrée en cours...",
   },
 
 

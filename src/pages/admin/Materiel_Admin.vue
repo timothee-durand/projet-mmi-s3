@@ -2,7 +2,13 @@
   <div>
     <sidebar-admin></sidebar-admin>
     <div class="containerRightAdmin p-4">
-      <h1>Matériel</h1>
+      <div class="w-100 d-inline-flex justify-content-between mb-2">
+        <h1>Matériel</h1>
+        <b-button type="button" variant="primary"  @click="changeModeSearch(modeSearch)" size="sm">
+          <b-icon-arrow-counterclockwise variant="light"></b-icon-arrow-counterclockwise>
+        </b-button>
+      </div>
+
       <search-bar @changeType="changeModeSearch" @search-input="filterString" :types-materiel="typesMateriel"
                   @changeTypeMat="typeSearch"
                   @addMat="addMat"
@@ -13,8 +19,9 @@
                   :reference="materiel.ref" :disable-ref="modeSearch==='types'||modeSearch==='departements'"
                   :img="materiel[keyImg]" :nom="materiel.nom"
                   :disable-dispo="modeSearch==='types'||modeSearch==='departements'"
-                  @lock-mat="openModal(materiel, 'lock')"
-                  @deleteMat="openModal(materiel,'del')"
+                  @editMat="editMat"
+                  @deleteMat="delMat"
+                  :type="modeSearch"
                   class="mt-3"></row-result>
 
       <modal-pictum :title="modal.title" id-modal="modal-mat" text-cancel-button="Fermer"
@@ -23,13 +30,13 @@
       </modal-pictum>
 
 
-      <mat-edit :modal="modal" id-perso="modif-mat"  :mode="modeMatEdit" :callback-ok="getListe"/>
+      <mat-edit :modal="modal" id-perso="modif-mat"  :mode="modeMatEdit" :callback-ok="getListe" :materiel-to-edit="matSelected"/>
 
-      <type-edit :callback-ok="callbackTypeCreation" :mode="modeMatEdit" id-perso="modif-type" ></type-edit>
+      <type-edit :callback-ok="callbackTypeCreation" :mode="modeMatEdit" id-perso="modif-type" :type-to-edit="matSelected"></type-edit>
 
-      <kit-edit :callback-ok="getListe" :mode="modeMatEdit" id-perso="modif-kit"></kit-edit>
+      <kit-edit :callback-ok="getListe" :mode="modeMatEdit" id-perso="modif-kit" :kit-to-edit="matSelected" ></kit-edit>
 
-      <dep-edit :callback-ok="getListe" :mode="modeMatEdit" id-perso="modif-dep"></dep-edit>
+      <dep-edit :callback-ok="getListe" :mode="modeMatEdit" id-perso="modif-dep" :departement-to-edit="matSelected"></dep-edit>
     </div>
   </div>
 </template>
@@ -54,11 +61,6 @@ export default {
     return {
       buttons: [
         {
-          icon: 'lock',
-          variant: 'success',
-          eventName: 'lock-mat'
-        },
-        {
           icon: 'pencil-fill',
           variant: 'success',
           eventName: 'editMat'
@@ -67,7 +69,7 @@ export default {
           icon: 'x',
           variant: 'success',
           eventName: 'deleteMat'
-        }
+        },
       ],
       matSelected: {},
       listeMat: [],
@@ -121,40 +123,8 @@ export default {
   },
   methods: {
 
-    openModal (mat, action) {
-      let actions = {
-        lock: {
-          title: 'Mettre matériel en indisponible',
-          callback: this.lockMat,
-          message: 'Êtes-vous sûrs de vouloir mettre ' + this.matSelected.nom + ' en indisponible ?',
-          idModal: 'modal-mat'
-        },
-        edit: {
-          title: 'Mettre matériel en indisponible',
-          callback: 'editMat',
-          message: 'Êtes-vous sûrs de vouloir mettre ' + this.matSelected.nom + ' en indisponible ?',
-          idModal: 'modal-mat-edit'
-        },
-        del: {
-          title: 'Supprimer',
-          callback: this.delMat,
-          message: 'Êtes-vous sûrs de vouloir supprimer ' + this.matSelected.nom + ' ?',
-          idModal: 'modal-mat'
-        }
-      }
-      switch (action) {
-        case 'edit':
-          this.modal = actions.edit
-          break
-        case 'lock':
-          this.modal = actions.lock
-          break
-        case 'del':
-          this.modal = actions.del
-          break
-      }
-
-      this.matSelected = mat
+    openModal (modal) {
+      this.modal = modal;
       this.$bvModal.show(this.modal.idModal)
     },
     modifMatApi () {
@@ -162,7 +132,7 @@ export default {
       this.$bvModal.hide(this.idModal)
     },
     getListe () {
-      ajaxService.getApi(this.modeSearch).then(result => {
+     ajaxService.getAllApi(this.modeSearch).then(result => {
         this.listeMat = result
       }).catch(error => console.log(error))
     },
@@ -176,7 +146,7 @@ export default {
       this.stringSearch = search
     },
     setTypesMateriel () {
-      ajaxService.getApi('types')
+      ajaxService.getAllApi('types')
           .then(result => {
             result.forEach(function (type) {
               this.typesMateriel.push({text: type.nom, value: type.nom, id: type.id})
@@ -186,13 +156,35 @@ export default {
     typeSearch (type) {
       this.typeMatSearch = type
     },
-    lockMat () {
-      console.log('blaoquer matériel')
-      this.$bvModal.hide(this.modal.idModal)
+    delMat (payload) {
+      this.openModal({
+        title: 'Supprimer',
+        callback: function (){
+          //ajaxService.delApi(this.modeSearch, payload.id).then(result => this.modal.message = result).catch(error => this.modal.message = error);
+        }.bind(this),
+        message: 'Êtes-vous sûrs de vouloir supprimer ' + payload.nom + ' ? (non implémenté)',
+        idModal: 'modal-mat'
+      })
     },
-    delMat () {
-      console.log('del matériel')
-      this.$bvModal.hide(this.modal.idModal)
+    editMat(payload){
+      this.modeMatEdit = 'edit'
+      this.matSelected = this.getMatById(parseInt(payload.id))[0];
+      console.log(payload)
+
+      switch (this.modeSearch) {
+        case 'materiels':
+          this.$bvModal.show('modif-mat')
+          break;
+        case 'types':
+          this.$bvModal.show("modif-type")
+          break;
+        case "malettes":
+          this.$bvModal.show("modif-kit")
+          break
+        case "departements":
+          this.$bvModal.show("modif-dep")
+          break
+      }
     },
     addMat () {
       this.modeMatEdit = 'add'
@@ -215,6 +207,11 @@ export default {
     callbackTypeCreation(){
       this.modeSearch = 'types';
       this.getListe();
+    },
+    getMatById(id) {
+      return this.listeMat.filter(function (mat){
+          return mat.id === id;
+      })
     }
 
   },
@@ -222,8 +219,6 @@ export default {
     console.log('yo')
     this.getListe()
     this.setTypesMateriel()
-    this.setDeps()
-    this.setMals()
   }
 }
 </script>

@@ -1,11 +1,12 @@
 <template>
-  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer >
+  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer :on-show-method="setType">
     <b-form enctype="multipart/form-data" @submit.prevent="send">
 
         <b-input placeholder="Nom" v-model="type.nom" class="mr-2 border-primary " required :state="type.nom.length > 4"></b-input>
 
         <p class="m-0 mt-2">Pictogramme : (Attention n'accepte que les images !)<br/> </p>
-        <b-form-file id="input-mat-photo" accept="image/*" class="d-block border-primary"  placeholder="Choisissez ou glissez-déposez"  required browse-text="Choisir" drop-placeholder="Glissez-ici"></b-form-file>
+        <b-img :src="type.picto"></b-img>
+        <b-form-file id="input-mat-photo" accept="image/*" class="d-block border-primary"  placeholder="Choisissez ou glissez-déposez" :required="mode!=='edit'" browse-text="Choisir" drop-placeholder="Glissez-ici"></b-form-file>
 
         <b-button type="submit" pill variant="outline-primary" class="m-auto" >{{ textSendButton }}</b-button>
 
@@ -27,15 +28,6 @@ export default {
       type:String,
       default:"modif-mat"
     },
-    type: {
-      type: Object,
-      default: function () {
-        return {
-          nom:"",
-          picto:""
-        }
-      }
-    },
     mode:{
       type:String,
       required:true
@@ -44,12 +36,15 @@ export default {
       type: Function,
       required:true
     },
+    typeToEdit:{
+      Object
+    }
   },
   computed: {
     textSendButton () {
       if(this.mode === "add"){
         return "Créer";
-      } else if (this.mode==="modif"){
+      } else if (this.mode==="edit"){
         return "Modifier";
       } else {
         return "Envoyer";
@@ -58,19 +53,27 @@ export default {
   },
   data () {
     return {
-      alertMessage: ''
+      alertMessage: '',
+      type:{
+        id:0,
+        nom:""
+      }
     }
   },
   methods: {
     send(){
+      let data = new FormData();
+      data.append("nom", this.type.nom);
+      if(document.querySelector('#input-mat-photo').files.length !== 0) {
+        data.append("picto", document.querySelector('#input-mat-photo').files[0]);
+      }
+
+
+      this.alertMessage = param.messages.sending;
+
       if(this.mode==="add"){
         //console.log("add");
-        let data = new FormData();
-        data.append("nom", this.type.nom);
-        data.append("picto", document.querySelector('#input-mat-photo').files[0]);
 
-
-        this.alertMessage = param.messages.sending;
         ajaxService.postAPI("types", data).then(response => {
           this.alertMessage = param.messages.stored + response;
           this.callbackOk;
@@ -81,12 +84,32 @@ export default {
         });
 
       }
-      else if (this.mode==="modif"){
-        console.log("modif")
+      else if (this.mode==="edit"){
+        ajaxService.putApi("types", this.type.id, data ).then(response => {
+          this.alertMessage = param.messages.stored + response
+          this.callbackOk;
+
+        }).catch(error => {
+          this.alertMessage = param.messages.problem + error
+          this.callbackOk;
+        })
       }
     },
+    setType(){
+      this.alertMessage = ''
+      if(this.mode === 'edit'){
+        this.type = this.typeToEdit;
+      } else {
+        this.type = {
+          id:0,
+          nom:""
+        };
+      }
+
+    }
 
   },
+
 
 }
 </script>

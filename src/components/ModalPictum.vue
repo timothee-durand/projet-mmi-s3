@@ -1,5 +1,5 @@
 <template>
-  <b-modal :ref="idModal" centered  :title="title" :id="idModal" header-border-variant="light" :hide-footer="hideFooter" footer-border-variant="light">
+  <b-modal :ref="idModal" centered  :title="title" :id="idModal" header-border-variant="light" :hide-footer="hideFooter" footer-border-variant="light" @close="onCloseMethod" @show="onShowMethod">
     <slot ></slot>
     <template #modal-footer>
       <footer class="d-flex justify-content-between w-75 mx-auto">
@@ -37,7 +37,19 @@ name: "ModalPictum",
     hideFooter:{
       type:Boolean,
       default:false
-    }
+    },
+    onShowMethod:{
+      type: Function,
+      default: function (){
+
+      }
+    },
+    onCloseMethod:{
+      type: Function,
+      default: function (){
+
+      }
+    },
 
   },
   methods: {

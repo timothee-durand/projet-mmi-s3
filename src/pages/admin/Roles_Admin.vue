@@ -45,7 +45,7 @@ export default {
         {
           icon: 'pencil-fill',
           variant: 'success',
-          eventName: 'editRole' 
+          eventName: 'editRole'
         },
         {
           icon: 'x',
@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     getUsers () {
-      ajaxService.getApi('allLDAP').then(result => this.users = result)
+      ajaxService.getAllApi('allLDAP').then(result => this.users = result)
     },
 
     addRole () {

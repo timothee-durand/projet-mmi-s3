@@ -1,5 +1,5 @@
 <template>
-  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer >
+  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer :on-show-method="setMalette">
     <b-form enctype="multipart/form-data" @submit.prevent="send">
 
       <b-input-group class="mb-2">
@@ -8,7 +8,8 @@
       </b-input-group>
 
         <p class="m-0 mt-2">Photo : (Attention n'accepte que les images !)<br/> </p>
-        <b-form-file id="input-mat-photo" accept="image/*" class="d-block border-primary"  placeholder="Choisissez ou glissez-déposez"  required browse-text="Choisir" drop-placeholder="Glissez-ici"></b-form-file>
+        <b-img :src="kit.photo" fluid></b-img>
+        <b-form-file id="input-mat-photo" accept="image/*" class="d-block border-primary"  placeholder="Choisissez ou glissez-déposez"  :required="mode!=='edit'" browse-text="Choisir" drop-placeholder="Glissez-ici"></b-form-file>
 
         <b-button type="submit" pill variant="outline-primary" class="m-auto" >{{ textSendButton }}</b-button>
 
@@ -30,16 +31,6 @@ export default {
       type:String,
       default:"modif-mat"
     },
-    kit: {
-      type: Object,
-      default: function () {
-        return {
-          nom:"",
-          photo:"",
-          ref:""
-        }
-      }
-    },
     mode:{
       type:String,
       required:true
@@ -48,6 +39,9 @@ export default {
       type: Function,
       required:true
     },
+    kitToEdit:{
+      type:Object
+    }
   },
   computed: {
     textSendButton () {
@@ -62,17 +56,26 @@ export default {
   },
   data () {
     return {
-      alertMessage: ''
+      alertMessage: '',
+      kit:{
+        nom:"",
+        photo:"",
+        ref:""
+      }
     }
   },
   methods: {
     send(){
+      let data = new FormData();
+      data.append("nom", this.kit.nom);
+      data.append("ref", this.kit.ref);
+      if(document.querySelector('#input-mat-photo').files.length !== 0) {
+        data.append("photo", document.querySelector('#input-mat-photo').files[0]);
+      }
+
       if(this.mode==="add"){
         //console.log("add");
-        let data = new FormData();
-        data.append("nom", this.kit.nom);
-        data.append("ref", this.kit.ref);
-        data.append("photo", document.querySelector('#input-mat-photo').files[0]);
+
 
 
         this.alertMessage = param.messages.sending;
@@ -86,10 +89,30 @@ export default {
         });
 
       }
-      else if (this.mode==="modif"){
-        console.log("modif")
+      else if (this.mode==="edit"){
+        ajaxService.putApi("malettes", this.kit.id, data).then(response => {
+          this.alertMessage = param.messages.stored + response;
+          this.callbackOk;
+
+        }).catch(error => {
+          this.alertMessage = param.messages.problem + error;
+          this.callbackOk;
+        });
       }
     },
+    setMalette(){
+      this.alertMessage = '';
+      if(this.mode=== "edit"){
+        this.kit = this.kitToEdit;
+      } else {
+        this.kit = {
+          nom:"",
+          photo:"",
+          ref:""
+        };
+      }
+
+    }
 
   },
 
