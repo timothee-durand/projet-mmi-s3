@@ -31,8 +31,7 @@ name: "ModalPictum",
       default:"Annuler"
     },
     callbackOk: {
-      type: Function,
-      required:true
+      type: Function
     },
     hideFooter:{
       type:Boolean,
