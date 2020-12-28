@@ -42,8 +42,12 @@ export default {
       params.append("username", "tdurand5");
       params.append("password", "tdurand5");
       ajaxService.postAPI("login", params).then(result => {
-        console.log(result);
+        //stocke le token dans le localStorage
         appService.setLocal(result.token)
+
+        //stocke l'utilisateur dans le store
+        this.$store.commit("setuser", result.user);
+        this.$store.commit("setusertype", result.user_type);
       });
     },
     verifyLDAP(){

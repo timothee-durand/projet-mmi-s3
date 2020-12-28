@@ -9,6 +9,7 @@ export default {
     stored:"Votre nouvelle entrée est enregistrée !",
     problem:"Un problème à l'enregistrement a eu lieu :",
     getting:"Chargement de l'entrée en cours...",
+    success:"L'envoi a reussi !",
   },
 
 
@@ -18,6 +19,12 @@ export default {
   malettes: host +  "malettes",
   departements: host +  "departements",
   gestionnaires: host +  "gestionnaires",
+  reservations: host +  "reservations",
+
+
   allLDAP : host + "ldap/all",
   getLDAP : host + "ldap/verify",
+
+  //mail
+  sendMailGest: host + "send-mail-gest",
 }
