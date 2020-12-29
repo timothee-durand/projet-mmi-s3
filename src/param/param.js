@@ -20,6 +20,7 @@ export default {
   departements: host +  "departements",
   gestionnaires: host +  "gestionnaires",
   reservations: host +  "reservations",
+  blacklists: host +  "blacklists",
 
 
   allLDAP : host + "ldap/all",
