@@ -21,6 +21,7 @@ export default {
   gestionnaires: host +  "gestionnaires",
   reservations: host +  "reservations",
   blacklists: host +  "blacklists",
+  estpretes: host + "estpretes",
 
 
   allLDAP : host + "ldap/all",

@@ -4,7 +4,7 @@
     <template #modal-footer>
       <footer class="d-flex justify-content-between w-75 mx-auto">
         <b-button pill variant="outline-success" @click="callBackCancelDef">{{ textCancelButton }}</b-button>
-        <b-button pill variant="success ml-4" @click="callbackOk">{{ textOkButton }}</b-button>
+        <b-button pill variant="success ml-4" @click="$emit(callbackOk.event, callbackOk.payload)">{{ textOkButton }}</b-button>
       </footer>
     </template>
   </b-modal>
@@ -31,7 +31,15 @@ name: "ModalPictum",
       default:"Annuler"
     },
     callbackOk: {
-      type: Function
+      type: Object,
+      default:function (){
+        return {
+          event:'okModal',
+          payload:{
+
+          }
+        }
+      }
     },
     hideFooter:{
       type:Boolean,

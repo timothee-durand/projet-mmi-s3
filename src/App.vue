@@ -11,7 +11,7 @@
       <b-button @click="login">Login</b-button>
     </header>
 
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -20,12 +20,15 @@
 import ajaxService from '@/services/ajaxService.js'
 import appService from '@/services/appService.js'
 
+
+
 export default {
   name: 'App',
 
   data () {
     return {
       isConnected:false,
+
     }
   },
   created () {
