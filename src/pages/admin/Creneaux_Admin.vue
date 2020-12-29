@@ -34,7 +34,7 @@
                             <row-result id="0" reference="Mardi 21 sept. - 14h00" nom="Lundi 20 sept. - 14h00"
                                         :buttons="buttonsCrnx" disable-dispo></row-result>
 
-                            <router-link to="" class="btn rounded-pill bg-success text-light p-2 mx-auto d-block mt-4"
+                            <router-link to="param" class="btn rounded-pill bg-success text-light p-2 mx-auto d-block mt-4"
                                          style="max-width: 15rem;">Configurer mes créneaux
                             </router-link>
                         </b-card>

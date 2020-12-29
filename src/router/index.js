@@ -13,6 +13,7 @@ import Roles_Admin from '@/pages/admin/Roles_Admin.vue'
 import Admin_Contact from '@/pages/Admin_Contact.vue'
 import Article from "../pages/client/Article";
 import RDV_Admin from '@/pages/admin/RDV_Admin.vue'
+import CreneauxParam_Admin from '@/pages/admin/CreneauxParam_Admin.vue'
 
 Vue.use(Router)
 
@@ -33,6 +34,7 @@ export default new Router({
     {path: '/blacklist/', name: 'BlacklistAdmin', component: Blacklist_Admin},
     {path: '/roles/', name: 'RoleAdmin', component: Roles_Admin},
     {path: '/creneaux/rdvs/', name: 'RDVAdmin', component: RDV_Admin},
+    {path: '/creneaux/param/', name: 'CreneauxParamAdmin', component: CreneauxParam_Admin},
 
 
     //communes
