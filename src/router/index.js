@@ -12,6 +12,7 @@ import Blacklist_Admin from '@/pages/admin/Blacklist_Admin.vue'
 import Roles_Admin from '@/pages/admin/Roles_Admin.vue'
 import Admin_Contact from '@/pages/Admin_Contact.vue'
 import Article from "../pages/client/Article";
+import RDV_Admin from '@/pages/admin/RDV_Admin.vue'
 
 Vue.use(Router)
 
@@ -31,6 +32,7 @@ export default new Router({
     {path: '/mails/', name: 'MailAdmin', component: Mail_Admin},
     {path: '/blacklist/', name: 'BlacklistAdmin', component: Blacklist_Admin},
     {path: '/roles/', name: 'RoleAdmin', component: Roles_Admin},
+    {path: '/creneaux/rdvs/', name: 'RDVAdmin', component: RDV_Admin},
 
 
     //communes

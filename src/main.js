@@ -9,6 +9,7 @@ import store from '@/store/store.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import './styles/custom-bootstrap.scss'
 
@@ -30,6 +31,11 @@ axios.defaults.headers = {
 
 //ajout vueX
 Vue.use(Vuex)
+
+//ajout vue-moment
+Vue.use(require('vue-moment'));
+
+
 
 
 //ajout google maps

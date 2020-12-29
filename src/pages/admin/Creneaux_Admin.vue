@@ -18,7 +18,7 @@
                             <row-result id="0" reference="Grégoire DURAND" nom="Jeu 12 Sept" :buttons="buttonsRdv"
                                         disable-dispo></row-result>
 
-                            <router-link to="" class="btn rounded-pill bg-success text-light p-2 mx-auto d-block mt-4"
+                            <router-link to="rdvs" class="btn rounded-pill bg-success text-light p-2 mx-auto d-block mt-4"
                                          style="max-width: 15rem;">Voir tous mes rendez-vous
                             </router-link>
                         </b-card>
