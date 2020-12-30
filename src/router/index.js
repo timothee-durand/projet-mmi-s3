@@ -15,7 +15,7 @@ import Article from "../pages/client/Article";
 import RDV_Admin from '@/pages/admin/RDV_Admin.vue'
 import CreneauxParam_Admin from '@/pages/admin/CreneauxParam_Admin.vue'
 import Login from '@/pages/Login.vue'
-import appService from '@/services/appService.js'
+
 
 Vue.use(Router)
 
@@ -45,11 +45,6 @@ let router =  new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  console.log(appService.getLocal())
-  if (to.name !== 'Login' && !appService.getLocal()) next({ name: 'Login' })
-  else next()
-})
 
 
 export default router;

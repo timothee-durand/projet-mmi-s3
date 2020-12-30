@@ -2,6 +2,7 @@ const host = "https://pictum.pu-pm.univ-fcomte.fr/api/";
 
 export default {
   login: host + "login",
+
   keyTokenLocal: "token",
 
   messages: {
@@ -11,6 +12,17 @@ export default {
     getting:"Chargement de l'entrée en cours...",
     success:"L'envoi a reussi !",
   },
+
+  routeAdminName: [
+    "AccueilAdmin",
+    "MaterielAdmin",
+    "CreneauxAdmin",
+    "MailAdmin",
+    "BlacklistAdmin",
+    "RoleAdmin",
+    "RDVAdmin",
+    "CreneauxParamAdmin"
+  ],
 
 
   //routes

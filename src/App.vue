@@ -4,11 +4,12 @@
         class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
       <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
 
-      <b-dropdown text="AM" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary">
-        <b-dropdown-item>
+      <b-dropdown text="AM" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary" v-if="isAuth">
+        <b-dropdown-item v-if="isGest">
           <router-link to="/">Voir vue étudiant</router-link>
+          <router-link to="/admin">Voir vue gestionnaire</router-link>
         </b-dropdown-item>
-        <b-dropdown-item class="text-danger" @click="console.log('disconnect')">Se déconnecter</b-dropdown-item>
+        <b-dropdown-item class="text-danger" @click="disconnect">Se déconnecter</b-dropdown-item>
       </b-dropdown>
     </header>
     <router-view/>
@@ -16,6 +17,9 @@
 </template>
 
 <script>
+
+import appService from '@/services/appService.js'
+
 
 export default {
   name: 'App',
@@ -25,16 +29,48 @@ export default {
       userToLogin: {
         username: '',
         passord: ''
-      }
+      },
     }
   },
   computed: {
-
+    isGest(){
+      return this.$store.getters.isGest;
+    },
+    isAuth(){
+      return this.$store.getters.isAuthenticated;
+    },
   },
   created () {
   },
+  watch: {
+    '$route': {
+      immediate: true,
+      handler(to) {
+        if(to.name !== "Login" && !this.$store.getters.isAuthenticated) {
+          //si on ne va pas se connecter et que on est pas authentifié
+          this.$router.push("/login");
+        }
 
+        if(to.name === "Login" && this.$store.getters.isAuthenticated) {
+          //si on est connecté et que on veut aller sur la page de connexion
+          this.$router.push("/");
+        }
+
+        if(!this.$store.getters.isGest && appService.isAdminRoute(to.name)){
+          this.$router.push("/")
+          // eslint-disable-next-line no-unused-vars
+          this.$bvModal.msgBoxOk("Vous n'avez pas le droit d'accéder à cette page. Si vous en avez besoin, contactez l'administrateur !");
+        }
+
+      }
+    }
+  },
   methods: {
+    disconnect(){
+      this.$store.commit("resetUser");
+      this.$bvModal.msgBoxOk("Vous avez bien été déconnectés")
+      this.$router.push("/login");
+    }
 
   },
 

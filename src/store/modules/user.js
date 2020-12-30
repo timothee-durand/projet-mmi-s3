@@ -7,16 +7,15 @@ export default {
   },
 
   getters: {
-    getUser () {
-      return this.user
+    getUser (context) {
+      return context.user
     },
-    isGest () {
-      return this.type === 'GEST'
+    isGest (context) {
+      return context.userType === 'GEST'
     },
-    isAuthenticated(state){
-      console.log(this)
+    isAuthenticated(context){
       //regarde si il y a la propriété id a l'utilisateur stocké (objet initialisé à vide)
-      return "id" in state.user.user;
+      return "id" in context.user;
     },
   },
 
@@ -27,6 +26,10 @@ export default {
     setusertype (state, type) {
       state.userType = type;
     },
+    resetUser(state){
+      state.user = {};
+      state.userType = "";
+    }
   }
 }
 
