@@ -13,6 +13,17 @@
       <b-textarea required placeholder="Pour quoi faire ?" v-model="materiel.usage"
                   class="mb-2 border-primary"></b-textarea>
 
+
+      <b-form-checkbox
+          id="checkbox-1"
+          v-model="materiel.pro"
+          class="mb-2 text-center"
+          value="1"
+          unchecked-value="0"
+      >
+        Matériel "pro" (demande controle avant prêt)
+      </b-form-checkbox>
+
       <label class="w-100">Malette : <br/>
         <b-select required v-model="materiel.malette_id" class="mb-2 border-primary">
           <b-select-option value="" disabled> Choissisez une malette</b-select-option>
@@ -40,6 +51,10 @@
           <b-select-option v-for="type in types" :value="type.id" :key="type.id">{{ type.nom }}</b-select-option>
         </b-select>
       </label>
+
+
+
+
 
       <div class="w-100 d-flex flex-column">
         <div class="w-100 d-inline-flex justify-content-between mb-2 align-items-center">
@@ -106,6 +121,7 @@ export default {
         notice: '',
         photo: '',
         ref: '',
+        pro:'',
         tutos: [
           ''
         ],
@@ -168,6 +184,7 @@ export default {
         data.append('notice', document.querySelector('#input-mat-notice').files[0])
       }
         data.append('type_id', this.materiel.type_id)
+        data.append('pro', this.materiel.pro)
 
         data.append('departement_id', this.materiel.departement_id)
         data.append('tutos', JSON.stringify(this.materiel.tutos))
