@@ -164,12 +164,12 @@ export default {
 
     signIn(){
       let params = new FormData()
-      params.append('id_univ', this.userToConnect.username)
-      params.append('password', this.userToConnect.password)
+      params.append('id_univ', this.userToSignIn.username)
+      params.append('password', this.userToSignIn.password)
       //par défault
       params.append('valide', 1)
 
-
+      //GRt5mlte
       this.alertMessage = param.messages.sending;
       // eslint-disable-next-line no-unused-vars
       ajaxService.postAPI('reservations', params).then(result => {
