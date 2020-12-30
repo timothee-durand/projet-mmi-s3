@@ -5,10 +5,10 @@
       <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
 
 
-      <div class="d-flex flex-row align-items-center">
+      <div class="d-flex flex-row align-items-center" v-if="isAuth">
         <router-link to="/" class="mr-3 text-white">Accueil</router-link>
         <router-link :to="{ name: 'Reservation', params : { state:'selection'}}" class="mr-3 text-white">Réservation</router-link>
-        <b-dropdown :text="initials" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary" v-if="isAuth">
+        <b-dropdown :text="initials" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary" >
           <div v-if="isGest">
             <b-dropdown-item >
               <router-link :to="toDropdown">{{textLinkDropdown}}</router-link>
