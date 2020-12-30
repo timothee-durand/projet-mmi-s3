@@ -5,4 +5,9 @@ export default {
     Object.keys(object).forEach(key => formData.append(key, object[key]))
     return formData
   },
+  getById(array, id){
+    return array.filter(function (item){
+      return item.id === id;
+    })[0];
+  }
 }

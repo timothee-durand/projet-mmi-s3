@@ -17,5 +17,13 @@ export default {
   //suppression
   removeLocal(){
     localStorage.removeItem(param.keyTokenLocal);
+  },
+
+  isAdminRoute(routeName){
+    if(param.routeAdminName.findIndex(function (route){return routeName === route}) !== -1){
+      return true;
+    } else {
+      return false;
+    }
   }
 }
