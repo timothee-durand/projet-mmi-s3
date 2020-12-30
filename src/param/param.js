@@ -3,6 +3,7 @@ const host = "https://pictum.pu-pm.univ-fcomte.fr/api/";
 export default {
   login: host + "login",
   passwordForgot: host + "email/send/new-password",
+  mailVerifiationResend: host + "/email/resend",
 
   keyTokenLocal: "token",
 

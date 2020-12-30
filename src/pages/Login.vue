@@ -40,6 +40,8 @@
               <b-input v-model="userToSignIn.passwordConfirm" type="password" placeholder="motdepasse" :state="passwordVerificationState"></b-input>
             </b-form-group>
             <b-alert :show="alertMessage !== ''">{{ alertMessage }}</b-alert>
+
+            <p>Avant de pouvoir vous connecter il vous faudra aller sur votre boite mail universitaire pour valider votre identité.</p>
             <b-btn :disabled="!userVerificationState || !passwordVerificationState || !passwordStrengthState" type="submit" variant="outline-primary">S'inscrire</b-btn>
 
       </b-form>
@@ -140,7 +142,23 @@ export default {
 
         this.$router.push('/')
       }).catch(err => {
-        this.$bvModal.msgBoxOk("Il y a eu un problème pendant votre connexion : " + err.response.data)
+        if(err.response.status === 418) {
+          //si le mail n'est pas vérifié
+          this.$bvModal.msgBoxConfirm("Votre email universitaire n'a pas été validé, voulez-vous que le mail de confirmation du mail vous soit renvoyé ?")
+              .then(value => {
+                if(value){
+                  ajaxService.getSingleApi("mailVerifiationResend", this.userToConnect.username).then(res=>{
+                    this.mailToNewMdp = "";
+                    this.$bvModal.msgBoxOk("Un nouveau mail de confirmation vous a été envoyé ! (" + res +")");
+                  }).catch(res=>{
+                    this.$bvModal.msgBoxOk("Il y a eu un problème ! (" + res.response.data+")");
+                  })
+                }
+              })
+        } else {
+          this.$bvModal.msgBoxOk("Il y a eu un problème pendant votre connexion : " + err.response.data)
+        }
+
       })
     },
 
