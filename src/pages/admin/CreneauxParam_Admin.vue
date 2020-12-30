@@ -13,76 +13,96 @@
                     fill="#81cb51"/>
             </svg>
             <h2>Créneaux</h2>
-            <b-button type="button" variant="primary" @click="getRDV" size="sm">
+            <b-button type="button" variant="primary" @click="getCreneaux" size="sm">
               <b-icon-arrow-counterclockwise variant="light"></b-icon-arrow-counterclockwise>
             </b-button>
           </div>
         </slot>
 
         <b-row>
-          <b-col cols="6">
+          <b-col cols="12" sm="6">
             <h5>Disponibilités :</h5>
             <b-form @submit.prevent="sendCreneaux">
               <b-input-group class="d-inline-flex align-items-center  ">
                 <p class="mr-2">Lundi matin :</p>
-                <b-form-timepicker v-model="creneaux['1'].heure_debut_matin" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['1'].heure_fin_matin" size="sm"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[0].heure_debut_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[0].heure_fin_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <b-input-group class="d-inline-flex align-items-center mt-2  ">
-                <p  class="mr-2">Lundi après-midi :</p>
-                <b-form-timepicker v-model="creneaux['1'].heure_debut_am" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['1'].heure_fin_am" size="sm"></b-form-timepicker>
+                <p class="mr-2">Lundi après-midi :</p>
+                <b-form-timepicker v-model="creneaux[0].heure_debut_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[0].heure_fin_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <hr/>
               <b-input-group class="d-inline-flex align-items-center  ">
                 <p class="mr-2">Mardi matin :</p>
-                <b-form-timepicker v-model="creneaux['2'].heure_debut_matin" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['2'].heure_fin_matin" size="sm"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[1].heure_debut_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[1].heure_fin_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <b-input-group class="d-inline-flex align-items-center mt-2  ">
-                <p  class="mr-2">Mardi après-midi :</p>
-                <b-form-timepicker v-model="creneaux['3'].heure_debut_am" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['3'].heure_fin_am" size="sm"></b-form-timepicker>
+                <p class="mr-2">Mardi après-midi :</p>
+                <b-form-timepicker v-model="creneaux[1].heure_debut_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[1].heure_fin_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <hr/>
               <b-input-group class="d-inline-flex align-items-center  ">
                 <p class="mr-2">Mercredi matin :</p>
-                <b-form-timepicker v-model="creneaux['4'].heure_debut_matin" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['4'].heure_fin_matin" size="sm"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[2].heure_debut_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[2].heure_fin_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <b-input-group class="d-inline-flex align-items-center mt-2  ">
-                <p  class="mr-2">Mercredi après-midi :</p>
-                <b-form-timepicker v-model="creneaux['5'].heure_debut_am" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['5'].heure_fin_am" size="sm"></b-form-timepicker>
+                <p class="mr-2">Mercredi après-midi :</p>
+                <b-form-timepicker v-model="creneaux[2].heure_debut_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[2].heure_fin_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <hr/>
               <b-input-group class="d-inline-flex align-items-center  ">
                 <p class="mr-2">Jeudi matin :</p>
-                <b-form-timepicker v-model="creneaux['1'].heure_debut_matin" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['1'].heure_fin_matin" size="sm"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[3].heure_debut_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[3].heure_fin_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <b-input-group class="d-inline-flex align-items-center mt-2  ">
-                <p  class="mr-2">Jeudi après-midi :</p>
-                <b-form-timepicker v-model="creneaux['1'].heure_debut_am" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['1'].heure_fin_am" size="sm"></b-form-timepicker>
+                <p class="mr-2">Jeudi après-midi :</p>
+                <b-form-timepicker v-model="creneaux[3].heure_debut_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[3].heure_fin_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <hr/>
               <b-input-group class="d-inline-flex align-items-center  ">
                 <p class="mr-2">Vendredi matin :</p>
-                <b-form-timepicker v-model="creneaux['1'].heure_debut_matin" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['1'].heure_fin_matin" size="sm"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[4].heure_debut_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[4].heure_fin_matin" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
               <b-input-group class="d-inline-flex align-items-center mt-2  ">
-                <p  class="mr-2">Vendredi après-midi :</p>
-                <b-form-timepicker v-model="creneaux['1'].heure_debut_am" size="sm"></b-form-timepicker>
-                <b-form-timepicker v-model="creneaux['1'].heure_fin_am" size="sm"></b-form-timepicker>
+                <p class="mr-2">Vendredi après-midi :</p>
+                <b-form-timepicker v-model="creneaux[4].heure_debut_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
+                <b-form-timepicker v-model="creneaux[4].heure_fin_am" size="sm"
+                                   :disabled="!initialized"></b-form-timepicker>
               </b-input-group>
-
-              <b-btn type="submit" pill variant="outline-primary" class="mx-auto">Envoyer Créneaux </b-btn>
+              <b-alert :show="alertMessage !== ''">{{ alertMessage }}</b-alert>
+              <b-btn type="submit" pill variant="outline-primary" class="mx-auto">Envoyer Créneaux</b-btn>
             </b-form>
           </b-col>
 
-          <b-col cols="6">
+          <b-col cols="12" sm="6">
 
           </b-col>
         </b-row>
@@ -95,56 +115,100 @@
 
 <script>
 import SidebarAdmin from '@/components/SidebarAdmin.vue'
+import ajaxService from '@/services/ajaxService.js'
+import param from '@/param/param.js'
+//import utilsServices from '@/services/utilsServices.js'
 
 export default {
   name: 'CreneauxParam_Admin',
   components: {SidebarAdmin},
   data () {
     return {
-      creneaux: {
-        1:{
-          jour:1,
-          heure_debut_matin:'08:00',
-          heure_fin_matin:'12:00',
-          heure_debut_am:'14:00',
-          heure_fin_am:'18:00',
-          gestionnaire_id:this.$store.state.user.user.id
+      creneaux: [
+        {
+          jour: 1,
+          heure_debut_matin: '08:00',
+          heure_fin_matin: '12:00',
+          heure_debut_am: '14:00',
+          heure_fin_am: '18:00',
+          gestionnaire_id: this.$store.state.user.user.id
         },
-        2:{
-          jour:2,
-          heure_debut_matin:'08:00',
-          heure_fin_matin:'12:00',
-          heure_debut_am:'14:00',
-          heure_fin_am:'18:00',
-          gestionnaire_id:this.$store.state.user.user.id
+        {
+          jour: 2,
+          heure_debut_matin: '08:00',
+          heure_fin_matin: '12:00',
+          heure_debut_am: '14:00',
+          heure_fin_am: '18:00',
+          gestionnaire_id: this.$store.state.user.user.id
         },
-        3:{
-          jour:3,
-          heure_debut_matin:'08:00',
-          heure_fin_matin:'12:00',
-          heure_debut_am:'14:00',
-          heure_fin_am:'18:00',
-          gestionnaire_id:this.$store.state.user.user.id
+        {
+          jour: 3,
+          heure_debut_matin: '08:00',
+          heure_fin_matin: '12:00',
+          heure_debut_am: '14:00',
+          heure_fin_am: '18:00',
+          gestionnaire_id: this.$store.state.user.user.id
         },
-        4:{
-          jour:4,
-          heure_debut_matin:'08:00',
-          heure_fin_matin:'12:00',
-          heure_debut_am:'14:00',
-          heure_fin_am:'18:00',
-          gestionnaire_id:this.$store.state.user.user.id
+        {
+          jour: 4,
+          heure_debut_matin: '08:00',
+          heure_fin_matin: '12:00',
+          heure_debut_am: '14:00',
+          heure_fin_am: '18:00',
+          gestionnaire_id: this.$store.state.user.user.id
         },
-        5:{
-          jour:5,
-          heure_debut_matin:'08:00',
-          heure_fin_matin:'12:00',
-          heure_debut_am:'14:00',
-          heure_fin_am:'18:00',
-          gestionnaire_id:this.$store.state.user.user.id
+        {
+          jour: 5,
+          heure_debut_matin: '08:00',
+          heure_fin_matin: '12:00',
+          heure_debut_am: '14:00',
+          heure_fin_am: '18:00',
+          gestionnaire_id: this.$store.state.user.user.id
         }
+      ]
+      ,
+      listeCrnxGest: [],
+      initialized: false,
+      alertMessage:'',
+    }
+  },
+  methods: {
+    sendCreneaux () {
+      let data = new FormData();
+      data.append("creneaux", JSON.stringify(this.creneaux))
+
+      this.alertMessage = param.messages.sending;
+      ajaxService.postAPI("creneaux", data).then(res => {this.alertMessage = param.messages.stored + res; this.getCreneaux()}).catch(res => this.alertMessage = param.messages.problem + res)
+    },
+    getCreneaux () {
+      ajaxService.getSingleApi('gestionnaires', this.$store.state.user.user.id).then(result => {
+        this.listeCrnxGest = result.data.creneaux
+        this.setCreneaux()
+      }).catch(err => this.$bvModal.msgBoxOk(param.messages.problem + err).then(res => this.getCreneaux(res)))
+    },
+    setCreneaux () {
+      if (this.listeCrnxGest.length !== 0) {
+        for (let i = 0; i <= 5; i++) {
+          //je regarde si il y a un jour dans le tableau qui correspond
+          let indexCrnx = this.listeCrnxGest.findIndex(function (crnxS) {
+            return crnxS.jour === i
+          })
+          if (indexCrnx !== -1) {
+            //alors je met à jour le créneaux correspondant dans le tableau qui gère les inputs
+            this.creneaux[i-1] = this.listeCrnxGest[indexCrnx]
+          }
+        }
+        // eslint-disable-next-line no-unused-vars
+        this.$bvModal.msgBoxOk("Les créneaux ont bien étés initialisés avec vos précédentes entrées").then(res =>  this.initialized = true);
+      } else {
+        // eslint-disable-next-line no-unused-vars
+        this.$bvModal.msgBoxOk("Vous n'avez encore aucun créneaux par défault.").then(res =>  this.initialized = true);
       }
     }
   },
+  mounted () {
+    this.getCreneaux()
+  }
 }
 </script>
 

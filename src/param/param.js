@@ -22,6 +22,7 @@ export default {
   reservations: host +  "reservations",
   blacklists: host +  "blacklists",
   estpretes: host + "estpretes",
+  creneaux:host+"creneaux",
 
 
   allLDAP : host + "ldap/all",

@@ -52,11 +52,10 @@ export default {
   },
   methods: {
     getRDV () {
-      console.log(this.$store.state.user.user.id);
-      /*TODO ne pas laisser l'horreur la*/
+      //console.log(this.$store.state.user.user.id);
       this.listeRDV = [];
       this.listeRes = [];
-      ajaxService.getSingleApi("gestionnaires", 4).then(result => {
+      ajaxService.getSingleApi("gestionnaires", this.$store.state.user.user.id).then(result => {
         this.listeRes = result.data.rdv;
         let idRDV  = 0;
 
