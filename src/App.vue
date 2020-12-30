@@ -5,10 +5,12 @@
       <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
 
       <b-dropdown text="AM" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary" v-if="isAuth">
-        <b-dropdown-item v-if="isGest">
-          <router-link to="/">Voir vue étudiant</router-link>
-          <router-link to="/admin">Voir vue gestionnaire</router-link>
-        </b-dropdown-item>
+        <div v-if="isGest">
+          <b-dropdown-item >
+            <router-link :to="toDropdown">{{textLinkDropdown}}</router-link>
+          </b-dropdown-item>
+        </div>
+
         <b-dropdown-item class="text-danger" @click="disconnect">Se déconnecter</b-dropdown-item>
       </b-dropdown>
     </header>
@@ -39,6 +41,20 @@ export default {
     isAuth(){
       return this.$store.getters.isAuthenticated;
     },
+    textLinkDropdown(){
+      if(appService.isAdminRoute(this.$route.name)){
+        return "Voir vue Etudiant"
+      } else {
+        return "Voir vue Gestionnaire"
+      }
+    },
+    toDropdown(){
+      if(appService.isAdminRoute(this.$route.name)){
+        return "/"
+      } else {
+        return "/admin"
+      }
+    }
   },
   created () {
   },
@@ -56,7 +72,7 @@ export default {
           this.$router.push("/");
         }
 
-        if(!this.$store.getters.isGest && appService.isAdminRoute(to.name)){
+        if(!this.$store.getters.isGest && appService.isAdminRoute(to.name) && this.$store.getters.isAuthenticated){
           this.$router.push("/")
           // eslint-disable-next-line no-unused-vars
           this.$bvModal.msgBoxOk("Vous n'avez pas le droit d'accéder à cette page. Si vous en avez besoin, contactez l'administrateur !");

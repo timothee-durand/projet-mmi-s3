@@ -62,9 +62,19 @@
           </b-col>
         </b-row>
 
-        <b-btn type="submit">Se connecter</b-btn>
+        <b-btn type="submit" variant="primary">Se connecter</b-btn>
+
+        <b-btn v-b-modal.modal-psw-forgot size="sm" variant="outline-light" class="text-black-50 mt-4">Mot de passe oublié</b-btn>
       </b-form>
     </div>
+
+    <modal-pictum title="Mot de passe oublié" id-modal="modal-psw-forgot" :callback-ok="{event:'sendPasswd'}" @sendPasswd="passwordForgot">
+      <p>Un nouveau mot de passe va vous être enoyé par mail. Vous pourrez ensuite le changer dans l'espace "Mot de passe".</p>
+      <b-form-group
+      label="Entrez votre identifiant universitaire">
+        <b-input v-model="mailToNewMdp" placeholder="mdpont" ></b-input>
+      </b-form-group>
+    </modal-pictum>
 
   </div>
 </template>
@@ -73,9 +83,11 @@
 import ajaxService from '@/services/ajaxService.js'
 import appService from '@/services/appService.js'
 import param from '@/param/param.js'
+import ModalPictum from '@/components/ModalPictum.vue'
 
 export default {
   name: 'Login',
+  components: {ModalPictum},
   data () {
     return {
       inscription: false,
@@ -92,7 +104,8 @@ export default {
       },
       userVerificationState: false,
       isVerifiying:false,
-      alertMessage:''
+      alertMessage:'',
+      mailToNewMdp:''
     }
   },
   computed: {
@@ -175,6 +188,17 @@ export default {
         } else {
           this.$bvModal.msgBoxOk('Problème à la vérification de votre identifiant :' + error.response.data)
         }
+      })
+    },
+    passwordForgot(){
+      ajaxService.getSingleApi("passwordForgot", this.mailToNewMdp).then(res=>{
+        this.$bvModal.hide("modal-psw-forgot");
+        this.mailToNewMdp = "";
+        this.$bvModal.msgBoxOk("Un nouveau mot de passe vous a été envoyé par mail ! (" + res +")");
+      }).catch(res=>{
+        this.$bvModal.hide("modal-psw-forgot");
+        this.mailToNewMdp = "";
+        this.$bvModal.msgBoxOk("Il y a eu un problème ! (" + res.response.data+")");
       })
     }
   },
