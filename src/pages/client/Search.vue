@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CategoriesHeader sidebarVisible :categories="categoriesArray"></CategoriesHeader>
+        <CategoriesHeader sidebarVisible :categories="getTypesFiltered" :activeCat="this.$route.params.filter"></CategoriesHeader>
         <SidebarClient>
             <!--            Recherche -->
             <form class="form-inline w-100" ref="widthSidebar">
@@ -54,14 +54,14 @@
         <div class="containerRight ">
             <div class="container-fluid ">
                 <b-row gutter-2>
-                    <div class="p-4 col-md-6 col-12 mt-3">
+                    <div v-for="materiel in listeMateriel" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
                         <div class="c-card shadow p-4"
                              style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
                             <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
                             <div class="d-flex flex-row align-items-center mb-2">
-                                <b-carousel
+                                <!-- <b-carousel
                                         id="carousel-1"
-                                        :interval="4000"
+                                        :interval="-1"
                                         controls
                                         indicators
                                         background="#ababab"
@@ -70,40 +70,16 @@
                                         style="height: 100%;"
                                         class="w-50 mr-4"
                                 >
-                                    <!-- Text slides with image -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
 
-                                    <!-- Slides with custom text -->
                                     <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
+                                            :img-src="materiel.photo"></b-carousel-slide>
 
-                                    <!-- Slides with image only -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-                                    <!-- Slides with img slot -->
-                                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-                                    <b-carousel-slide>
-                                        <template #img>
-                                            <img
-                                                    class="d-block img-fluid w-100"
-                                                    width="1024"
-                                                    height="480"
-                                                    src="https://picsum.photos/1024/480/?image=55"
-                                                    alt="image slot"
-                                            >
-                                        </template>
-                                    </b-carousel-slide>
-                                </b-carousel>
+                                </b-carousel> -->
+                                <img :src="materiel.photo" class="w-25 mr-4 img-fluid" alt="Responsive image">
                                 <div class="w-50"
                                      style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">There is some text here</h3>
-                                    <p>description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Assumenda blanditiis
-                                        dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet
-                                        impedit in neque
-                                        possimus voluptate. Accusamus asperiores rem voluptatem?</p>
+                                    <h3 class="border-bottom border-dark t">{{materiel.nom}}</h3>
+                                    <p>{{materiel.usage}}</p>
                                 </div>
                             </div>
                             <div class="d-flex flex-row justify-content-between align-items-center">
@@ -111,412 +87,6 @@
                                 <router-link :to="{ name: 'Article', params : { id:'Hello'}}">
                                     <b-button variant="primary">Button</b-button>
                                 </router-link>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 col-md-6 col-12 mt-3">
-                        <div class="c-card shadow p-4"
-                             style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <b-carousel
-                                        id="carousel-1"
-                                        :interval="4000"
-                                        controls
-                                        indicators
-                                        background="#ababab"
-                                        img-width="1024"
-                                        img-height="480"
-                                        style="height: 100%;"
-                                        class="w-50 mr-4"
-                                >
-                                    <!-- Text slides with image -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
-
-                                    <!-- Slides with custom text -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
-
-                                    <!-- Slides with image only -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-                                    <!-- Slides with img slot -->
-                                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-                                    <b-carousel-slide>
-                                        <template #img>
-                                            <img
-                                                    class="d-block img-fluid w-100"
-                                                    width="1024"
-                                                    height="480"
-                                                    src="https://picsum.photos/1024/480/?image=55"
-                                                    alt="image slot"
-                                            >
-                                        </template>
-                                    </b-carousel-slide>
-                                </b-carousel>
-                                <div class="w-50"
-                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">There is some text here</h3>
-                                    <p>description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Assumenda blanditiis
-                                        dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet
-                                        impedit in neque
-                                        possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <b-button variant="primary">Button</b-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 col-md-6 col-12 mt-3">
-                        <div class="c-card shadow p-4"
-                             style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <b-carousel
-                                        id="carousel-1"
-                                        :interval="4000"
-                                        controls
-                                        indicators
-                                        background="#ababab"
-                                        img-width="1024"
-                                        img-height="480"
-                                        style="height: 100%;"
-                                        class="w-50 mr-4"
-                                >
-                                    <!-- Text slides with image -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
-
-                                    <!-- Slides with custom text -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
-
-                                    <!-- Slides with image only -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-                                    <!-- Slides with img slot -->
-                                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-                                    <b-carousel-slide>
-                                        <template #img>
-                                            <img
-                                                    class="d-block img-fluid w-100"
-                                                    width="1024"
-                                                    height="480"
-                                                    src="https://picsum.photos/1024/480/?image=55"
-                                                    alt="image slot"
-                                            >
-                                        </template>
-                                    </b-carousel-slide>
-                                </b-carousel>
-                                <div class="w-50"
-                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">There is some text here</h3>
-                                    <p>description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Assumenda blanditiis
-                                        dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet
-                                        impedit in neque
-                                        possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <b-button variant="primary">Button</b-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 col-md-6 col-12 mt-3">
-                        <div class="c-card shadow p-4"
-                             style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <b-carousel
-                                        id="carousel-1"
-                                        :interval="4000"
-                                        controls
-                                        indicators
-                                        background="#ababab"
-                                        img-width="1024"
-                                        img-height="480"
-                                        style="height: 100%;"
-                                        class="w-50 mr-4"
-                                >
-                                    <!-- Text slides with image -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
-
-                                    <!-- Slides with custom text -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
-
-                                    <!-- Slides with image only -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-                                    <!-- Slides with img slot -->
-                                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-                                    <b-carousel-slide>
-                                        <template #img>
-                                            <img
-                                                    class="d-block img-fluid w-100"
-                                                    width="1024"
-                                                    height="480"
-                                                    src="https://picsum.photos/1024/480/?image=55"
-                                                    alt="image slot"
-                                            >
-                                        </template>
-                                    </b-carousel-slide>
-                                </b-carousel>
-                                <div class="w-50"
-                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">There is some text here</h3>
-                                    <p>description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Assumenda blanditiis
-                                        dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet
-                                        impedit in neque
-                                        possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <b-button variant="primary">Button</b-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 col-md-6 col-12 mt-3">
-                        <div class="c-card shadow p-4"
-                             style="height: 270px;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <b-carousel
-                                        id="carousel-1"
-                                        :interval="4000"
-                                        controls
-                                        indicators
-                                        background="#ababab"
-                                        img-width="1024"
-                                        img-height="480"
-                                        style="height: 100%;"
-                                        class="w-50 mr-4"
-                                >
-                                    <!-- Text slides with image -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
-
-                                    <!-- Slides with custom text -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
-
-                                    <!-- Slides with image only -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-                                    <!-- Slides with img slot -->
-                                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-                                    <b-carousel-slide>
-                                        <template #img>
-                                            <img
-                                                    class="d-block img-fluid w-100"
-                                                    width="1024"
-                                                    height="480"
-                                                    src="https://picsum.photos/1024/480/?image=55"
-                                                    alt="image slot"
-                                            >
-                                        </template>
-                                    </b-carousel-slide>
-                                </b-carousel>
-                                <div class="w-50"
-                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">There is some text here</h3>
-                                    <p>description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Assumenda blanditiis
-                                        dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet
-                                        impedit in neque
-                                        possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <b-button variant="primary">Button</b-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 col-md-6 col-12 mt-3">
-                        <div class="c-card shadow p-4"
-                             style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <b-carousel
-                                        id="carousel-1"
-                                        :interval="4000"
-                                        controls
-                                        indicators
-                                        background="#ababab"
-                                        img-width="1024"
-                                        img-height="480"
-                                        style="height: 100%;"
-                                        class="w-50 mr-4"
-                                >
-                                    <!-- Text slides with image -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
-
-                                    <!-- Slides with custom text -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
-
-                                    <!-- Slides with image only -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-                                    <!-- Slides with img slot -->
-                                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-                                    <b-carousel-slide>
-                                        <template #img>
-                                            <img
-                                                    class="d-block img-fluid w-100"
-                                                    width="1024"
-                                                    height="480"
-                                                    src="https://picsum.photos/1024/480/?image=55"
-                                                    alt="image slot"
-                                            >
-                                        </template>
-                                    </b-carousel-slide>
-                                </b-carousel>
-                                <div class="w-50"
-                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">There is some text here</h3>
-                                    <p>description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Assumenda blanditiis
-                                        dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet
-                                        impedit in neque
-                                        possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <b-button variant="primary">Button</b-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 col-md-6 col-12 mt-3">
-                        <div class="c-card shadow p-4"
-                             style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <b-carousel
-                                        id="carousel-1"
-                                        :interval="4000"
-                                        controls
-                                        indicators
-                                        background="#ababab"
-                                        img-width="1024"
-                                        img-height="480"
-                                        style="height: 100%;"
-                                        class="w-50 mr-4"
-                                >
-                                    <!-- Text slides with image -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
-
-                                    <!-- Slides with custom text -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
-
-                                    <!-- Slides with image only -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-                                    <!-- Slides with img slot -->
-                                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-                                    <b-carousel-slide>
-                                        <template #img>
-                                            <img
-                                                    class="d-block img-fluid w-100"
-                                                    width="1024"
-                                                    height="480"
-                                                    src="https://picsum.photos/1024/480/?image=55"
-                                                    alt="image slot"
-                                            >
-                                        </template>
-                                    </b-carousel-slide>
-                                </b-carousel>
-                                <div class="w-50"
-                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">There is some text here</h3>
-                                    <p>description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Assumenda blanditiis
-                                        dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet
-                                        impedit in neque
-                                        possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <b-button variant="primary">Button</b-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 col-md-6 col-12 mt-3">
-                        <div class="c-card shadow p-4"
-                             style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <b-carousel
-                                        id="carousel-1"
-                                        :interval="4000"
-                                        controls
-                                        indicators
-                                        background="#ababab"
-                                        img-width="1024"
-                                        img-height="480"
-                                        style="height: 100%;"
-                                        class="w-50 mr-4"
-                                >
-                                    <!-- Text slides with image -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
-
-                                    <!-- Slides with custom text -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
-
-                                    <!-- Slides with image only -->
-                                    <b-carousel-slide
-                                            img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-                                    <!-- Slides with img slot -->
-                                    <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-                                    <b-carousel-slide>
-                                        <template #img>
-                                            <img
-                                                    class="d-block img-fluid w-100"
-                                                    width="1024"
-                                                    height="480"
-                                                    src="https://picsum.photos/1024/480/?image=55"
-                                                    alt="image slot"
-                                            >
-                                        </template>
-                                    </b-carousel-slide>
-                                </b-carousel>
-                                <div class="w-50"
-                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">There is some text here</h3>
-                                    <p>description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                        Assumenda blanditiis
-                                        dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet
-                                        impedit in neque
-                                        possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <b-button variant="primary">Button</b-button>
                             </div>
                         </div>
                     </div>
@@ -529,6 +99,7 @@
 <script>
     import CategoriesHeader from '@/components/CategoriesHeader'
     import SidebarClient from '@/components/SidebarClient'
+    import ajaxService from '@/services/ajaxService.js'
 
     export default {
         name: 'Search',
@@ -541,11 +112,16 @@
             return {
                 showDismissibleAlert: false,
                 categoriesArray: ['Kit', 'Prise de vue', 'Son', 'Eclairage', 'Accessoires'],
+                listeType: [],
+                listeMateriel: [],
 
                 /* sidebar content */
                 dateFilter: null,
                 v_disableDatePicker: true,
-                sidebarInnerWidth: 0
+                sidebarInnerWidth: 0,
+
+                /*Filter*/
+                currentFilter: "none"
             }
         },
         methods: {
@@ -555,30 +131,83 @@
                 } else {
                     return false
                 }
-            }
+            },
+
+            //Getters
+            getTypes() {
+                ajaxService.getApi("types").then(result => {
+                    this.listeType = result;
+                    console.log(result);
+                    for( let i = 0; i < this.listeType.length; i++ )
+                    {
+                        this.categoriesArray[i] = this.listeType()[i].nom;
+                        console.log(this.categoriesArray[i]);
+                    }
+                }).catch(error => console.log(error))
+            },
+            getListeMateriel() {
+                ajaxService.getApi("materiels").then(result => {
+                    this.listeMateriel = result;
+                    console.log(result);
+                }).catch(error => console.log(error))
+            },
+
+
         },
         computed:
-            {
-                disableDatePicker() {
-                    return !this.v_disableDatePicker
-                },
-                adaptCalendar() {
-                    if (this.isMobile()) {
+        {
+            disableDatePicker() {
+                return !this.v_disableDatePicker
+            },
+            adaptCalendar() {
+                if (this.isMobile()) {
+                    return true
+                } else {
+                    if (this.sidebarInnerWidth < 250) {
+                        console.log(this.sidebarInnerWidth)
                         return true
                     } else {
-                        if (this.sidebarInnerWidth < 250) {
-                            console.log(this.sidebarInnerWidth)
-                            return true
-                        } else {
-                            console.log(this.sidebarInnerWidth)
-                            console.log('Big One')
-                            return false
-                        }
+                        console.log(this.sidebarInnerWidth)
+                        console.log('Big One')
+                        return false
                     }
                 }
             },
+            //Filtres
+            getTypesFiltered: function()
+            {
+                if( this.listeType ) {
+                    console.log("startfilter | lenght :" + this.listeType.length);
+                    let array = [];
+                    for (let i = 0; i < this.listeType.length; i++) {
+                        array.push(this.listeType[i].nom);
+                        console.log(this.listeType[i].nom);
+                    }
+                    return [...new Set(array)];
+                }
+                else {
+                    return [];
+                }
+            }
+        },
+        beforeMount(){
+
+        },
         mounted() {
-            this.sidebarInnerWidth = this.$refs.widthSidebar.clientWidth
+            this.getTypes();
+            this.getListeMateriel();
+
+            this.sidebarInnerWidth = this.$refs.widthSidebar.clientWidth;
+            this.currentFilter = this.$route.params.filter;
+
+            /*console.log(this.getTypesFiltered());
+
+            for( let i = 0; i < this.getTypesFiltered.length; i++ )
+            {
+                this.categoriesArray[i] = this.getTypesFiltered()[i].nom;
+
+                console.log(this.categoriesArray[i]);
+            }*/
         }
     }
 </script>
@@ -588,7 +217,7 @@
     .containerRight {
         width: calc(100% - var(--sidebar-width));
         margin-left: var(--sidebar-width);
-        height: calc(100vh - var(--header-height) - var(--navbar-height));
+        min-height: calc(100vh - var(--header-height) - var(--navbar-height));
     }
 
     h3 {

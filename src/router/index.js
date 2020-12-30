@@ -19,7 +19,8 @@ export default new Router({
   routes: [
     //client
     {path: '/', name: 'Accueil', component: Accueil},
-    {path: '/search', name: 'Search', component: Search},
+    {path: '/search/:filter', name: 'Search', component: Search},
+    { path: '/search', redirect: '/search/nofilter' },
     {path: '/reservation/:state', name: 'Reservation', component: Reservation},
     {path: '/article/:id', name: 'Article', component: Article},
 

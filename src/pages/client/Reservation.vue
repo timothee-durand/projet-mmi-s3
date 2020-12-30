@@ -415,7 +415,6 @@ export default {
   methods:
   {
     sendOnSite(){
-      console.log("GHHH");
       //this.$router.go({ name: 'Reservation', params : { state:'selection'}});
       this.$router.push('selection')
     }
