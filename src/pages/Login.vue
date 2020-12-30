@@ -1,0 +1,186 @@
+<template>
+  <div class="p-4">
+    <h1>Bienvenue sur Pictum</h1>
+    <p>Le service de gestion de prêt matériel vidéo du Campus des Portes du Jura</p>
+    <div class="w-50 mx-auto">
+      <b-btn-group class="mx-auto w-100 mb-2">
+        <b-btn variant="outline-primary" @click="inscription = false" :pressed="!inscription">Se connecter</b-btn>
+        <b-btn variant="outline-primary" @click="inscription = true" :pressed="inscription">S'inscrire</b-btn>
+      </b-btn-group>
+      <b-form v-if="inscription" @submit.prevent="signIn">
+        <h3>Inscription</h3>
+
+            <b-form-group
+                valid-feedback="Votre identifiant est correct"
+                invalid-feedback="Vous devez entrez un identifiant universitaire valide !"
+                :state="userVerificationState"
+                label="Identifiant universitaire"
+            >
+              <b-input-group>
+                <b-input v-model="userToSignIn.username" placeholder="mdupont" :state="userVerificationState" @change="verifyLDAP"></b-input>
+                <b-btn size="sm" variant="primary" @click="verifyLDAP" >Vérifier ID universitaire</b-btn>
+              </b-input-group>
+            </b-form-group>
+            <p v-if="userToSignIn.nomLDAP.length > 0 ">Vous êtes {{userToSignIn.nomLDAP}} {{userToSignIn.prenomLDAP}}</p>
+
+            <b-form-group
+                :state="passwordStrengthState"
+                valid-feedback="Votre mot de passe est fort !"
+                invalid-feedback="Votre mot de passe doit contenir entre 6 et 20 caractères, un chiffre, une majuscule et une minuscule"
+                label="Mot de passe"
+            >
+              <b-input v-model="userToSignIn.password" type="password" placeholder="motdepasse" :state="passwordStrengthState"></b-input>
+            </b-form-group>
+
+            <b-form-group
+                :state="passwordVerificationState"
+                invalid-feedback="Les deux mots de passe ne correspondent pas !"
+                label="Confirmez votre mot de passe"
+            >
+              <b-input v-model="userToSignIn.passwordConfirm" type="password" placeholder="motdepasse" :state="passwordVerificationState"></b-input>
+            </b-form-group>
+            <b-alert :show="alertMessage !== ''">{{ alertMessage }}</b-alert>
+            <b-btn :disabled="!userVerificationState || !passwordVerificationState || !passwordStrengthState" type="submit" variant="outline-primary">S'inscrire</b-btn>
+
+      </b-form>
+
+      <b-form v-if="!inscription" class="d-flex flex-column " @submit="login">
+        <h3>Connexion</h3>
+        <b-row>
+          <b-col cols="4">
+            <p class="mr-2">Identifiant universitaire :</p>
+          </b-col>
+          <b-col cols="8">
+            <b-input v-model="userToConnect.username" placeholder="mdupont" class="flex"></b-input>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col cols="4"><p class="mr-2">Mot de passe :</p></b-col>
+          <b-col cols="8">
+            <b-input v-model="userToConnect.password" type="password" placeholder="motdepasse"></b-input>
+          </b-col>
+        </b-row>
+
+        <b-btn type="submit">Se connecter</b-btn>
+      </b-form>
+    </div>
+
+  </div>
+</template>
+
+<script>
+import ajaxService from '@/services/ajaxService.js'
+import appService from '@/services/appService.js'
+import param from '@/param/param.js'
+
+export default {
+  name: 'Login',
+  data () {
+    return {
+      inscription: false,
+      userToConnect: {
+        username: '',
+        password: ''
+      },
+      userToSignIn: {
+        username: '',
+        password: '',
+        passwordConfirm:'',
+        nomLDAP:'',
+        prenomLDAP:''
+      },
+      userVerificationState: false,
+      isVerifiying:false,
+      alertMessage:''
+    }
+  },
+  computed: {
+    passwordStrengthState () {
+      if( this.userToSignIn.password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    passwordVerificationState(){
+      if(this.userToSignIn.password === this.userToSignIn.passwordConfirm) {
+        return true;
+      } else {
+        return false
+      }
+    }
+  },
+  methods: {
+    login () {
+
+      let params = new FormData()
+      params.append('username', this.userToConnect.username)
+      params.append('password', this.userToConnect.password)
+      ajaxService.postAPI('login', params).then(result => {
+        //stocke le token dans le localStorage
+        appService.setLocal(result.token)
+
+        //stocke l'utilisateur dans le store
+        this.$store.commit('setuser', result.user)
+        this.$store.commit('setusertype', result.user_type)
+
+        this.$router.push('/')
+      }).catch(err => {
+        this.$bvModal.msgBoxOk("Il y a eu un problème pendant votre connexion : " + err.response.data)
+      })
+    },
+
+    signIn(){
+      let params = new FormData()
+      params.append('id_univ', this.userToConnect.username)
+      params.append('password', this.userToConnect.password)
+      //par défault
+      params.append('valide', 1)
+
+
+      this.alertMessage = param.messages.sending;
+      // eslint-disable-next-line no-unused-vars
+      ajaxService.postAPI('reservations', params).then(result => {
+          this.userToConnect.username = this.userToSignIn.username;
+          this.userToConnect.password = this.userToSignIn.password;
+
+          this.login();
+      }).catch(err => {
+          this.$bvModal.msgBoxOk("Il y a eu un problème à l'inscription :" + err.response.data);
+      })
+
+    },
+
+    verifyLDAP () {
+      let params = new FormData()
+      params.append('id_univ', this.userToSignIn.username)
+      this.isVerifiying = true;
+      this.userVerificationState = false;
+      // eslint-disable-next-line no-unused-vars
+      ajaxService.postAPI('getLDAP', params).then(result => {
+        this.userVerificationState = true;
+        console.log(result, this.userVerificationState)
+        this.isVerifiying = false;
+
+        this.userToSignIn.nomLDAP = result.nom;
+        this.userToSignIn.prenomLDAP = result.prenom;
+
+      }).catch(error => {
+        console.log(error.response)
+        this.isVerifiying = false;
+        if (error.response.status === 404) {
+          console.log("yo")
+          this.userVerificationState = false
+        } else {
+          this.$bvModal.msgBoxOk('Problème à la vérification de votre identifiant :' + error.response.data)
+        }
+      })
+    }
+  },
+}
+</script>
+
+<style scoped>
+
+</style>

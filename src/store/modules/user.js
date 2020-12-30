@@ -12,7 +12,12 @@ export default {
     },
     isGest () {
       return this.type === 'GEST'
-    }
+    },
+    isAuthenticated(state){
+      console.log(this)
+      //regarde si il y a la propriété id a l'utilisateur stocké (objet initialisé à vide)
+      return "id" in state.user.user;
+    },
   },
 
   mutations : {

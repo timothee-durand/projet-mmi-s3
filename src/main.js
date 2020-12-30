@@ -16,7 +16,7 @@ import './styles/custom-bootstrap.scss'
 /*Fontawesome*/
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
-import appService from '@/services/appService.js'
+
 
 // utiliser bootstrap vue
 Vue.use(BootstrapVue)
@@ -25,9 +25,7 @@ Vue.use(BootstrapVueIcons)
 //ajout axios vue
 Vue.use(VueAxios, axios)
 
-axios.defaults.headers = {
-  'Authorization': 'Bearer ' + appService.getLocal()
-}
+
 
 //ajout vueX
 Vue.use(Vuex)

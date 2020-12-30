@@ -14,10 +14,12 @@ import Admin_Contact from '@/pages/Admin_Contact.vue'
 import Article from "../pages/client/Article";
 import RDV_Admin from '@/pages/admin/RDV_Admin.vue'
 import CreneauxParam_Admin from '@/pages/admin/CreneauxParam_Admin.vue'
+import Login from '@/pages/Login.vue'
+import appService from '@/services/appService.js'
 
 Vue.use(Router)
 
-export default new Router({
+let router =  new Router({
   routes: [
     //client
     {path: '/', name: 'Accueil', component: Accueil},
@@ -39,5 +41,15 @@ export default new Router({
 
     //communes
     {path: '/contact-admin/', name: 'AdminContact', component: Admin_Contact},
+    {path: '/login/', name: 'Login', component: Login},
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  console.log(appService.getLocal())
+  if (to.name !== 'Login' && !appService.getLocal()) next({ name: 'Login' })
+  else next()
+})
+
+
+export default router;
