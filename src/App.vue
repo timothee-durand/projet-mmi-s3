@@ -3,12 +3,15 @@
     <header class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
       <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
 
-      <b-dropdown text="AM" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary">
-        <b-dropdown-item><router-link to="/">Voir vue étudiant</router-link></b-dropdown-item>
-        <b-dropdown-item class="text-danger" @click="console.log('disconnect')">Se déconnecter</b-dropdown-item>
-      </b-dropdown>
+      <div class="d-flex flex-row align-items-center">
+        <router-link to="/" class="mr-3 text-white">Accueil</router-link>
+        <router-link :to="{ name: 'Reservation', params : { state:'selection'}}" class="mr-3 text-white">Réservation</router-link>
+        <b-dropdown text="AM" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary" >
+          <b-dropdown-item><router-link to="/">Voir vue étudiant</router-link></b-dropdown-item>
+          <b-dropdown-item class="text-danger" @click="console.log('disconnect')">Se déconnecter</b-dropdown-item>
+        </b-dropdown>
+      </div>
 
-      <b-button @click="login">Login</b-button>
     </header>
 
     <router-view/>
@@ -39,8 +42,8 @@ export default {
      // window.location = param.login;
       //ajaxService.test();
       let params = new FormData();
-      params.append("username", "tdurand5");
-      params.append("password", "tdurand5");
+      params.append("username", "kschmitt");
+      params.append("password", "Ryu-RDK-CsQ-wVX");
       ajaxService.postAPI("login", params).then(result => {
         console.log(result);
         appService.setLocal(result.token)
@@ -94,5 +97,13 @@ export default {
   .c-card
   {
     border-radius: 10px; background-color: #ffffff; overflow: hidden;
+  }
+
+  #__BVID__8__BV_toggle_
+  {
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    text-align: center;
   }
 </style>
