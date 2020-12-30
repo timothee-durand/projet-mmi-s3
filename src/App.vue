@@ -4,21 +4,22 @@
         class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
       <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
 
-      <b-dropdown text="AM" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary" v-if="isAuth">
-        <div v-if="isGest">
-          <b-dropdown-item >
-            <router-link :to="toDropdown">{{textLinkDropdown}}</router-link>
-          </b-dropdown-item>
-        </div>
-        <b-dropdown-item >
-          <router-link to="password">Mot de passe</router-link>
-        </b-dropdown-item>
 
-        <b-dropdown-item class="text-danger" @click="disconnect">Se déconnecter</b-dropdown-item>
-      </b-dropdown>
       <div class="d-flex flex-row align-items-center">
         <router-link to="/" class="mr-3 text-white">Accueil</router-link>
         <router-link :to="{ name: 'Reservation', params : { state:'selection'}}" class="mr-3 text-white">Réservation</router-link>
+        <b-dropdown :text="initials" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary" v-if="isAuth">
+          <div v-if="isGest">
+            <b-dropdown-item >
+              <router-link :to="toDropdown">{{textLinkDropdown}}</router-link>
+            </b-dropdown-item>
+          </div>
+          <b-dropdown-item >
+            <router-link to="password">Mot de passe</router-link>
+          </b-dropdown-item>
+
+          <b-dropdown-item class="text-danger" @click="disconnect">Se déconnecter</b-dropdown-item>
+        </b-dropdown>
       </div>
     </header>
     <router-view/>
@@ -38,7 +39,7 @@ export default {
       userToLogin: {
         username: '',
         passord: ''
-      },
+      }
     }
   },
   computed: {
@@ -61,6 +62,10 @@ export default {
       } else {
         return "/admin"
       }
+    },
+    initials(){
+      let user = this.$store.getters.getUser;
+      return user.nom.charAt(0) + user.prenom.charAt(0);
     }
   },
   created () {
