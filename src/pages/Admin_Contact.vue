@@ -1,5 +1,5 @@
 <template>
-  <div class="containerRight p-4">
+  <div class=" p-4">
     <b-card class="mx-auto w-75">
       <slot name="header" >
         <div class="d-inline-flex w-25 justify-content-between ">
@@ -11,28 +11,57 @@
       </slot>
       <p>Ce message va être transmis à la personne chargée d'administrer Pictum.</p>
       <b-form @submit.prevent="sendMail">
-        <b-form-input v-model="subject"  placeholder="Sujet du mail"  class="mt-3"></b-form-input>
-        <b-textarea placeholder="Entrez votre message" v-model="message" class="mt-3" rows="10"></b-textarea>
-        <b-button type="submit" variant="success" pill class="pr-3 pl-3 pt-2 pb-2 mt-3 mx-auto d-block">Envoyer</b-button>
+        <p><strong>De : </strong> {{mail.from_name}}</p>
+        <b-input type="email" v-model="mail.from_address"></b-input>
+        <b-form-input v-model="mail.subject" placeholder="Sujet du mail" class="mt-3"></b-form-input>
+        <b-textarea placeholder="Entrez votre message" v-model="mail.content_mail" class="mt-3"
+                    rows="10"></b-textarea>
+        <b-button type="submit" variant="success" pill class="pr-3 pl-3 pt-2 pb-2 mt-3 mx-auto d-block">
+          Envoyer
+        </b-button>
+        <b-alert :show="alertMessage !== ''">{{ alertMessage }}</b-alert>
       </b-form>
     </b-card>
   </div>
 </template>
 
 <script>
+import utilsServices from '@/services/utilsServices.js'
+import param from '@/param/param.js'
+import ajaxService from '@/services/ajaxService.js'
+
 export default {
 name: "Admin_Contact",
   data () {
     return {
-      subject:'',
-      message:''
-    }
-  },
-  methods: {
-    sendMail () {
+      mail :{
+        from_address: '',
+        from_name: "",
+        subject: '',
+        content: '',
+      },
+      listeRes:[],
+      alertMessage : '',
 
     }
   },
+  methods: {
+    initFrom(){
+      let user = this.$store.getters.getUser
+      this.mail.from_address = user.email
+      this.mail.from_name = user.prenom + " " + user.nom;
+    },
+    sendMail () {
+      let mail = utilsServices.getFormData(this.mail);
+
+      this.alertMessage = param.messages.sending;
+      ajaxService.postAPI("sendMailAdmin", mail).then(response => this.alertMessage = param.messages.success + response).catch(error => this.alertMessage = param.messages.problem + error);
+    }
+  },
+  mounted () {
+    this.initFrom();
+
+  }
 }
 </script>
 

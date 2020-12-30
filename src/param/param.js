@@ -44,4 +44,5 @@ export default {
 
   //mail
   sendMailGest: host + "send-mail-gest",
+  sendMailAdmin: host + "send-mail-contact-admin",
 }
