@@ -12,6 +12,7 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.20.1",
     "core-js": "^3.6.5",
+    "dhtmlx-scheduler": "^5.3.10",
     "gantt-schedule-timeline-calendar": "^3.6.6",
     "gmap-vue": "^1.5.0",
     "moment": "^2.29.1",

@@ -80,7 +80,12 @@ export default {
 
         if(to.name === "Login" && this.$store.getters.isAuthenticated) {
           //si on est connecté et que on veut aller sur la page de connexion
-          this.$router.push("/");
+          if( this.$store.getters.isGest) {
+            this.$router.push("/admin");
+          } else {
+            this.$router.push("/");
+          }
+
         }
 
         if(!this.$store.getters.isGest && appService.isAdminRoute(to.name) && this.$store.getters.isAuthenticated){
