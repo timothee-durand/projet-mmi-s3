@@ -132,9 +132,17 @@ export default {
       this.$bvModal.hide(this.idModal)
     },
     getListe () {
-     ajaxService.getAllApi(this.modeSearch).then(result => {
-        this.listeMat = result
-      }).catch(error => console.log(error))
+      if(!this.$store.getters.isAdmin && this.modeSearch === "materiels") {
+        ajaxService.getSingleApi("gestionnaires", this.$store.getters.getUser.id).then(result => {
+          this.listeMat = result.materiels;
+        }).catch(error => console.log(error))
+      } else {
+        //si pas admin
+        ajaxService.getAllApi(this.modeSearch).then(result => {
+          this.listeMat = result
+        }).catch(error => console.log(error))
+      }
+
     },
     changeModeSearch (mode) {
       this.listeMat = []

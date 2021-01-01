@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export default {
   //https://stackoverflow.com/a/40552372
   getFormData (object) {
@@ -9,5 +11,8 @@ export default {
     return array.filter(function (item){
       return item.id === id;
     })[0];
-  }
+  },
+  getDate(date){
+    return moment(date, ["YYYY-MM-DD HH:mm:SS"], 'fr').format("DD MMM YYYY - HH:mm");
+  },
 }
