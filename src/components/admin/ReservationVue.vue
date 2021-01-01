@@ -58,7 +58,9 @@
                 <b-card size="sm" body-class="p-2 flex-row d-flex justify-content-between" class=" mb-2">
                   <p class="m-0 w-75 p-0 d-block"><span class="text-primary"
                                                         :class="{'text-black-50':pret.depart !== null}">
-                    {{pret.date_debut | dateFormat}}</span> - <span class="text-danger">{{ pret.date_fin | dateFormat }}</span> |
+                    {{ pret.date_debut | dateFormat }}</span> - <span class="text-danger">{{
+                      pret.date_fin | dateFormat
+                    }}</span> |
                     {{ pret.materiel.nom }} - {{ pret.materiel.ref }} - {{ pret.materiel.departement.nom }} </p>
                   <b-icon-exclamation-circle variant="danger"
                                              v-if="pret.rendu === null && pret.depart !== null && isNotRegivenInTime(pret)"></b-icon-exclamation-circle>
@@ -103,11 +105,28 @@
         <div class="d-flex justify-content-between w-50">
           <p>Autres actions :</p>
           <b-btn @click="setDepartPret(pret.id)" :disabled="pret.depart !== null">Valider départ</b-btn>
-          <b-btn @click="setRenduPret(pret.id)" :disabled="pret.rendu !== null">Valider Arrivée</b-btn>
+          <b-btn @click="openModalRenduPret(pret)" :disabled="pret.rendu !== null || pret.depart === null">Valider Arrivée</b-btn>
+          <b-btn @click="delPret(pret.id)" class="bg-danger">Annuler le prêt</b-btn>
         </div>
       </b-card>
+    </b-modal>
 
+    <b-modal hide-footer title="Rendu matériel" id="rendu-mat-modal">
+      <p>Êtes-vous sûrs de vouloir rendre ce matériel ?</p>
+      <b-form @submit.prevent="setRenduPret(rendu.pret_id)">
+        <b-form-group class="border-primary border rounded p-3" >
+          <p>Quel est l'état du matériel ?</p>
+          <b-radio-group :options="rendu.optionsRadio" stacked v-model="rendu.indisp" required>
+          </b-radio-group>
+          <b-select v-model="rendu.raisonSelect" :options="rendu.optionsSelect" :disabled="rendu.indisp === 0" :required="rendu.indisp === 1"></b-select>
+          <b-textarea v-if="rendu.raisonSelect === -1" :required="rendu.indisp === 1 && rendu.raisonSelect === -1" v-model="rendu.raison" placeholder="Quel est le problème ?" :disabled="rendu.indisp === 0"></b-textarea>
+        </b-form-group>
+        <div class="d-inline-flex justify-content-between w-100 px-3">
+          <b-btn  variant="outline-danger" class="mx-auto d-block" @click="$bvModal.hide('rendu-mat-modal')">Annuler</b-btn>
+          <b-btn type="submit" variant="primary" class="mx-auto d-block"> Valider</b-btn>
+        </div>
 
+      </b-form>
     </b-modal>
 
   </div>
@@ -146,6 +165,25 @@ export default {
       optionsDatePicker: {
         locale: 'fr',
         format: 'YYYY-MM-DD HH:mm'
+      },
+      rendu: {
+        indisp: 0,
+        mat_id: 0,
+        pret_id:0,
+        raison: '',
+        raisonSelect: 0,
+        optionsRadio: [
+          {text: 'Bon état', value: 0},
+          {text: 'Problèmes', value: 1}
+        ],
+        optionsSelect:[
+          {text: 'Sélectionnez votre problème', value: 0, disabled:true},
+          {text: 'Casse', value: 1},
+          {text: 'Batterie non chargée', value: 2},
+          {text: 'Manque accessoire', value: 3},
+          {text: 'Déterioration', value: 3},
+          {text: 'Autre', value: -1},
+        ]
       }
     }
   },
@@ -185,8 +223,21 @@ export default {
 
       return listeRes
     },
-    now () {
-      return moment()
+    selectIndispRaisonText(){
+      let text =  this.rendu.optionsSelect.find(function (opt){
+        console.log( opt.value === this.rendu.raisonSelect, opt.value, this.rendu.raisonSelect )
+        return opt.value === this.rendu.raisonSelect;
+      }.bind(this));
+      console.log("slele",text);
+      return text.text;
+    },
+    indispRaison(){
+      if(this.rendu.raisonSelect !== -1){
+        //si c'est pas autre
+        return this.selectIndispRaisonText;
+      } else {
+        return this.rendu.raison;
+      }
     }
   },
   methods: {
@@ -194,7 +245,7 @@ export default {
       this.listeMateriel = []
       this.listeRes = []
       ajaxService.getSingleApi('gestionnaires', this.$store.getters.getUser.id).then(result => {
-        console.log(result)
+        //console.log(result)
         this.listeMateriel = result.data.materiels
         this.listeRes = result.data.rdv
         if (this.listeMateriel.length === 0) {
@@ -204,9 +255,9 @@ export default {
     },
     isNotRegivenInTime (estprete) {
       let now = moment()
-      let reponse =  moment(estprete.date_fin).isBefore(now);
-      console.log({estprete}, reponse);
-      return reponse;
+      let reponse = moment(estprete.date_fin).isBefore(now)
+     // console.log({estprete}, reponse)
+      return reponse
 
     },
     editRes (payload) {
@@ -219,17 +270,27 @@ export default {
       this.$bvModal.show('edit-res-modal')
     },
     setDepartPret (id) {
-      let data = new FormData()
-      data.append('action', 'depart')
-      data.append('id_estprete', JSON.stringify([id]))
+      this.$bvModal.msgBoxConfirm('Êtes-vous surs de vouloir valider le départ ce de matériel ?').then(value => {
+        if (value) {
+          let data = new FormData()
+          data.append('action', 'depart')
+          data.append('id_estprete', JSON.stringify([id]))
 
-      ajaxService.putApi('estpretes', id, data).then(res => {
-        this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
-        this.getMat()
-      }).catch(err => {
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
-        this.getMat()
+          ajaxService.putApi('estpretes', id, data).then(res => {
+            this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
+            this.getMat()
+          }).catch(err => {
+            this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
+            this.getMat()
+          })
+        }
       })
+
+    },
+    openModalRenduPret (pret) {
+      this.rendu.mat_id = pret.materiel.id
+      this.rendu.pret_id = pret.id
+      this.$bvModal.show('rendu-mat-modal')
     },
     setRenduPret (id) {
       let data = new FormData()
@@ -237,31 +298,68 @@ export default {
       data.append('id_estprete', JSON.stringify([id]))
 
       ajaxService.putApi('estpretes', id, data).then(res => {
-        this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
-        this.getMat()
-      }).catch(err => {
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
-        this.getMat()
-      })
-    },
-    editPret (id) {
-      let pret = utilsServices.getById(this.resToEdit.est_pretes, id)
-      let data = new FormData()
-      data.append('action', 'edit')
-      data.append('id_estprete', JSON.stringify([id]))
-      data.append('date_debut', pret.date_debut)
-      data.append('date_fin', pret.date_fin)
-      data.append('materiel_id', pret.materiel_id)
+        this.$bvModal.msgBoxOk("Le prêt a bien été signalé comme rendu" + '(' + res + ')').then(value=>{
+          console.log(value)
+          this.$bvModal.hide('edit-res-modal')
+          if(this.rendu.indisp === 1) {
+            let data = new FormData()
+            data.append('indisp', 1)
+            data.append('indisp_raison', this.indispRaison)
 
-      ajaxService.putApi('estpretes', id, data).then(res => {
-        this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
+            console.log("id", this.rendu.mat_id)
+            ajaxService.putApi('materiels', this.rendu.mat_id, data).then(res => {
+              // eslint-disable-next-line no-unused-vars
+              this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(value=>{
+                this.$bvModal.hide('edit-res-modal');
+                this.$bvModal.hide('rendu-mat-modal');
+              })
+            }).catch(err => {
+              // eslint-disable-next-line no-unused-vars
+              this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(value=>{
+                this.$bvModal.hide('edit-res-modal');
+                this.$bvModal.hide('rendu-mat-modal');
+              })
+
+            })
+        }})
         this.getMat()
+        //si il faut mettre le matériel en indisponible
+
       }).catch(err => {
         this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
         this.getMat()
       })
-    }
+
+
+    },
+  editPret (id) {
+    let pret = utilsServices.getById(this.resToEdit.est_pretes, id)
+    let data = new FormData()
+    data.append('action', 'edit')
+    data.append('id_estprete', JSON.stringify([id]))
+    data.append('date_debut', pret.date_debut)
+    data.append('date_fin', pret.date_fin)
+    data.append('materiel_id', pret.materiel_id)
+
+    ajaxService.putApi('estpretes', id, data).then(res => {
+      this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
+      this.getMat()
+    }).catch(err => {
+      this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
+      this.getMat()
+    })
   },
+  delPret (id) {
+
+    ajaxService.delApi('estpretes', id).then(res => {
+      this.$bvModal.msgBoxOk("Ce prêt a bien été annulé !" + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
+      this.getMat()
+    }).catch(err => {
+      this.$bvModal.msgBoxOk("Il y a eu un problème :" + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
+      this.getMat()
+    })
+  }
+},
   mounted () {
     this.getMat()
 
