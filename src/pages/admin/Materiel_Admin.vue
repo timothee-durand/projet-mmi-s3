@@ -19,14 +19,40 @@
                   :reference="materiel.ref" :disable-ref="modeSearch==='types'||modeSearch==='departements'"
                   :img="materiel[keyImg]" :nom="materiel.nom"
                   :disable-dispo="modeSearch==='types'||modeSearch==='departements'"
+                  :dispo="getDisponibilite(materiel)"
                   @editMat="editMat"
                   @deleteMat="delMat"
+                  @lockMat="lockMat"
                   :type="modeSearch"
                   class="mt-3"></row-result>
 
       <modal-pictum :title="modal.title" id-modal="modal-mat" text-cancel-button="Fermer"
                     :callback-ok="modal.callback">
         <p>{{ modal.message }}</p>
+      </modal-pictum>
+
+      <modal-pictum id-modal="lock-mat-modal" title="Gestion indisponibilité matériel" hide-footer>
+
+        <b-form @submit.prevent="sendLockMat">
+          <b-input-group>
+            <b-form-group label="Nom">
+              <b-input v-model="matToLock.nom" disabled/>
+            </b-form-group>
+            <b-form-group label="Référence">
+              <b-input v-model="matToLock.ref" disabled/>
+            </b-form-group>
+          </b-input-group>
+
+          <b-form-group label="Disponibilité">
+            <b-radio-group buttons  v-model="matToLock.indisp" button-variant="primary" :options="optionsIndisp" >
+            </b-radio-group>
+          </b-form-group>
+
+          <b-form-group label="Raison">
+            <b-textarea  :required="matToLock.indisp === 1" v-model="matToLock.indisp_raison" placeholder="Quel est le problème ?" :disabled="matToLock.indisp === 0"></b-textarea>
+          </b-form-group>
+          <b-button variant="outline-primary" type="submit">Valider</b-button>
+        </b-form>
       </modal-pictum>
 
 
@@ -52,6 +78,8 @@ import SidebarAdmin from '@/components/SidebarAdmin.vue'
 import TypeEdit from '@/components/admin/TypeEdit.vue'
 import KitEdit from '@/components/admin/KitEdit.vue'
 import DepEdit from '@/components/admin/DepEdit.vue'
+import utilsServices from '@/services/utilsServices.js'
+import param from '@/param/param.js'
 //import param from '@/param/param.js'
 
 export default {
@@ -59,18 +87,6 @@ export default {
   components: {DepEdit, KitEdit, TypeEdit, MatEdit, ModalPictum, RowResult, SearchBar, SidebarAdmin},
   data () {
     return {
-      buttons: [
-        {
-          icon: 'pencil-fill',
-          variant: 'success',
-          eventName: 'editMat'
-        },
-        {
-          icon: 'x',
-          variant: 'success',
-          eventName: 'deleteMat'
-        },
-      ],
       matSelected: {},
       listeMat: [],
       modeSearch: 'materiels',
@@ -86,10 +102,40 @@ export default {
         idModal: 'modal-mat'
       },
       modeMatEdit: 'add',
-
+      matToLock:{
+        id:0,
+        indisp:0,
+        indisp_raison:''
+      },
+      optionsIndisp:[
+        {text: 'Disponible', value: 0},
+        {text: 'Indisponible', value: 1},
+      ]
     }
   },
   computed: {
+    buttons(){
+      let buttons =  [
+        {
+          icon: 'pencil-fill',
+          variant: 'success',
+          eventName: 'editMat'
+        },
+        {
+          icon: 'x',
+          variant: 'success',
+          eventName: 'deleteMat'
+        },
+      ]
+      if(this.modeSearch === "materiels") {
+        buttons.push({
+          icon: 'lock',
+          variant: 'success',
+          eventName: 'lockMat'
+        })
+      }
+      return buttons;
+    },
     listeSearch () {
       return this.listeMat.filter(function (mat) {
         if (this.stringSearch !== '' || this.typeMatSearch !== '') {
@@ -219,6 +265,41 @@ export default {
     getMatById(id) {
       return this.listeMat.filter(function (mat){
           return mat.id === id;
+      })
+    },
+    getDisponibilite(mat){
+      if(mat.indisp === 0){
+        return {
+          text:"Disponible",
+          variant:"success"
+        }
+      } else {
+        return {
+          text: utilsServices.getShortVersion(mat.indisp_raison),
+          variant:"danger"
+        }
+      }
+    },
+    lockMat(payload){
+      console.log(payload)
+      this.matToLock = utilsServices.getById(this.listeMat, parseInt(payload.id));
+      this.$bvModal.show('lock-mat-modal');
+    },
+    sendLockMat(){
+      let data = new FormData();
+      data.append("indisp", this.matToLock.indisp);
+      if(this.matToLock.indisp === 0){
+        data.append("indisp_raison", " ");
+      } else {
+        data.append("indisp_raison", this.matToLock.indisp_raison);
+      }
+
+      ajaxService.putApi("materiels", this.matToLock.id, data).then(res => {
+        this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('lock-mat-modal'))
+        this.getListe()
+      }).catch(err => {
+        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('lock-mat-modal'))
+        this.getListe()
       })
     }
 
