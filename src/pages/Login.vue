@@ -145,7 +145,7 @@ export default {
       }).catch(err => {
         if(err.response.status === 418) {
           //si le mail n'est pas vérifié
-          this.$bvModal.msgBoxConfirm("Votre email universitaire n'a pas été validé, voulez-vous que le mail de confirmation du mail vous soit renvoyé ?")
+          this.$bvModal.msgBoxConfirm("Votre email universitaire n'a pas été validé (vérifiez vos spams...), voulez-vous que le mail de confirmation du mail vous soit renvoyé ?")
               .then(value => {
                 if(value){
                   ajaxService.getSingleApi("mailVerifiationResend", this.userToConnect.username).then(res=>{
