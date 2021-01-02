@@ -16,7 +16,7 @@
     ></search-bar>
 
     <row-result v-for="gest in listeSearch" :key="gest.id" :nom="gest.nom + ' '+ gest.prenom "  disable-dispo :reference="getDepNom(gest)" img="../assets/img/person.png" :buttons="getButtons(gest)" :id="gest.id"
-                class="mt-2" ></row-result>
+                class="mt-2"  disable-img :class="{'border-primary':gest.admin === 1}" @editRole="editRoleShow"></row-result>
 
     <modal-pictum   hide-footer id-modal="add-blacklist-modal" title="Ajout Blacklist">
       <b-form @submit.prevent="addRole">
@@ -33,9 +33,20 @@
           <b-select-option value="gest">Gestionnaire</b-select-option>
         </b-select>
         <p>Un mot de passe va lui être envoyé par mail.</p>
-<!--        <p>Entrez le mot de passe qu'elle désire :</p>-->
-<!--        <b-input placeholder="mot de passe" v-model="password" type="password" required></b-input>-->
         <b-button type="submit">Ajouter</b-button>
+        <b-alert :show="alertMessage !== ''">{{ alertMessage }}</b-alert>
+      </b-form>
+    </modal-pictum>
+
+    <modal-pictum   hide-footer id-modal="edit-role-modal" title="Edition Rôle">
+      <b-form @submit.prevent="editRole">
+        <p><strong>Utilisateur :</strong> {{usertoEdit.nom}} {{usertoEdit.prenom}} </p>
+        <b-form-group label="Rôle">
+          <b-select v-model="usertoEdit.admin" :options="optionsRole" required>
+          </b-select>
+        </b-form-group>
+
+        <b-button type="submit">Modifier</b-button>
         <b-alert :show="alertMessage !== ''">{{ alertMessage }}</b-alert>
       </b-form>
     </modal-pictum>
@@ -68,6 +79,12 @@ export default {
       lieux: [{text: 'MMI', value: 'mmi'}, {text: 'BU', value: 'bu'},],
       users: [],
       userToAdd: null,
+      usertoEdit:{},
+      optionsRole:[
+        {text:"Administateur", value:1},
+        {text:"Gestionnaire", value:0},
+      ]
+      ,
       userToAddRole: '',
       searchUser: '',
       idUnivToAdd:'',
@@ -166,21 +183,7 @@ export default {
         return true;
       }
     },
-    getButtons(gest){
-      if(gest.departement === null) {
-        return [
-          {
-            icon: 'pencil-fill',
-            variant: 'success',
-            eventName: 'editRole'
-          },
-          {
-            icon: 'x',
-            variant: 'success',
-            eventName: 'deleteRole'
-          }
-        ]
-      } else {
+    getButtons(){
         return [
           {
             icon: 'pencil-fill',
@@ -188,7 +191,32 @@ export default {
             eventName: 'editRole'
           }
         ]
-      }
+
+    },
+    delRole(payload){
+      console.log("deli", payload)
+      ajaxService.delApi("gestionnaires", payload.id).then(response => {
+          utilsServices.alertResult(response, this, "Ce gestionnaire a bien été supprimé");
+      }).catch(err => {
+          utilsServices.alertError(err, this)
+      } )
+    },
+    editRoleShow(payload){
+      this.usertoEdit = utilsServices.getById(this.listeGest, payload.id);
+      this.$bvModal.show('edit-role-modal')
+    },
+    editRole(){
+      let params = new FormData();
+      params.append("admin", this.usertoEdit.admin);
+      //params.append("password", this.password);
+
+      this.alertMessage = param.messages.sending;
+
+      ajaxService.putApi("gestionnaires", this.usertoEdit.id, params).then(response => {
+        this.alertMessage = param.messages.stored + response;
+        this.getGestionnaires()
+      }).catch(response => utilsServices.alertError(response, this));
+
 
     }
   },

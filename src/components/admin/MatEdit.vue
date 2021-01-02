@@ -1,19 +1,19 @@
 <template>
-  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" hide-footer :on-show-method="setMat">
+  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" hide-footer size="lg" :on-show-method="setMat">
     <b-form enctype="multipart/form-data" @submit.prevent="send">
       <b-input-group class="mb-2">
         <b-input placeholder="Nom" v-model="materiel.nom" class="mr-2 border-primary " required
-                 :state="materiel.nom.length > 6"></b-input>
+                 :state="materiel.nom.length > 4"></b-input>
         <b-input placeholder="Référence" v-model="materiel.ref" class="border-primary " required
                  :state="materiel.ref.length > 6"></b-input>
       </b-input-group>
 
-      <b-form-group label="Caractéristiques" :description="materiel.caracteristiques.length + '/2000'" :state="materiel.caracteristiques.length<2000" invalid-feedback="Vous ne devez pas dépasser 2000 caractères">
+      <b-form-group label="Caractéristiques" :description="materiel.caracteristiques.length + '/2000'" :state="materiel.caracteristiques.length<10000" invalid-feedback="Vous ne devez pas dépasser 2000 caractères">
 <!--        <b-textarea required placeholder="Caractéristiques" v-model="materiel.caracteristiques"-->
 <!--                    class="mb-2 border-primary" :state="materiel.caracteristiques.length < 2000"></b-textarea>-->
         <wysiwyg v-model="materiel.caracteristiques" />
       </b-form-group>
-      <b-form-group label="Pour quoi faire ?" :description="materiel.usage.length + '/2000' " :state="materiel.usage.length<2000" invalid-feedback="Vous ne devez pas dépasser 2000 caractères">
+      <b-form-group label="Pour quoi faire ?" :description="materiel.usage.length + '/10 000' " :state="materiel.usage.length<10000" invalid-feedback="Vous ne devez pas dépasser 10000 caractères">
         <wysiwyg v-model="materiel.usage" />
       </b-form-group>
 

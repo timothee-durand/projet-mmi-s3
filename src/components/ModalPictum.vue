@@ -1,5 +1,5 @@
 <template>
-  <b-modal :ref="idModal" centered  :title="title" :id="idModal" header-border-variant="light" :hide-footer="hideFooter" footer-border-variant="light" @close="onCloseMethod" @show="onShowMethod">
+  <b-modal :ref="idModal" centered  :title="title" :size="size" :id="idModal" header-border-variant="light" :hide-footer="hideFooter" footer-border-variant="light" @close="onCloseMethod" @show="onShowMethod">
     <slot ></slot>
     <template #modal-footer>
       <footer class="d-flex justify-content-between w-75 mx-auto">
@@ -25,6 +25,9 @@ name: "ModalPictum",
     textOkButton: {
       type: String,
       default:"Valider"
+    },
+    size:{
+      type:String
     },
     textCancelButton: {
       type: String,
