@@ -12,7 +12,7 @@
 
             <b-form-group
                 valid-feedback="Votre identifiant est correct"
-                invalid-feedback="Vous devez entrez un identifiant universitaire valide !"
+                :invalid-feedback="userVerificationMessage"
                 :state="userVerificationState"
                 label="Identifiant universitaire"
             >
@@ -105,6 +105,7 @@ export default {
         prenomLDAP:''
       },
       userVerificationState: false,
+      userVerificationMessage: 'Vous devez entrez un identifiant universitaire valide !',
       isVerifiying:false,
       alertMessage:'',
       mailToNewMdp:''
@@ -171,12 +172,12 @@ export default {
 
       //GRt5mlte
       this.alertMessage = param.messages.sending;
-      // eslint-disable-next-line no-unused-vars
       ajaxService.postAPI('reservations', params).then(result => {
+        this.alertMessage = param.messages.success;
           this.userToConnect.username = this.userToSignIn.username;
           this.userToConnect.password = this.userToSignIn.password;
-
-          this.login();
+         this.$bvModal.msgBoxOk("Votre inscription est finie ! \n Vous devez maintenant aller valider votre email.(" + result.response.data + ")");
+          this.inscription = false;
       }).catch(err => {
           this.$bvModal.msgBoxOk("Il y a eu un problème à l'inscription :" + err.response.data);
       })
@@ -201,8 +202,11 @@ export default {
         console.log(error.response)
         this.isVerifiying = false;
         if (error.response.status === 404) {
-          console.log("yo")
           this.userVerificationState = false
+          this.userVerificationMessage = "Vous devez entrez un identifiant universitaire valide !"
+        } else if (error.response.status === 418){
+          this.userVerificationState = false
+          this.userVerificationMessage = "Cet identifiant universitaire est déjà utilisé ou est sur la blacklist !"
         } else {
           this.$bvModal.msgBoxOk('Problème à la vérification de votre identifiant :' + error.response.data)
         }

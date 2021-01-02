@@ -15,7 +15,7 @@
             </b-dropdown-item>
           </div>
           <b-dropdown-item >
-            <router-link to="password">Mot de passe</router-link>
+            <router-link to="/password">Mot de passe</router-link>
           </b-dropdown-item>
           <b-dropdown-item class="text-danger" @click="disconnect">Se déconnecter</b-dropdown-item>
         </b-dropdown>

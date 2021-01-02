@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit.prevent="signIn" class="w-50 mx-auto mt-3">
+  <b-form @submit.prevent="modifyPswd" class="w-50 mx-auto mt-3">
     <h3>Mot de passe</h3>
     <p>Entrez votre nouveau mot de passe</p>
     <b-form-group
@@ -23,7 +23,7 @@
     <b-alert :show="alertMessage !== ''">{{ alertMessage }}</b-alert>
 
     <b-btn :disabled="!passwordVerificationState || !passwordStrengthState" type="submit" variant="outline-primary">
-      S'inscrire
+      Modifier
     </b-btn>
 
   </b-form>
@@ -45,16 +45,17 @@ export default {
     }
   },
   methods: {
-    signIn () {
+    modifyPswd () {
       let params = new FormData()
       params.append('password', this.userToSignIn.password)
+      params.append('id_univ', this.$store.getters.getUser.id_univ)
 
       this.alertMessage = param.messages.sending
       // eslint-disable-next-line no-unused-vars
-      ajaxService.putApi('reservations', this.$store.getters.getUser.id, params).then(result => {
+      ajaxService.postAPI('passwordChange',  params).then(result => {
         this.$bvModal.msgBoxOk('Votre mot de passe a bien été mis à jour !')
       }).catch(err => {
-        this.$bvModal.msgBoxOk('Il y a eu un problème à l\'inscription :' + err.response.data)
+        this.$bvModal.msgBoxOk('Il y a eu un problème à la mise à jour de votre mot de passe :' + err.response.data)
       })
 
     },

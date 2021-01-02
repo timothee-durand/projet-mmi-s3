@@ -39,6 +39,7 @@ export default {
   estpretes: host + "estpretes",
   creneaux: host+"creneaux",
   indisponibilites: host + "indisponibilites",
+  passwordChange: host +"password/change",
 
 
   allLDAP : host + "ldap/all",
