@@ -4,7 +4,7 @@
     <div class="containerRightAdmin p-4">
       <div class="w-100 d-inline-flex justify-content-between mb-2">
         <h1>Matériel</h1>
-        <b-button type="button" variant="primary"  @click="changeModeSearch(modeSearch)" size="sm">
+        <b-button type="button" variant="primary" @click="changeModeSearch(modeSearch)" size="sm">
           <b-icon-arrow-counterclockwise variant="light"></b-icon-arrow-counterclockwise>
         </b-button>
       </div>
@@ -15,7 +15,7 @@
       ></search-bar>
 
       <row-result v-for="materiel in listeSearch" :key="materiel.id" :id="materiel.id.toString()"
-                  :buttons="buttons"
+                  :buttons="buttons(materiel)"
                   :reference="materiel.ref" :disable-ref="modeSearch==='types'||modeSearch==='departements'"
                   :img="materiel[keyImg]" :nom="materiel.nom"
                   :disable-dispo="modeSearch==='types'||modeSearch==='departements'"
@@ -26,13 +26,8 @@
                   :type="modeSearch"
                   class="mt-3"></row-result>
 
-      <modal-pictum :title="modal.title" id-modal="modal-mat" text-cancel-button="Fermer"
-                    :callback-ok="modal.callback">
-        <p>{{ modal.message }}</p>
-      </modal-pictum>
 
       <modal-pictum id-modal="lock-mat-modal" title="Gestion indisponibilité matériel" hide-footer>
-
         <b-form @submit.prevent="sendLockMat">
           <b-input-group>
             <b-form-group label="Nom">
@@ -44,25 +39,29 @@
           </b-input-group>
 
           <b-form-group label="Disponibilité">
-            <b-radio-group buttons  v-model="matToLock.indisp" button-variant="primary" :options="optionsIndisp" >
+            <b-radio-group buttons v-model="matToLock.indisp" button-variant="primary" :options="optionsIndisp">
             </b-radio-group>
           </b-form-group>
 
           <b-form-group label="Raison">
-            <b-textarea  :required="matToLock.indisp === 1" v-model="matToLock.indisp_raison" placeholder="Quel est le problème ?" :disabled="matToLock.indisp === 0"></b-textarea>
+            <b-textarea :required="matToLock.indisp === 1" v-model="matToLock.indisp_raison"
+                        placeholder="Quel est le problème ?" :disabled="matToLock.indisp === 0"></b-textarea>
           </b-form-group>
           <b-button variant="outline-primary" type="submit">Valider</b-button>
         </b-form>
       </modal-pictum>
 
 
-      <mat-edit :modal="modal" id-perso="modif-mat"  :mode="modeMatEdit" :callback-ok="getListe" :materiel-to-edit="matSelected"/>
+      <mat-edit :modal="modal" id-perso="modif-mat" :mode="modeMatEdit" :callback-ok="getListe"
+                :materiel-to-edit="matSelected"/>
 
-      <type-edit :callback-ok="callbackTypeCreation" :mode="modeMatEdit" id-perso="modif-type" :type-to-edit="matSelected"></type-edit>
+      <type-edit :callback-ok="callbackTypeCreation" :mode="modeMatEdit" id-perso="modif-type"
+                 :type-to-edit="matSelected"></type-edit>
 
-      <kit-edit :callback-ok="getListe" :mode="modeMatEdit" id-perso="modif-kit" :kit-to-edit="matSelected" ></kit-edit>
+      <kit-edit :callback-ok="getListe" :mode="modeMatEdit" id-perso="modif-kit" :kit-to-edit="matSelected"></kit-edit>
 
-      <dep-edit :callback-ok="getListe" :mode="modeMatEdit" id-perso="modif-dep" :departement-to-edit="matSelected"></dep-edit>
+      <dep-edit :callback-ok="getListe" :mode="modeMatEdit" id-perso="modif-dep"
+                :departement-to-edit="matSelected"></dep-edit>
     </div>
   </div>
 </template>
@@ -102,40 +101,18 @@ export default {
         idModal: 'modal-mat'
       },
       modeMatEdit: 'add',
-      matToLock:{
-        id:0,
-        indisp:0,
-        indisp_raison:''
+      matToLock: {
+        id: 0,
+        indisp: 0,
+        indisp_raison: ''
       },
-      optionsIndisp:[
+      optionsIndisp: [
         {text: 'Disponible', value: 0},
         {text: 'Indisponible', value: 1},
       ]
     }
   },
   computed: {
-    buttons(){
-      let buttons =  [
-        {
-          icon: 'pencil-fill',
-          variant: 'success',
-          eventName: 'editMat'
-        },
-        {
-          icon: 'x',
-          variant: 'success',
-          eventName: 'deleteMat'
-        },
-      ]
-      if(this.modeSearch === "materiels") {
-        buttons.push({
-          icon: 'lock',
-          variant: 'success',
-          eventName: 'lockMat'
-        })
-      }
-      return buttons;
-    },
     listeSearch () {
       return this.listeMat.filter(function (mat) {
         if (this.stringSearch !== '' || this.typeMatSearch !== '') {
@@ -143,7 +120,7 @@ export default {
             return (mat.nom.toLowerCase().indexOf(this.stringSearch.toLowerCase()) !== -1 && mat.type.nom.toLowerCase().indexOf(this.typeMatSearch.toLowerCase()) !== -1)
           }
           if (this.stringSearch !== '') {
-            return mat.nom.toLowerCase().indexOf(this.stringSearch.toLowerCase()) !== -1;
+            return mat.nom.toLowerCase().indexOf(this.stringSearch.toLowerCase()) !== -1
           }
           if (this.typeMatSearch !== '') {
             return mat.type.nom.toLowerCase().indexOf(this.typeMatSearch.toLowerCase()) !== -1
@@ -168,19 +145,20 @@ export default {
     }
   },
   methods: {
-
     openModal (modal) {
-      this.modal = modal;
-      this.$bvModal.show(this.modal.idModal)
+      this.modal = modal
+      this.$bvModal.msgBoxOk(this.modal.message, {
+        title: this.modal.title
+      }).then(this.modal.callback)
     },
     modifMatApi () {
       console.log(this.matSelected)
       this.$bvModal.hide(this.idModal)
     },
     getListe () {
-      if(!this.$store.getters.isAdmin && this.modeSearch === "materiels") {
-        ajaxService.getSingleApi("gestionnaires", this.$store.getters.getUser.id).then(result => {
-          this.listeMat = result.materiels;
+      if (!this.$store.getters.isAdmin && this.modeSearch === 'materiels') {
+        ajaxService.getSingleApi('gestionnaires', this.$store.getters.getUser.id).then(result => {
+          this.listeMat = result.materiels
         }).catch(error => console.log(error))
       } else {
         //si pas admin
@@ -192,8 +170,8 @@ export default {
     },
     changeModeSearch (mode) {
       this.listeMat = []
-      this.modeSearch = mode;
-      this.typeMatSearch = "";
+      this.modeSearch = mode
+      this.typeMatSearch = ''
       this.getListe()
     },
     filterString (search) {
@@ -213,30 +191,36 @@ export default {
     delMat (payload) {
       this.openModal({
         title: 'Supprimer',
-        callback: function (){
-          //ajaxService.delApi(this.modeSearch, payload.id).then(result => this.modal.message = result).catch(error => this.modal.message = error);
+        callback: function () {
+          ajaxService.delApi(this.modeSearch, payload.id).then(res => {
+            this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide(this.modal.idModal))
+            this.getListe()
+          }).catch(err => {
+            this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide(this.modal.idModal))
+            this.getListe()
+          })
         }.bind(this),
-        message: 'Êtes-vous sûrs de vouloir supprimer ' + payload.nom + ' ? (non implémenté)',
+        message: 'Êtes-vous sûrs de vouloir supprimer ' + payload.nom + ' ?',
         idModal: 'modal-mat'
       })
     },
-    editMat(payload){
+    editMat (payload) {
       this.modeMatEdit = 'edit'
-      this.matSelected = this.getMatById(parseInt(payload.id))[0];
+      this.matSelected = this.getMatById(parseInt(payload.id))[0]
       console.log(payload)
 
       switch (this.modeSearch) {
         case 'materiels':
           this.$bvModal.show('modif-mat')
-          break;
-        case 'types':
-          this.$bvModal.show("modif-type")
-          break;
-        case "malettes":
-          this.$bvModal.show("modif-kit")
           break
-        case "departements":
-          this.$bvModal.show("modif-dep")
+        case 'types':
+          this.$bvModal.show('modif-type')
+          break
+        case 'malettes':
+          this.$bvModal.show('modif-kit')
+          break
+        case 'departements':
+          this.$bvModal.show('modif-dep')
           break
       }
     },
@@ -246,68 +230,115 @@ export default {
       switch (this.modeSearch) {
         case 'materiels':
           this.$bvModal.show('modif-mat')
-          break;
-        case 'types':
-          this.$bvModal.show("modif-type")
-          break;
-        case "malettes":
-          this.$bvModal.show("modif-kit")
           break
-        case "departements":
-          this.$bvModal.show("modif-dep")
+        case 'types':
+          this.$bvModal.show('modif-type')
+          break
+        case 'malettes':
+          this.$bvModal.show('modif-kit')
+          break
+        case 'departements':
+          this.$bvModal.show('modif-dep')
           break
       }
     },
-    callbackTypeCreation(){
-      this.modeSearch = 'types';
-      this.getListe();
+    callbackTypeCreation () {
+      this.modeSearch = 'types'
+      this.getListe()
     },
-    getMatById(id) {
-      return this.listeMat.filter(function (mat){
-          return mat.id === id;
+    getMatById (id) {
+      return this.listeMat.filter(function (mat) {
+        return mat.id === id
       })
     },
-    getDisponibilite(mat){
-      if(mat.indisp === 0){
+    getDisponibilite (mat) {
+      if (this.modeSearch === 'types' || this.modeSearch === 'departements' || this.modeSearch === 'malettes') {
         return {
-          text:"Disponible",
-          variant:"success"
+          text: '',
+          variant: ''
+        }
+      }
+      if (mat.indisp === 0) {
+        return {
+          text: 'Disponible',
+          variant: 'success'
         }
       } else {
         return {
           text: utilsServices.getShortVersion(mat.indisp_raison),
-          variant:"danger"
+          variant: 'danger'
         }
       }
     },
-    lockMat(payload){
+    lockMat (payload) {
       console.log(payload)
-      this.matToLock = utilsServices.getById(this.listeMat, parseInt(payload.id));
-      this.$bvModal.show('lock-mat-modal');
+      this.matToLock = utilsServices.getById(this.listeMat, parseInt(payload.id))
+      this.$bvModal.show('lock-mat-modal')
     },
-    sendLockMat(){
-      let data = new FormData();
-      data.append("indisp", this.matToLock.indisp);
-      if(this.matToLock.indisp === 0){
-        data.append("indisp_raison", " ");
+    sendLockMat () {
+      let data = new FormData()
+      data.append('indisp', this.matToLock.indisp)
+      if (this.matToLock.indisp === 0) {
+        data.append('indisp_raison', ' ')
       } else {
-        data.append("indisp_raison", this.matToLock.indisp_raison);
+        data.append('indisp_raison', this.matToLock.indisp_raison)
       }
 
-      ajaxService.putApi("materiels", this.matToLock.id, data).then(res => {
+      ajaxService.putApi('materiels', this.matToLock.id, data).then(res => {
         this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('lock-mat-modal'))
         this.getListe()
       }).catch(err => {
         this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('lock-mat-modal'))
         this.getListe()
       })
-    }
+    },
+    buttons (mat) {
+      let buttons = [
+        {
+          icon: 'pencil-fill',
+          variant: 'success',
+          eventName: 'editMat'
+        }
+      ]
+      if (this.modeSearch === 'materiels') {
+        buttons.push({
+          icon: 'lock',
+          variant: 'success',
+          eventName: 'lockMat'
+        })
+      }
+      if (mat.prets !== undefined) {
+        if (mat.prets.length === 0) {
+          buttons.push({
+            icon: 'x',
+            variant: 'success',
+            eventName: 'deleteMat'
+          })
+        }
+      }
+      if (mat.materiels !== undefined) {
+        if (mat.materiels.length === 0) {
+          buttons.push({
+            icon: 'x',
+            variant: 'success',
+            eventName: 'deleteMat'
+          })
+        }
+
+      }
+      return buttons
+    },
 
   },
   mounted () {
     console.log('yo')
     this.getListe()
     this.setTypesMateriel()
+
+    //event
+    this.$root.$on('bv::modal::hidden', () => {
+      this.getListe()
+    })
   }
 }
 </script>
