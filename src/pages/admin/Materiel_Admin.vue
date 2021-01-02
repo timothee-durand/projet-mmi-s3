@@ -159,12 +159,12 @@ export default {
       if (!this.$store.getters.isAdmin && this.modeSearch === 'materiels') {
         ajaxService.getSingleApi('gestionnaires', this.$store.getters.getUser.id).then(result => {
           this.listeMat = result.materiels
-        }).catch(error => console.log(error))
+        }).catch(error => utilsServices.alertError(error, this))
       } else {
         //si pas admin
         ajaxService.getAllApi(this.modeSearch).then(result => {
           this.listeMat = result
-        }).catch(error => console.log(error))
+        }).catch(error => utilsServices.alertError(error, this))
       }
 
     },
@@ -183,7 +183,7 @@ export default {
             result.forEach(function (type) {
               this.typesMateriel.push({text: type.nom, value: type.nom, id: type.id})
             }.bind(this))
-          }).catch(error => console.log(error))
+          }).catch(error => utilsServices.alertError(error, this))
     },
     typeSearch (type) {
       this.typeMatSearch = type
@@ -288,7 +288,7 @@ export default {
         this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('lock-mat-modal'))
         this.getListe()
       }).catch(err => {
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('lock-mat-modal'))
+        this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err)).then(this.$bvModal.hide('lock-mat-modal'))
         this.getListe()
       })
     },

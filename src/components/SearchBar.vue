@@ -56,7 +56,7 @@ export default {
       default: function () {
         return [
           {text: 'Matériel', value: 'materiels'},
-          {text: 'Type', value: 'types'},
+          {text: 'Catégories', value: 'types'},
           {text: 'Kit', value: 'malettes'},
           {text: 'Lieu', value: 'departements'},
         ];

@@ -16,7 +16,7 @@ export default {
     success:"L'envoi a reussi !",
   },
 
-  routeAdminName: [
+  routeGestName: [
     "AccueilAdmin",
     "MaterielAdmin",
     "CreneauxAdmin",
@@ -25,6 +25,10 @@ export default {
     "RoleAdmin",
     "RDVAdmin",
     "CreneauxParamAdmin"
+  ],
+
+  routeAdminName:[
+    "RoleAdmin"
   ],
 
 

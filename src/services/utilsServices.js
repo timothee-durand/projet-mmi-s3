@@ -37,5 +37,16 @@ export default {
 
     }
 
+  },
+  getCoolestError(error){
+    let response = error.response;
+    if(typeof response === 'object'){
+      return response.message;
+    } else {
+      return response.data;
+    }
+  },
+  alertError(error, context){
+    context.$bvModal.msgBoxOk("Il y a eu un problème : "+ this.getCoolestError(error));
   }
 }

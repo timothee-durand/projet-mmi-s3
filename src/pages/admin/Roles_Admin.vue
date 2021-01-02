@@ -47,6 +47,7 @@ import ajaxService from '@/services/ajaxService.js'
 import SidebarAdmin from '@/components/SidebarAdmin.vue'
 import ModalPictum from '@/components/ModalPictum.vue'
 import param from '@/param/param.js'
+import utilsServices from '@/services/utilsServices.js'
 
 export default {
   name: 'Roles_Admin',
@@ -120,7 +121,7 @@ export default {
 
       this.alertMessage = param.messages.sending;
 
-        ajaxService.postAPI("gestionnaires", params).then(response => this.alertMessage = param.messages.stored + response).catch(response => this.alertMessage = param.messages.problem + response);
+        ajaxService.postAPI("gestionnaires", params).then(response => this.alertMessage = param.messages.stored + response).catch(response => this.alertMessage = param.messages.problem + utilsServices.getCoolestError(response));
 
 
     },
@@ -132,7 +133,7 @@ export default {
       }
     },
     getGestionnaires(){
-      ajaxService.getAllApi("gestionnaires").then(result => this.listeGest = result).catch(error=>console.log(error));
+      ajaxService.getAllApi("gestionnaires").then(result => this.listeGest = result).catch(error=>utilsServices.alertError(error, this));
     },
     getDepNom(gest){
       if(gest.departement != null) {

@@ -8,11 +8,14 @@
                  :state="materiel.ref.length > 6"></b-input>
       </b-input-group>
 
-      <b-textarea required placeholder="Caractéristiques" v-model="materiel.caracteristiques"
+      <b-form-group label="Caractéristiques" :description="materiel.caracteristiques.length + '/2000' ">
+        <b-textarea required placeholder="Caractéristiques" v-model="materiel.caracteristiques"
+                    class="mb-2 border-primary" :state="materiel.caracteristiques.length < 2000"></b-textarea>
+      </b-form-group>
+      <b-form-group label="Pour quoi faire ?" :description="materiel.usage.length + '/2000' ">
+      <b-textarea required placeholder="Pour quoi faire ?" v-model="materiel.usage" :state="materiel.usage.length < 2000"
                   class="mb-2 border-primary"></b-textarea>
-      <b-textarea required placeholder="Pour quoi faire ?" v-model="materiel.usage"
-                  class="mb-2 border-primary"></b-textarea>
-
+      </b-form-group>
 
       <b-form-checkbox
           id="checkbox-1"
@@ -20,6 +23,7 @@
           class="mb-2 text-center"
           value="1"
           unchecked-value="0"
+
       >
         Matériel "pro" (demande controle avant prêt)
       </b-form-checkbox>
@@ -85,6 +89,7 @@
 import ModalPictum from '@/components/ModalPictum.vue'
 import ajaxService from '@/services/ajaxService.js'
 import param from '@/param/param.js'
+import utilsServices from '@/services/utilsServices.js'
 
 export default {
   name: 'mat-edit',
@@ -199,7 +204,7 @@ export default {
           this.callbackOk
 
         }).catch(error => {
-          this.alertMessage = param.messages.problem + error
+          this.alertMessage = param.messages.problem + utilsServices.getCoolestError(error)
           this.callbackOk
         })
 
@@ -209,7 +214,7 @@ export default {
           this.callbackOk
 
         }).catch(error => {
-          this.alertMessage = param.messages.problem + error
+          this.alertMessage = param.messages.problem + utilsServices.getCoolestError(error)
           this.callbackOk
         })
       }
