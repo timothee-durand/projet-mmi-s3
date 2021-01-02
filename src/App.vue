@@ -49,14 +49,14 @@ export default {
       return this.$store.getters.isAuthenticated;
     },
     textLinkDropdown(){
-      if(appService.isAdminRoute(this.$route.name)){
+      if(appService.isGestRoute(this.$route.name)){
         return "Voir vue Etudiant"
       } else {
         return "Voir vue Gestionnaire"
       }
     },
     toDropdown(){
-      if(appService.isAdminRoute(this.$route.name)){
+      if(appService.isGestRoute(this.$route.name)){
         return "/"
       } else {
         return "/admin"
@@ -88,8 +88,15 @@ export default {
 
         }
         //si pas gestionnaire et va dans admin
-        if(!this.$store.getters.isGest && appService.isAdminRoute(to.name) && this.$store.getters.isAuthenticated){
+        if(!this.$store.getters.isGest && appService.isGestRoute(to.name) && this.$store.getters.isAuthenticated){
           this.$router.push("/")
+          // eslint-disable-next-line no-unused-vars
+          this.$bvModal.msgBoxOk("Vous n'avez pas le droit d'accéder à cette page. Si vous en avez besoin, contactez l'administrateur !");
+        }
+
+        if(!this.$store.getters.isAdmin && appService.isAdminRoute(to.name) && this.$store.getters.isAuthenticated){
+          //si pas admin
+          this.$router.push("/admin")
           // eslint-disable-next-line no-unused-vars
           this.$bvModal.msgBoxOk("Vous n'avez pas le droit d'accéder à cette page. Si vous en avez besoin, contactez l'administrateur !");
         }
