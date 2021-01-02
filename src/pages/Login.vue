@@ -141,7 +141,11 @@ export default {
         this.$store.commit('setuser', result.user)
         this.$store.commit('setusertype', result.user_type)
 
-        this.$router.push('/')
+        if(this.$store.getters.isGest) {
+          this.$router.push("/admin");
+        } else {
+          this.$router.push("/");
+        }
       }).catch(err => {
         if(err.response.status === 418) {
           //si le mail n'est pas vérifié
