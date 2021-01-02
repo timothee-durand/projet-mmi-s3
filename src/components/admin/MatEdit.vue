@@ -1,5 +1,5 @@
 <template>
-  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer :on-show-method="setMat">
+  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" hide-footer :on-show-method="setMat">
     <b-form enctype="multipart/form-data" @submit.prevent="send">
       <b-input-group class="mb-2">
         <b-input placeholder="Nom" v-model="materiel.nom" class="mr-2 border-primary " required
@@ -8,11 +8,14 @@
                  :state="materiel.ref.length > 6"></b-input>
       </b-input-group>
 
-      <b-textarea required placeholder="Caractéristiques" v-model="materiel.caracteristiques"
-                  class="mb-2 border-primary"></b-textarea>
-      <b-textarea required placeholder="Pour quoi faire ?" v-model="materiel.usage"
-                  class="mb-2 border-primary"></b-textarea>
-
+      <b-form-group label="Caractéristiques" :description="materiel.caracteristiques.length + '/2000'" :state="materiel.caracteristiques.length<2000" invalid-feedback="Vous ne devez pas dépasser 2000 caractères">
+<!--        <b-textarea required placeholder="Caractéristiques" v-model="materiel.caracteristiques"-->
+<!--                    class="mb-2 border-primary" :state="materiel.caracteristiques.length < 2000"></b-textarea>-->
+        <wysiwyg v-model="materiel.caracteristiques" />
+      </b-form-group>
+      <b-form-group label="Pour quoi faire ?" :description="materiel.usage.length + '/2000' " :state="materiel.usage.length<2000" invalid-feedback="Vous ne devez pas dépasser 2000 caractères">
+        <wysiwyg v-model="materiel.usage" />
+      </b-form-group>
 
       <b-form-checkbox
           id="checkbox-1"
@@ -28,9 +31,7 @@
         <b-select required v-model="materiel.malette_id" class="mb-2 border-primary">
           <b-select-option value="" disabled> Choissisez une malette</b-select-option>
           <b-select-option value=-1> Pas dans une malette</b-select-option>
-          <b-select-option v-for="malette in malettes" :value="malette.id" :key="malette.id">{{
-              malette.ref
-            }}
+          <b-select-option v-for="malette in malettes" :value="malette.id" :key="malette.id">{{ malette.ref }}
           </b-select-option>
         </b-select>
       </label>
@@ -71,11 +72,11 @@
                    placeholder="Choisissez ou glissez-déposez" :required="mode!=='edit'" browse-text="Choisir"
                    drop-placeholder="Glissez-ici"></b-form-file>
 
-      <p class="m-0 mt-2">Notice : (en PDF)<br/></p>
-      <p v-if="materiel.notice != null">Fichier existant <a :href="materiel.notice">ici</a></p>
-      <b-form-file id="input-mat-notice" accept="application/pdf" class="d-block"
-                   placeholder="Choisissez ou glissez-déposez" :required="mode!=='edit'" browse-text="Choisir"
-                   drop-placeholder="Glissez-ici"></b-form-file>
+      <b-form-group label="Notice">
+        <b-input type="url" v-model="materiel.notice"></b-input>
+      </b-form-group>
+
+
       <b-button type="submit" pill variant="outline-primary" class="m-auto">{{ textSendButton }}</b-button>
       <b-alert :show="alertMessage !== ''">{{ alertMessage }}</b-alert>
     </b-form>
@@ -85,6 +86,7 @@
 import ModalPictum from '@/components/ModalPictum.vue'
 import ajaxService from '@/services/ajaxService.js'
 import param from '@/param/param.js'
+import utilsServices from '@/services/utilsServices.js'
 
 export default {
   name: 'mat-edit',
@@ -180,9 +182,9 @@ export default {
       }
         data.append('usage', this.materiel.usage)
         data.append('carac', this.materiel.caracteristiques)
-      if(document.querySelector('#input-mat-notice').files.length !== 0) {
-        data.append('notice', document.querySelector('#input-mat-notice').files[0])
-      }
+
+        data.append('notice', this.materiel.notice)
+
         data.append('type_id', this.materiel.type_id)
         data.append('pro', this.materiel.pro)
 
@@ -199,7 +201,7 @@ export default {
           this.callbackOk
 
         }).catch(error => {
-          this.alertMessage = param.messages.problem + error
+          this.alertMessage = param.messages.problem + utilsServices.getCoolestError(error)
           this.callbackOk
         })
 
@@ -209,7 +211,7 @@ export default {
           this.callbackOk
 
         }).catch(error => {
-          this.alertMessage = param.messages.problem + error
+          this.alertMessage = param.messages.problem + utilsServices.getCoolestError(error)
           this.callbackOk
         })
       }
@@ -249,3 +251,5 @@ export default {
   }
 }
 </script>
+
+

@@ -62,11 +62,11 @@ export default {
       let mail = utilsServices.getFormData(this.mail);
 
       this.alertMessage = param.messages.sending;
-      ajaxService.postAPI("sendMailGest", mail).then(response => this.alertMessage = param.messages.success + response).catch(error => this.alertMessage = param.messages.problem + error);
+      ajaxService.postAPI("sendMailGest", mail).then(response => this.alertMessage = param.messages.success + response).catch(error => this.alertMessage = param.messages.problem + utilsServices.getCoolestError(error));
     },
 
     setContacts(){
-      ajaxService.getAllApi("reservations").then(result=> this.listeRes = result).catch(error => console.log(error));
+      ajaxService.getAllApi("reservations").then(result=> this.listeRes = result).catch(error => utilsServices.alertError(error, this));
     }
   },
   mounted () {

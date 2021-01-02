@@ -4,7 +4,6 @@
         class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
       <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
 
-
       <div class="d-flex flex-row align-items-center" v-if="isAuth">
         <router-link to="/" class="mr-3 text-white">Accueil</router-link>
         <router-link :to="{ name: 'Reservation', params : { state:'selection'}}" class="mr-3 text-white">Réservation</router-link>
@@ -26,10 +25,7 @@
 </template>
 
 <script>
-
 import appService from '@/services/appService.js'
-
-
 export default {
   name: 'App',
 
@@ -49,14 +45,14 @@ export default {
       return this.$store.getters.isAuthenticated;
     },
     textLinkDropdown(){
-      if(appService.isAdminRoute(this.$route.name)){
+      if(appService.isGestRoute(this.$route.name)){
         return "Voir vue Etudiant"
       } else {
         return "Voir vue Gestionnaire"
       }
     },
     toDropdown(){
-      if(appService.isAdminRoute(this.$route.name)){
+      if(appService.isGestRoute(this.$route.name)){
         return "/"
       } else {
         return "/admin"
@@ -73,7 +69,7 @@ export default {
     '$route': {
       immediate: true,
       handler(to) {
-        if(to.name !== "Login" && !this.$store.getters.isAuthenticated) {
+        if((to.name !== "Login" || to.name !== "AdminContact"  )&& !this.$store.getters.isAuthenticated) {
           //si on ne va pas se connecter et que on est pas authentifié
           this.$router.push("/login");
         }
@@ -88,12 +84,18 @@ export default {
 
         }
         //si pas gestionnaire et va dans admin
-        if(!this.$store.getters.isGest && appService.isAdminRoute(to.name) && this.$store.getters.isAuthenticated){
+        if(!this.$store.getters.isGest && appService.isGestRoute(to.name) && this.$store.getters.isAuthenticated){
           this.$router.push("/")
           // eslint-disable-next-line no-unused-vars
           this.$bvModal.msgBoxOk("Vous n'avez pas le droit d'accéder à cette page. Si vous en avez besoin, contactez l'administrateur !");
         }
 
+        if(!this.$store.getters.isAdmin && appService.isAdminRoute(to.name) && this.$store.getters.isAuthenticated){
+          //si pas admin
+          this.$router.push("/admin")
+          // eslint-disable-next-line no-unused-vars
+          this.$bvModal.msgBoxOk("Vous n'avez pas le droit d'accéder à cette page. Si vous en avez besoin, contactez l'administrateur !");
+        }
       }
     }
   },

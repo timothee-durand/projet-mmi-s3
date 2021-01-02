@@ -43,6 +43,7 @@
 import ModalPictum from '@/components/ModalPictum.vue'
 import ajaxService from '@/services/ajaxService.js'
 import param from '@/param/param.js'
+import utilsServices from '@/services/utilsServices.js'
 
 export default {
   name: 'dep-edit',
@@ -123,7 +124,7 @@ export default {
           this.callbackOk
 
         }).catch(error => {
-          this.alertMessage = param.messages.problem + error
+          this.alertMessage = param.messages.problem + utilsServices.getCoolestError(error)
           this.callbackOk
         })
 
@@ -135,7 +136,7 @@ export default {
           this.callbackOk
 
         }).catch(error => {
-          this.alertMessage = param.messages.problem + error
+          this.alertMessage = param.messages.problem + utilsServices.getCoolestError(error)
           this.callbackOk
         })
       }
