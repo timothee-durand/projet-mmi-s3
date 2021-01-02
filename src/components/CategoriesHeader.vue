@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar type="secondary" style="margin-top: 70px" fixed="top" variant="secondary" :class="adaptToSidebar">
+        <b-navbar type="secondary" style="margin-top: 70px; z-index: 1;" fixed="top" variant="secondary" :class="adaptToSidebar">
             <b-navbar-nav class="ml-auto mr-auto" style="min-width: 75%" justified>
                 <b-nav-item :class="{ activeNav : isSelected(index), inactiveNav : !isSelected(index)}" v-for="(categorie, index) in verifiedCategories"
                             :key="categorie" href="#" link-classes="text-light">

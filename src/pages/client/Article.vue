@@ -45,19 +45,41 @@
                             <b-form-datepicker v-if="adaptCalendar" id="datepicker" v-model="selectedDate"
                                                :disabled="disableDatePicker"
                                                class="mb-4"></b-form-datepicker>
-                            <b-calendar v-else v-model="selectedDate" locale="fr" :disabled="disableDatePicker" block
+                            <b-calendar v-else v-model="selectedDate" today-variant="primary" selected-variant="primary" nav-button-variant="secondary" :date-disabled-fn="dateDisabled" locale="fr" :disabled="disableDatePicker" block
                                         class="w-100 "></b-calendar>
                         </form>
+
+                        <!-- Modale de confirmation de réservation -->
+                        <b-modal ref="modalReserv" id="modalReserv" centered :title="titreReservModal">
+                            <p>
+                                Ce matériel sera ajouté à votre réservation.
+                            </p>
+                            <p>
+                                <span class="font-weight-bold">La date d'emprunt sélectionnée sera la même pour tous les objets que vous ajouterez par la suite à votre réservation.</span>
+                            </p>
+
+                            <template #modal-footer="{ cancel }">
+                                <!-- Emulate built in modal footer ok and cancel button actions -->
+
+                                <b-button size="sm" variant="secondary" @click="cancel()">
+                                    Annuler
+                                </b-button>
+                                <b-button size="sm" variant="success" @click="addToReservation()">
+                                    OK
+                                </b-button>
+                            </template>
+                        </b-modal>
+
                     </div>
                     <div class="d-flex align-items-center justify-content-end w-100 flex-row mb-3">
                         <b-button v-on:click="sendToManuel" variant="primary" class="w-auto mr-3">Manuel PDF</b-button>
                         <b-button v-b-modal.modalTuto variant="primary" class="w-auto">Video Tutoriel</b-button>
 
-                        <b-modal id="modalTuto" title="Tutoriels disponibles" ok-only>
+                        <b-modal id="modalTuto" scrollable centered title="Tutoriels disponibles" ok-only>
                             <p>
                                 This <a href="#" v-b-tooltip title="Tooltip in a modal!">Link</a> Voici la liste des tutoriels disponibles pour ce matériel.
                             </p>
-                                <div v-for="{tuto, index} in this.tutos" v-on:click="sendTo(index)" :key="index" class="c-card shadow mb-3 text-dark">{{tuto}}</div>
+                                <div style="cursor: pointer;" v-for="(tuto, index) in this.tutos" v-on:click="sendTo(index)" :key="index" class="c-card shadow mb-3 text-dark">{{tuto}}</div>
                         </b-modal>
 
                     </div>
@@ -81,11 +103,11 @@
                     </div>
                     <div class="c-card shadow mb-3">
                         <h3>Caractéristiques techniques</h3>
-                        <p>{{this.selectedMateriel.caracteristiques}}</p>
+                        <div v-html="this.selectedMateriel.usage"></div>
                     </div>
                     <div class="c-card shadow mb-3">
                         <h3>Usage</h3>
-                        <p>{{this.selectedMateriel.usage}}</p>
+                        <div v-html="this.selectedMateriel.usage"></div>
                     </div>
                 </div>
 
@@ -98,6 +120,7 @@
     import CategoriesHeader from '@/components/CategoriesHeader'
     import ajaxService from '@/services/ajaxService.js'
     import utilsServices from '@/services/utilsServices.js'
+
 
     export default {
         name: "Article",
@@ -137,28 +160,60 @@
             },
             sendTo(TutoIndex)
             {
-                console.log(this.tutos[TutoIndex].name);
+                console.log(this.tutos[TutoIndex]);
                 window.open(this.tutos[TutoIndex]);
             },
             sendToManuel()
             {
                 console.log(this.selectedMateriel.notice);
                 window.open(this.selectedMateriel.notice);
+            },
+
+            //Calendrier
+
+            dateDisabled(ymd, date) {
+                // Disable weekends (Sunday = `0`, Saturday = `6`) and
+                // disable days that fall on the 13th of the month
+                const weekday = date.getDay()
+                //const day = date.getDate()
+                // Return `true` if the date should be disabled
+                return weekday === 0 || weekday === 0 || weekday === 2 || weekday === 3 || weekday === 4 || weekday === 5 || weekday === 6
+            },
+
+            //Reservation
+
+            addToReservation()
+            {
+                console.log("ajouté à la reservation");
+                this.$store.commit("addMaterielId", this.selectedMateriel.id);
+                this.$refs['modalReserv'].hide();
             }
         },
 
         computed:
             {
                 adaptCalendar() {
-                    if (this.isMobile()) {
-                        return true
-                    } else {
-                        return false
-                    }
+                    return !!this.isMobile();
                 },
                 disableDatePicker() {
                     return this.v_disableDatePicker
                 },
+                titreReservModal()
+                {
+                    if( this.selectedDate ) {
+                        return "Louer cet objet pour le " + this.selectedDate.split("-").reverse().join('/') + ' ?';
+                    }
+                    return "Louer cet objet ?";
+                }
+
+            },
+
+        watch:
+            {
+                selectedDate: function()
+                {
+                    this.$refs['modalReserv'].show();
+                }
             },
 
         mounted() {

@@ -23,7 +23,6 @@
         data() {
             return {
                 showDismissibleAlert: false,
-                categoriesArray: ['Kit', 'Prise de vue', 'Son', 'Eclairage', 'Accessoires'],
                 listeType: [],
             }
         },
@@ -33,10 +32,6 @@
                 ajaxService.getAllApi("types").then(result => {
                     this.listeType = result;
                     console.log(result);
-                    for (let i = 0; i < this.listeType.length; i++) {
-                        this.categoriesArray[i] = this.listeType()[i].nom;
-                        console.log(this.categoriesArray[i]);
-                    }
                 }).catch(error => console.log(error))
             },
         },
@@ -51,7 +46,10 @@
                             array.push(this.listeType[i].nom);
                             console.log(this.listeType[i].nom);
                         }
-                        return [...new Set(array)];
+                        let result = [...new Set(array)];
+                        result.push("Malettes");
+                        result.push("Tous");
+                        return result;
                     } else {
                         return [];
                     }
