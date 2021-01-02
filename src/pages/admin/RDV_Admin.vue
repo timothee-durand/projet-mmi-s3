@@ -97,7 +97,7 @@ export default {
         this.listeRDV.sort(function (rdv1, rdv2){
           return moment(rdv1.date).isAfter(rdv2.date);
         })
-      } ).catch(error => console.log(error));
+      } ).catch(error => utilsServices.alertError(error, this));
     },
     getDate(date){
       return moment(date, ["YYYY-MM-DD HH:mm:SS"], 'fr').format("DD MMM YYYY - HH:mm");
@@ -159,12 +159,12 @@ export default {
               data.append("valide", 1);
               ajaxService.putApi("reservations", rdv.reservation.id, data)
                   .then(result => this.$bvModal.msgBoxOk(param.messages.success + result).then(test=>{this.getRDV(test)}))
-                  .catch(err => this.$bvModal.msgBoxOk(param.messages.problem + err));
+                  .catch(err => this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err)));
             }
           })
           .catch(err => {
             // An error occurred
-            console.log(err)
+            utilsServices.alertError(err, this)
           })
 
 

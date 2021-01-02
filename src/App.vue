@@ -4,7 +4,6 @@
         class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
       <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
 
-
       <div class="d-flex flex-row align-items-center" v-if="isAuth">
         <router-link to="/" class="mr-3 text-white">Accueil</router-link>
         <router-link :to="{ name: 'Reservation', params : { state:'selection'}}" class="mr-3 text-white">Réservation</router-link>
@@ -26,10 +25,7 @@
 </template>
 
 <script>
-
 import appService from '@/services/appService.js'
-
-
 export default {
   name: 'App',
 
@@ -73,7 +69,7 @@ export default {
     '$route': {
       immediate: true,
       handler(to) {
-        if(to.name !== "Login" && !this.$store.getters.isAuthenticated) {
+        if((to.name !== "Login" || to.name !== "AdminContact"  )&& !this.$store.getters.isAuthenticated) {
           //si on ne va pas se connecter et que on est pas authentifié
           this.$router.push("/login");
         }
@@ -100,7 +96,6 @@ export default {
           // eslint-disable-next-line no-unused-vars
           this.$bvModal.msgBoxOk("Vous n'avez pas le droit d'accéder à cette page. Si vous en avez besoin, contactez l'administrateur !");
         }
-
       }
     }
   },

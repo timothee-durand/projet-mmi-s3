@@ -281,7 +281,7 @@ export default {
       ajaxService.getSingleApi('gestionnaires', this.$store.state.user.user.id).then(result => {
         this.listeCrnxGest = result.data.creneaux
         this.setCreneaux()
-      }).catch(err => this.$bvModal.msgBoxOk(param.messages.problem + err).then(res => this.getCreneaux(res)))
+      }).catch(err => this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err)).then(res => this.getCreneaux(res)))
     },
     setCreneaux () {
       if (this.listeCrnxGest.length !== 0) {
@@ -310,7 +310,7 @@ export default {
         this.getIndispo()
       }).catch(err => {
         console.log(err.response)
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data)
+        this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err))
       })
     },
     getIndispo () {
@@ -327,7 +327,7 @@ export default {
               return moment(ind1.date_debut).isAfter(ind2.date_debut)
             })
           }).catch(err => {
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.statusMessage)
+        this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err))
       })
     },
     getDateFormated (date) {
@@ -347,7 +347,7 @@ export default {
             this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')')
             this.getIndispo()
           }).catch(err => {
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data)
+        this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err))
         this.getIndispo()
       })
     },
@@ -358,7 +358,7 @@ export default {
             this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')')
             this.getIndispo()
           }).catch(err => {
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data)
+        this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err))
       })
     },
   },

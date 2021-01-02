@@ -6,14 +6,20 @@
         <b-btn @click="byMat = true" :pressed="byMat" variant="primary">Par Matériel</b-btn>
         <b-btn @click="byMat = false" :pressed="!byMat" variant="primary">Par Réservation</b-btn>
       </b-btn-group>
-      <b-button type="button" variant="primary" @click="getMat" size="sm">
-        <b-icon-arrow-counterclockwise variant="light"></b-icon-arrow-counterclockwise>
-      </b-button>
+      <div>
+        <b-button type="button" variant="primary" @click="$bvModal.show('add-res-modal')" size="sm" class="mr-2">
+          <b-icon-plus variant="light"></b-icon-plus>
+        </b-button>
+        <b-button type="button" variant="primary" @click="getMat" size="sm">
+          <b-icon-arrow-counterclockwise variant="light"></b-icon-arrow-counterclockwise>
+        </b-button>
+      </div>
+
     </div>
 
     <!--Par matériel-->
     <b-row v-if="byMat">
-      <b-col cols="12" v-for="materiel in listMatNonRendu" :key="materiel.id">
+      <b-col cols="12" v-for="materiel in listMatNonRendu" :key="'mat-'+materiel.id">
         <b-card class="mb-3">
           <div class="d-flex align-items-center justify-content-between">
             <b-img rounded="circle" :src="materiel.photo" width="40"></b-img>
@@ -22,7 +28,7 @@
           </div>
           <div class="d-flex flex-column mt-2">
             <b-row>
-              <b-col cols="12" v-for="pret in materiel.est_pretes" :key="pret.id">
+              <b-col cols="12" v-for="pret in materiel.est_pretes" :key="'pr-'+pret.id">
                 <b-card size="sm" body-class="p-2 flex-row d-flex justify-content-between" class=" mb-2">
                   <p class="m-0 w-75 p-0 d-block"><span class="text-primary "
                                                         :class="{'text-black-50':pret.depart !== null}">{{
@@ -57,7 +63,7 @@
           </div>
           <div class="d-flex flex-column mt-2">
             <b-row>
-              <b-col cols="12" v-for="pret in res.est_pretes" :key="pret.id">
+              <b-col cols="12" v-for="pret in res.est_pretes" :key="'pr2-'+pret.id">
 
                 <b-card size="sm" body-class="p-2 flex-row d-flex justify-content-between" class=" mb-2">
                   <p class="m-0 w-75 p-0 d-block"><span class="text-primary"
@@ -77,7 +83,7 @@
       </b-col>
     </b-row>
 
-
+    <!--Edition réservation-->
     <b-modal hide-footer title="Edition réservation" ref="edit-res-modal" id="edit-res-modal" size="lg">
       <div class="d-flex justify-content-between w-50">
         <p><strong>Emprunteur : </strong>{{ resToEdit.nom }} {{ resToEdit.prenom }}</p>
@@ -87,15 +93,15 @@
       </div>
       <hr/>
       <p class="mb-1"><strong>Validation Réservation</strong></p>
-      <p v-if="resToEdit.valide === 0"><em>Raison invoquée pour le prêt :</em><br/>{{resToEdit.raison_pro}}</p>
-      <b-btn @click="validateRes(resToEdit.id)">{{textValideButton}}</b-btn>
+      <p v-if="resToEdit.valide === 0"><em>Raison invoquée pour le prêt :</em><br/>{{ resToEdit.raison_pro }}</p>
+      <b-btn @click="validateRes(resToEdit.id)">{{ textValideButton }}</b-btn>
       <hr/>
       <p><strong>Prêts en cours :</strong></p>
-      <b-card body-class="p-2 align-items-center" class="pret mb-2" v-for="pret in resToEdit.est_pretes" :key="pret.id">
+      <b-card body-class="p-2 align-items-center" class="pret mb-2" v-for="pret in resToEdit.est_pretes" :key="'pr3-'+pret.id">
         <b-form class="d-flex justify-content-between" @submit.prevent="editPret(pret.id)">
           <b-form-group label="Matériel" class="mr-2">
             <b-select v-model="pret.materiel_id">
-              <b-select-option v-for="mat in listeMateriel" :key="mat.id" :value="mat.id">{{ mat.nom }}
+              <b-select-option v-for="mat in listeMateriel" :key="'mat2-'+mat.id" :value="mat.id">{{ mat.nom }}
               </b-select-option>
             </b-select>
           </b-form-group>
@@ -119,6 +125,59 @@
           <b-btn @click="delPret(pret.id)" class="bg-danger">Annuler le prêt</b-btn>
         </div>
       </b-card>
+    </b-modal>
+
+    <!--    Ajout réservation -->
+    <b-modal hide-footer title="Ajout réservation" id="add-res-modal" size="lg">
+      <b-form class="" @submit.prevent="addRes">
+
+        <b-form-group label="Emprunteur">
+          <b-select v-model="resToAdd.id">
+            <b-select-option v-for="reservation in listeRes" :key="reservation.id" :value="reservation.id">
+              {{ reservation.nom }} {{ reservation.prenom }}
+            </b-select-option>
+          </b-select>
+        </b-form-group>
+        <hr/>
+        <b-form-group label="Validation" >
+          <p><em>Validée par défault</em></p>
+        </b-form-group>
+        <hr/>
+        <div>
+          <div class="d-inline-flex justify-content-between w-100 mb-2">
+            <p>Prêts :</p>
+            <b-btn  variant="primary" size="sm" @click="resToAdd.est_pretes.push([...estPreteBase])">
+              <b-icon-plus></b-icon-plus>
+            </b-btn>
+          </div>
+          <div class="d-inline-flex justify-content-center w-100 mb-2" >
+            <b-form-group label="Date Début" class="mr-3 w-50">
+              <date-picker :config="optionsDatePicker" v-model="resToAdd.date_debut"></date-picker>
+            </b-form-group>
+            <b-form-group label="Date Fin" class="w-50">
+              <date-picker :config="optionsDatePicker" v-model="resToAdd.date_fin"></date-picker>
+            </b-form-group>
+          </div>
+
+
+          <b-card body-class="p-2 align-items-center d-flex justify-content-between" class="pret mb-2" v-for="(pret, index) in resToAdd.est_pretes"
+                  :key="index">
+            <b-form-group label="Matériel" class="mr-2">
+              <b-select v-model="pret.materiel_id">
+                <b-select-option v-for="mat in listeMateriel" :key="mat.id" :value="mat.id">{{ mat.nom }}
+                </b-select-option>
+              </b-select>
+            </b-form-group>
+
+
+            <b-btn  variant="danger" size="sm" @click="this.resToAdd.est_pretes.splice(index, 1)">
+              <b-icon-dash></b-icon-dash>
+            </b-btn>
+
+          </b-card>
+        </div>
+        <b-btn type="submit" variant="outline-primary">Enregister</b-btn>
+      </b-form>
     </b-modal>
 
     <b-modal hide-footer title="Rendu matériel" id="rendu-mat-modal">
@@ -159,20 +218,54 @@ import datePicker from 'vue-bootstrap-datetimepicker'
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css'
 import param from '@/param/param.js'
 
+//https://stackoverflow.com/a/840812
+//pour retirer les doublons
+Array.prototype.unique = function () {
+  var r = new Array();
+  o:for(var i = 0, n = this.length; i < n; i++)
+  {
+    for(var x = 0, y = r.length; x < y; x++)
+    {
+      if(r[x].id==this[i].id)
+      {
+        continue o;
+      }
+    }
+    r[r.length] = this[i];
+  }
+  return r;
+}
+
+
 export default {
   components: {datePicker},
   data () {
     return {
       listeMateriel: [],
+      resToAdd: {
+        valide:false,
+        id: 0,
+        nom:'',
+        prenom:'',
+        est_pretes:[
+          {
+            materiel_id:0
+          }
+        ]
+      },
       resToEdit: {
         date_debut: '',
         date_fin: '',
         id: 0,
+        raison_pro:'',
         rendu: false,
         reservation: {
           nom: '',
           prenom: ''
         },
+      },
+      estPreteBase: {
+        materiel_id:0
       },
       byMat: true,
       listeRes: [],
@@ -217,6 +310,8 @@ export default {
         return mat.est_pretes.length !== 0
       })
 
+      listeMat = listeMat.unique();
+
       return listeMat
     },
     listeResNonRendu () {
@@ -235,6 +330,7 @@ export default {
         return res.est_pretes.length !== 0
       })
 
+      listeRes = listeRes.unique()
       return listeRes
     },
     selectIndispRaisonText () {
@@ -242,7 +338,6 @@ export default {
         console.log(opt.value === this.rendu.raisonSelect, opt.value, this.rendu.raisonSelect)
         return opt.value === this.rendu.raisonSelect
       }.bind(this))
-      console.log('slele', text)
       return text.text
     },
     indispRaison () {
@@ -253,11 +348,11 @@ export default {
         return this.rendu.raison
       }
     },
-    textValideButton(){
-      if(this.resToEdit.valide === 0) {
-        return "Valider réservation";
+    textValideButton () {
+      if (this.resToEdit.valide === 0) {
+        return 'Valider réservation'
       } else {
-        return "Invalider réservation";
+        return 'Invalider réservation'
       }
     }
   },
@@ -267,8 +362,8 @@ export default {
       this.listeRes = []
       ajaxService.getSingleApi('gestionnaires', this.$store.getters.getUser.id).then(result => {
         //console.log(result)
-        this.listeMateriel = result.data.materiels
-        this.listeRes = result.data.rdv
+        this.listeMateriel = result.data.materiels.unique()
+        this.listeRes = result.data.rdv.unique()
         if (this.listeMateriel.length === 0) {
           this.$bvModal('Vous n\'avez pas de matériel à gérer... soit parce que vous n\'avez pas de département assigné ou parce qu\'il n\'y a pas de matériel assigné à votre département.')
         }
@@ -301,7 +396,7 @@ export default {
             this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
             this.getMat()
           }).catch(err => {
-            this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
+            this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err)).then(this.$bvModal.hide('edit-res-modal'))
             this.getMat()
           })
         }
@@ -336,7 +431,7 @@ export default {
               })
             }).catch(err => {
               // eslint-disable-next-line no-unused-vars
-              this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(value => {
+              this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err)).then(value => {
                 this.$bvModal.hide('edit-res-modal')
                 this.$bvModal.hide('rendu-mat-modal')
               })
@@ -366,7 +461,7 @@ export default {
         this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
         this.getMat()
       }).catch(err => {
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
+        this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err)).then(this.$bvModal.hide('edit-res-modal'))
         this.getMat()
       })
     },
@@ -376,26 +471,33 @@ export default {
         this.$bvModal.msgBoxOk('Ce prêt a bien été annulé !' + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
         this.getMat()
       }).catch(err => {
-        this.$bvModal.msgBoxOk('Il y a eu un problème :' + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
+        this.$bvModal.msgBoxOk('Il y a eu un problème :' + utilsServices.getCoolestError(err)).then(this.$bvModal.hide('edit-res-modal'))
         this.getMat()
       })
     },
     validateRes () {
       let data = new FormData()
-      if(this.resToEdit.valide === 0) {
-        data.append('valide', 1);
+      if (this.resToEdit.valide === 0) {
+        data.append('valide', 1)
       } else {
-        data.append('valide', 0);
+        data.append('valide', 0)
       }
 
       ajaxService.putApi('reservations', this.resToEdit.id, data).then(res => {
         this.$bvModal.msgBoxOk(param.messages.success + '(' + res + ')').then(this.$bvModal.hide('edit-res-modal'))
         this.getMat()
       }).catch(err => {
-        this.$bvModal.msgBoxOk(param.messages.problem + err.response.data).then(this.$bvModal.hide('edit-res-modal'))
+        this.$bvModal.msgBoxOk(param.messages.problem + utilsServices.getCoolestError(err)).then(this.$bvModal.hide('edit-res-modal'))
         this.getMat()
       })
+    },
+    addRes(){
+      let data = new FormData();
+      data.append("id_materiels", JSON.stringify(this.resToAdd.est_pretes))
+
     }
+
+
   },
   mounted () {
     this.getMat()

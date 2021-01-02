@@ -72,14 +72,14 @@ export default {
   methods: {
     getBlacklist () {
       this.listeBlacklist = [];
-      ajaxService.getAllApi('blacklists').then(result => this.listeBlacklist = result).catch(error => console.log(error))
+      ajaxService.getAllApi('blacklists').then(result => this.listeBlacklist = result).catch(error => utilsServices.alertError(error, this))
     },
     delBl(payload){
       this.$bvModal.msgBoxConfirm("Voulez-vous vraiment supprimer " + payload.nom + " de la blacklist ?").then(value => {
         if(value){
           ajaxService.delApi("blacklists", payload.id)
               .then(response => { this.$bvModal.msgBoxOk(param.messages.success + "(" + response + ")"); this.getBlacklist()} )
-              .catch(error => this.$bvModal.msgBoxOk(param.messages.problem + "(" + error + ")"));
+              .catch(error => this.$bvModal.msgBoxOk(param.messages.problem + "(" + utilsServices.getCoolestError(error) + ")"));
         }
       })
 
@@ -90,7 +90,7 @@ export default {
     addBl(){
       let blToAdd = utilsServices.getById(this.listeRes, this.blToAdd.id);
       this.alertMessage = param.messages.sending;
-      ajaxService.postAPI("blacklists", utilsServices.getFormData(blToAdd)).then(response => this.alertMessage = param.messages.stored + response).catch(error => this.alertMessage = param.messages.problem + error)
+      ajaxService.postAPI("blacklists", utilsServices.getFormData(blToAdd)).then(response => this.alertMessage = param.messages.stored + response).catch(error => this.alertMessage = param.messages.problem + utilsServices.getCoolestError(error))
     }
   },
   mounted () {
