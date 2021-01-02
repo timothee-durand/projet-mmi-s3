@@ -2,6 +2,13 @@
   <div>
   <Sidebar-admin ></sidebar-admin>
   <div class="containerRight p-4">
+    <div class="d-inline-flex w-100 justify-content-between">
+      <h4>Rôles</h4>
+      <b-button type="button" variant="primary" @click="getGestionnaires" size="sm">
+        <b-icon-arrow-counterclockwise variant="light"></b-icon-arrow-counterclockwise>
+      </b-button>
+    </div>
+
     <search-bar :modes="roles" lib-mode="Rôle" :types-materiel="[]" lib-type="Lieux"
                 @addMat="$bvModal.show('add-blacklist-modal')"
                 @search-input="changeSearch"
@@ -9,7 +16,7 @@
     ></search-bar>
 
     <row-result v-for="gest in listeSearch" :key="gest.id" :nom="gest.nom + ' '+ gest.prenom "  disable-dispo :reference="getDepNom(gest)" img="../assets/img/person.png" :buttons="getButtons(gest)" :id="gest.id"
-                class="mt-2"></row-result>
+                class="mt-2" ></row-result>
 
     <modal-pictum   hide-footer id-modal="add-blacklist-modal" title="Ajout Blacklist">
       <b-form @submit.prevent="addRole">
@@ -25,8 +32,6 @@
           <b-select-option value="admin">Administrateur</b-select-option>
           <b-select-option value="gest">Gestionnaire</b-select-option>
         </b-select>
-        <p>Entrez son identifiant universitaire :</p>
-        <b-input placeholder="id_univ" v-model="idUnivToAdd" required></b-input>
         <p>Un mot de passe va lui être envoyé par mail.</p>
 <!--        <p>Entrez le mot de passe qu'elle désire :</p>-->
 <!--        <b-input placeholder="mot de passe" v-model="password" type="password" required></b-input>-->
@@ -115,13 +120,16 @@ export default {
 
     addRole () {
         let params = new FormData();
-        params.append("id_univ", this.idUnivToAdd);
         params.append("admin", this.isAdmin());
+        params.append("id_univ", this.userToAdd.id_univ);
         //params.append("password", this.password);
 
       this.alertMessage = param.messages.sending;
 
-        ajaxService.postAPI("gestionnaires", params).then(response => this.alertMessage = param.messages.stored + response).catch(response => this.alertMessage = param.messages.problem + utilsServices.getCoolestError(response));
+        ajaxService.postAPI("gestionnaires", params).then(response => {
+          this.alertMessage = param.messages.stored + response;
+          this.getGestionnaires()
+        }).catch(response => this.alertMessage = param.messages.problem + utilsServices.getCoolestError(response));
 
 
     },
@@ -133,6 +141,7 @@ export default {
       }
     },
     getGestionnaires(){
+      this.listeGest = [];
       ajaxService.getAllApi("gestionnaires").then(result => this.listeGest = result).catch(error=>utilsServices.alertError(error, this));
     },
     getDepNom(gest){

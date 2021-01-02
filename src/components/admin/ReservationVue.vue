@@ -133,7 +133,7 @@
 
         <b-form-group label="Emprunteur">
           <b-select v-model="resToAdd.id">
-            <b-select-option v-for="reservation in listeRes" :key="reservation.id" :value="reservation.id">
+            <b-select-option v-for="reservation in listeResTotale" :key="reservation.id" :value="reservation.id">
               {{ reservation.nom }} {{ reservation.prenom }}
             </b-select-option>
           </b-select>
@@ -146,17 +146,9 @@
         <div>
           <div class="d-inline-flex justify-content-between w-100 mb-2">
             <p>Prêts :</p>
-            <b-btn  variant="primary" size="sm" @click="resToAdd.est_pretes.push([...estPreteBase])">
+            <b-btn  variant="primary" size="sm" @click="resToAdd.est_pretes.push({...estPreteBase})">
               <b-icon-plus></b-icon-plus>
             </b-btn>
-          </div>
-          <div class="d-inline-flex justify-content-center w-100 mb-2" >
-            <b-form-group label="Date Début" class="mr-3 w-50">
-              <date-picker :config="optionsDatePicker" v-model="resToAdd.date_debut"></date-picker>
-            </b-form-group>
-            <b-form-group label="Date Fin" class="w-50">
-              <date-picker :config="optionsDatePicker" v-model="resToAdd.date_fin"></date-picker>
-            </b-form-group>
           </div>
 
 
@@ -168,14 +160,21 @@
                 </b-select-option>
               </b-select>
             </b-form-group>
+            <b-form-group label="Date Début" class="mr-3 w-50">
+              <date-picker :config="optionsDatePicker" v-model="pret.date_debut"></date-picker>
+            </b-form-group>
+            <b-form-group label="Date Fin" class="w-50">
+              <date-picker :config="optionsDatePicker" v-model="pret.date_fin"></date-picker>
+            </b-form-group>
 
 
-            <b-btn  variant="danger" size="sm" @click="this.resToAdd.est_pretes.splice(index, 1)">
+            <b-btn  variant="danger" size="sm" @click="resToAdd.est_pretes.splice(index, 1)" class="ml-2">
               <b-icon-dash></b-icon-dash>
             </b-btn>
 
           </b-card>
         </div>
+        <b-alert v-if="alertMessage.length > 0">{{alertMessage}}</b-alert>
         <b-btn type="submit" variant="outline-primary">Enregister</b-btn>
       </b-form>
     </b-modal>
@@ -242,6 +241,7 @@ export default {
   data () {
     return {
       listeMateriel: [],
+      listeResTotale:[],
       resToAdd: {
         valide:false,
         id: 0,
@@ -249,10 +249,13 @@ export default {
         prenom:'',
         est_pretes:[
           {
-            materiel_id:0
+            materiel_id:0,
+            date_debut:'',
+            date_fin:''
           }
         ]
       },
+      alertMessage:'',
       resToEdit: {
         date_debut: '',
         date_fin: '',
@@ -265,7 +268,9 @@ export default {
         },
       },
       estPreteBase: {
-        materiel_id:0
+        materiel_id:0,
+        date_debut:'',
+        date_fin:''
       },
       byMat: true,
       listeRes: [],
@@ -360,6 +365,11 @@ export default {
     getMat () {
       this.listeMateriel = []
       this.listeRes = []
+      this.listeResTotale = [];
+      ajaxService.getAllApi("reservations").then(result => {
+        this.listeResTotale = result;
+      }).catch(err => utilsServices.alertError(err, this));
+
       ajaxService.getSingleApi('gestionnaires', this.$store.getters.getUser.id).then(result => {
         //console.log(result)
         this.listeMateriel = result.data.materiels.unique()
@@ -493,7 +503,18 @@ export default {
     },
     addRes(){
       let data = new FormData();
-      data.append("id_materiels", JSON.stringify(this.resToAdd.est_pretes))
+      data.append("action", "few")
+      data.append("materiels", JSON.stringify(this.resToAdd.est_pretes))
+      data.append("reservation_id", this.resToAdd.id)
+
+
+      this.alertMessage = param.messages.sending;
+      ajaxService.postAPI("estpretes", data)
+          .then(result => {
+            utilsServices.alertResult(result, this, 'Réservation crée')
+            this.$bvModal.hide("add-res-modal");
+            this.getMat()
+          }).catch(err => utilsServices.alertError(err, this));
 
     }
 

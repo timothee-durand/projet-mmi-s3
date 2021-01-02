@@ -33,6 +33,14 @@ Vue.use(Vuex)
 //ajout vue-moment
 Vue.use(require('vue-moment'));
 
+import wysiwyg from "vue-wysiwyg";
+Vue.use(wysiwyg, {
+  // { [module]: boolean (set true to hide) }
+  hideModules: { "image": true, "table":true },
+  maxHeight: "500px"
+}); // config is optional. more below
+
+
 Vue.filter("dateFormat", utilsServices.getDate)
 
 
