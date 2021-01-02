@@ -5,7 +5,7 @@
             <!--            Recherche -->
             <form class="form-inline w-100" ref="widthSidebar">
                 <div class="input-group w-100">
-                    <input class="form-control input-group-append" id="search" placeholder="Recherche" type="search">
+                    <input class="form-control input-group-append" id="search" placeholder="Recherche" type="search" v-model="v_search">
                     <button class="btn-dark text-light input-group-prepend btn" type="submit">
                         <svg class="bi bi-search" fill="currentColor" height="1em" viewBox="0 0 16 16" width="1em"
                              xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +35,7 @@
 
                 <div class="d-inline-flex w-100 justify-content-between align-items-center my-1">
                     <label class="text-light" for="byDate">Par date</label>
-                    <input class="form-check-inline m-0" id="byDate" type="checkbox" v-model="v_disableDatePicker">
+                    <input class="form-check-inline m-0" id="byDate" type="checkbox" v-model="v_useDatePicker">
                 </div>
 
                 <b-form-datepicker v-if="adaptCalendar" id="datepicker" v-model="dateFilter"
@@ -46,7 +46,7 @@
 
                 <div class="d-inline-flex w-100 justify-content-between align-items-center my-1">
                     <label class="text-light" for="byPrem">Matériel pro</label>
-                    <input class="form-check-inline m-0" id="byPrem" type="checkbox">
+                    <input class="form-check-inline m-0" id="byPrem" type="checkbox" v-model="v_useProFilter">
                 </div>
 
             </form>
@@ -54,10 +54,10 @@
         <div class="containerRight ">
             <div class="container-fluid ">
                 <b-row gutter-2>
-                    <div v-for="materiel in listeMateriel" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
+                    <div v-for="materiel in filterSelection" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
                         <div class="c-card shadow p-4"
                              style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
+                            <img v-if="materiel.pro === 1" src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
                             <div class="d-flex flex-row align-items-center mb-2">
                                 <!-- <b-carousel
                                         id="carousel-1"
@@ -84,11 +84,14 @@
                             </div>
                             <div class="d-flex flex-row justify-content-between align-items-center">
                                 <p class="d-block mb-0">Disponibilité</p>
-                                <router-link :to="{ name: 'Article', params : { id:'Hello'}}">
-                                    <b-button variant="primary">Button</b-button>
+                                <router-link :to="{ name: 'Article', params : { id:materiel.id}}">
+                                    <b-button variant="primary" class="rounded-pill">Voir plus</b-button>
                                 </router-link>
                             </div>
                         </div>
+                    </div>
+                    <div v-if="this.nbResult === 0" style="height: calc(100vh - var(--header-height) - var(--navbar-height));" class="w-100 d-flex align-items-center justify-content-center">
+                        Aucun résultat
                     </div>
                 </b-row>
             </div>
@@ -100,6 +103,7 @@
     import CategoriesHeader from '@/components/CategoriesHeader'
     import SidebarClient from '@/components/SidebarClient'
     import ajaxService from '@/services/ajaxService.js'
+    import utilsServices from '@/services/utilsServices.js'
 
     export default {
         name: 'Search',
@@ -117,11 +121,14 @@
 
                 /* sidebar content */
                 dateFilter: null,
-                v_disableDatePicker: true,
+                v_useDatePicker: false,
+                v_useProFilter: false,
+                v_search: null,
                 sidebarInnerWidth: 0,
 
                 /*Filter*/
-                currentFilter: "none"
+                currentFilter: "none",
+                nbResult: 0,
             }
         },
         methods: {
@@ -135,7 +142,7 @@
 
             //Getters
             getTypes() {
-                ajaxService.getApi("types").then(result => {
+                ajaxService.getAllApi("types").then(result => {
                     this.listeType = result;
                     console.log(result);
                     for( let i = 0; i < this.listeType.length; i++ )
@@ -146,7 +153,7 @@
                 }).catch(error => console.log(error))
             },
             getListeMateriel() {
-                ajaxService.getApi("materiels").then(result => {
+                ajaxService.getAllApi("materiels").then(result => {
                     this.listeMateriel = result;
                     console.log(result);
                 }).catch(error => console.log(error))
@@ -157,7 +164,7 @@
         computed:
         {
             disableDatePicker() {
-                return !this.v_disableDatePicker
+                return !this.v_useDatePicker
             },
             adaptCalendar() {
                 if (this.isMobile()) {
@@ -188,6 +195,129 @@
                 else {
                     return [];
                 }
+            },
+
+            filterSelection: function()
+            {
+                let result;
+                if( this.v_search != null )
+                {
+                    result = this.getMaterielFilteredBySearch;
+                    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                    this.nbResult = result.length;
+
+                    return result;
+                }
+                else if( this.v_useProFilter )
+                {
+                    result = this.getMaterielFilteredByPro;
+                    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                    this.nbResult = result.length;
+                    return this.getMaterielFilteredByPro;
+                }
+                else if( this.v_useDatePicker )
+                {
+                    result = this.getMaterielFilteredBydate;
+                    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                    this.nbResult = result.length;
+                    return this.getMaterielFilteredBydate;
+                }
+                else
+                {
+                    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                    this.nbResult = this.listeMateriel.length;
+                    return this.listeMateriel;
+                }
+
+            },
+
+            getMaterielFilteredBydate: function()
+            {
+                if( this.listeMateriel ) {
+                    let result = [];
+                    let dateToTest = new Date(this.dateFilter);
+                    console.log("startfilter | lenght :" + this.listeMateriel.length);
+
+                    for( let i = 0; i < this.listeMateriel.length; i++ )
+                    {
+                        let taillePrets = this.listeMateriel[i].prets.length;
+                        console.log(taillePrets);
+                        if( taillePrets != 0 ) {
+                            for (let y = 0; y < taillePrets; y++) {
+                                console.log(this.listeMateriel[i]);
+                                let dateStart = this.listeMateriel[i].prets[y].date_debut.split(' ')[0];
+                                let dateFin = this.listeMateriel[i].prets[y].date_fin.split(' ')[0];
+
+                                console.log(dateStart);
+                                console.log(dateFin);
+                                dateStart = new Date(dateStart);
+                                dateFin = new Date(dateFin);
+
+
+                                if (dateStart < dateToTest && dateFin < dateToTest) {
+                                    console.log("Ok1");
+                                    result.push(this.listeMateriel[i]);
+                                    y = 0;
+                                    i++;
+                                    taillePrets = this.listeMateriel[i].prets.length;
+                                } else if (dateStart > dateToTest) {
+                                    console.log("Ok2");
+                                    result.push(this.listeMateriel[i]);
+                                    y = 0;
+                                    i++;
+                                    taillePrets = this.listeMateriel[i].prets.length;
+                                } else {
+                                    console.log("No no");
+                                }
+                            }
+                        }
+                    }
+                    return result;
+                }
+                return[]
+            },
+            getMaterielFilteredByPro()
+            {
+                if(this.listeMateriel)
+                {
+                    let currentArray = [];
+
+                    if(this.v_useDatePicker)
+                    {
+                        currentArray = this.getMaterielFilteredBydate;
+                    }
+                    else
+                    {
+                        currentArray = this.listeMateriel;
+                    }
+                    return currentArray.filter(function (item){
+                        return item.pro === 1;
+                    });
+                }
+                return [];
+            },
+
+            getMaterielFilteredBySearch()
+            {
+                if(this.listeMateriel)
+                {
+                    let currentArray = [];
+
+                    if(this.v_useProFilter)
+                    {
+                        currentArray = this.getMaterielFilteredByPro;
+                    }
+                    else if(this.v_useDatePicker)
+                    {
+                        currentArray = this.getMaterielFilteredBydate;
+                    }
+                    else
+                    {
+                        currentArray = this.listeMateriel;
+                    }
+                    return utilsServices.getByIncludes(currentArray, this.v_search);
+                }
+                return [];
             }
         },
         beforeMount(){

@@ -30,7 +30,7 @@
         methods: {
             //Getters
             getTypes() {
-                ajaxService.getApi("types").then(result => {
+                ajaxService.getAllApi("types").then(result => {
                     this.listeType = result;
                     console.log(result);
                     for (let i = 0; i < this.listeType.length; i++) {

@@ -5,7 +5,7 @@
         <div class="body container-fluid">
             <div class="row">
                 <div class="col-6 px-5 leftColumn d-flex flex-column">
-                    <b-carousel
+                    <!--<b-carousel
                             id="carousel-1"
                             :interval="4000"
                             controls
@@ -16,17 +16,16 @@
                             style="width: 100%;"
                             class=""
                     >
-                        <!-- Text slides with image -->
+
                         <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=52"></b-carousel-slide>
 
-                        <!-- Slides with custom text -->
+
                         <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54"></b-carousel-slide>
 
-                        <!-- Slides with image only -->
+
                         <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
 
-                        <!-- Slides with img slot -->
-                        <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
+
                         <b-carousel-slide>
                             <template #img>
                                 <img
@@ -38,28 +37,38 @@
                                 >
                             </template>
                         </b-carousel-slide>
-                    </b-carousel>
+                    </b-carousel>-->
+                    <img :src="this.selectedMateriel.photo" class="w-100 mr-4 img-fluid" alt="Responsive image">
                     <div class="mt-3 mb-3">
                         <h3>Réserver</h3>
                         <form class="" id="datePicker">
-                            <b-form-datepicker v-if="adaptCalendar" id="datepicker" v-model="dateFilter"
+                            <b-form-datepicker v-if="adaptCalendar" id="datepicker" v-model="selectedDate"
                                                :disabled="disableDatePicker"
                                                class="mb-4"></b-form-datepicker>
-                            <b-calendar v-else v-model="dateFilter" locale="fr" :disabled="disableDatePicker" block
+                            <b-calendar v-else v-model="selectedDate" locale="fr" :disabled="disableDatePicker" block
                                         class="w-100 "></b-calendar>
                         </form>
                     </div>
                     <div class="d-flex align-items-center justify-content-end w-100 flex-row mb-3">
-                        <b-button variant="primary" class="w-auto mr-3">Manuel PDF</b-button>
-                        <b-button variant="primary" class="w-auto">Video Tutoriel</b-button>
+                        <b-button v-on:click="sendToManuel" variant="primary" class="w-auto mr-3">Manuel PDF</b-button>
+                        <b-button v-b-modal.modalTuto variant="primary" class="w-auto">Video Tutoriel</b-button>
+
+                        <b-modal id="modalTuto" title="Tutoriels disponibles" ok-only>
+                            <p>
+                                This <a href="#" v-b-tooltip title="Tooltip in a modal!">Link</a> Voici la liste des tutoriels disponibles pour ce matériel.
+                            </p>
+                                <div v-for="{tuto, index} in this.tutos" v-on:click="sendTo(index)" :key="index" class="c-card shadow mb-3 text-dark">{{tuto}}</div>
+                        </b-modal>
+
                     </div>
                     <div class="c-card shadow mb-3">
                         <h3>Où se situe ce matériel ?</h3>
+                        <p>{{this.selectedMateriel.departement.nom}}</p>
                     </div>
                 </div>
                 <div class="col-6 d-flex flex-column rightColumn px-5">
                     <div class="c-card shadow mb-3">
-                        <h3>Name</h3>
+                        <h3>{{this.selectedMateriel.nom}}</h3>
 
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, beatae cumque dolor ea
@@ -67,25 +76,16 @@
                             saepe. Alias aliquam architecto asperiores consectetur cumque deserunt ea ipsa itaque modi,
                             nihil obcaecati officia provident quasi quibusdam ratione similique sit tempore! Error
                             quaerat quidem ratione rem sequi. Aliquam animi autem culpa dicta, dignissimos dolorem
-                            doloremque error est expedita, illo incidunt ipsam iste iure iusto magni molestias nesciunt
-                            nihil nobis odio officiis perferendis perspiciatis possimus provident quae quaerat quod
-                            recusandae rem repellat saepe tempora, tenetur vel veniam voluptates. Ad adipisci architecto
-                            at atque consequuntur distinctio hic labore laborum libero maxime minima minus mollitia
-                            nostrum placeat possimus provident quae quo reiciendis saepe sequi, unde velit veniam
-                            veritatis vero voluptate. Consectetur id minima officiis possimus rem suscipit voluptates! A
-                            deleniti doloremque ducimus facere facilis repellendus voluptatem. Dolorum eius eveniet,
-                            explicabo fugiat neque nobis perspiciatis sint soluta sunt temporibus. Ab, amet architecto
-                            at dignissimos distinctio dolorum eius ex excepturi, molestiae molestias neque nobis quia
-                            tempora. Cum eaque nesciunt porro quidem? Consectetur culpa fugiat impedit magnam minima,
-                            molestiae molestias quae quam quisquam quo, quod sed tempore voluptas voluptate voluptatem.
-                            Atque facere labore porro sed temporibus ut, vitae?
+
                         </p>
                     </div>
                     <div class="c-card shadow mb-3">
                         <h3>Caractéristiques techniques</h3>
+                        <p>{{this.selectedMateriel.caracteristiques}}</p>
                     </div>
                     <div class="c-card shadow mb-3">
                         <h3>Usage</h3>
+                        <p>{{this.selectedMateriel.usage}}</p>
                     </div>
                 </div>
 
@@ -96,6 +96,8 @@
 
 <script>
     import CategoriesHeader from '@/components/CategoriesHeader'
+    import ajaxService from '@/services/ajaxService.js'
+    import utilsServices from '@/services/utilsServices.js'
 
     export default {
         name: "Article",
@@ -106,8 +108,61 @@
 
         data() {
             return {
-                categoriesArray: ['Kit', 'Prise de vue', 'Son', 'Eclairage', 'Accessoires']
+                categoriesArray: ['Kit', 'Prise de vue', 'Son', 'Eclairage', 'Accessoires'],
+                materiel : [],
+                selectedMateriel : null,
+                selectedDate: null,
+                v_disableDatePicker: false,
+                tutos: null,
             }
+        },
+
+        methods:
+        {
+            getMateriel() {
+                ajaxService.getAllApi("materiels").then(result => {
+                    this.materiel = result;
+                    this.selectedMateriel = utilsServices.getById(this.materiel, this.$route.params.id );
+                    this.tutos = JSON.parse(this.selectedMateriel.tutos);
+                    console.log(result);
+                    console.log(this.$route.params.filter);
+                }).catch(error => console.log(error))
+            },
+            isMobile() {
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            sendTo(TutoIndex)
+            {
+                console.log(this.tutos[TutoIndex].name);
+                window.open(this.tutos[TutoIndex]);
+            },
+            sendToManuel()
+            {
+                console.log(this.selectedMateriel.notice);
+                window.open(this.selectedMateriel.notice);
+            }
+        },
+
+        computed:
+            {
+                adaptCalendar() {
+                    if (this.isMobile()) {
+                        return true
+                    } else {
+                        return false
+                    }
+                },
+                disableDatePicker() {
+                    return this.v_disableDatePicker
+                },
+            },
+
+        mounted() {
+            this.getMateriel();
         }
     }
 </script>
@@ -124,6 +179,6 @@
 
     h3 {
         font-size: 1.2rem;
-        font-weight: normal;
+        font-weight: bold;
     }
 </style>

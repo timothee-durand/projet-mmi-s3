@@ -160,4 +160,5 @@ export default {
     height: 45px;
     text-align: center;
   }
+
 </style>

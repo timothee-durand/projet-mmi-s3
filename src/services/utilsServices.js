@@ -9,5 +9,14 @@ export default {
     return array.filter(function (item){
       return item.id === id;
     })[0];
-  }
+  },
+  getByRef(array, ref){
+    return array.find(el => el.ref === ref);
+  },
+  getByIncludes(array, toFind){
+      return array.filter(function (item){
+          return item.nom.toLowerCase().includes(toFind.toLowerCase());
+      });
+  },
+
 }

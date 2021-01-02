@@ -120,4 +120,5 @@
     .inactiveNav {
         border-bottom: solid 4px var(--secondary);
     }
+
 </style>

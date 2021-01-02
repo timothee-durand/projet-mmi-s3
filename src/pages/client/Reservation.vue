@@ -390,6 +390,8 @@
 
 <script>
 import SidebarClient from '@/components/SidebarClient'
+import ajaxService from '@/services/ajaxService.js'
+import utilsServices from '@/services/utilsServices.js'
 
 export default {
   name: 'Reservation',
@@ -400,7 +402,9 @@ export default {
     return{
       currentState: "",
       motivation: "",
-      competences: ""
+      competences: "",
+        materiels : [],
+        selectedMateriel : null,
     }
   },
   computed:
@@ -417,8 +421,21 @@ export default {
     sendOnSite(){
       //this.$router.go({ name: 'Reservation', params : { state:'selection'}});
       this.$router.push('selection')
-    }
+    },
+      getMateriel() {
+          ajaxService.getAllApi("materiel").then(result => {
+              this.materiel = result;
+              this.selectedMateriel = utilsServices.getById(this.selectedMateriel, this.$route.params.filter)
+              console.log(result);
+              for( let i = 0; i < this.listeType.length; i++ )
+              {
+                  this.categoriesArray[i] = this.listeType()[i].nom;
+                  console.log(this.categoriesArray[i]);
+              }
+          }).catch(error => console.log(error))
+      },
   }
+
 }
 </script>
 
