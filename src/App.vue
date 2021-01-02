@@ -15,9 +15,8 @@
             </b-dropdown-item>
           </div>
           <b-dropdown-item >
-            <router-link to="password">Mot de passe</router-link>
+            <router-link to="/password">Mot de passe</router-link>
           </b-dropdown-item>
-          //G4kekem9k
           <b-dropdown-item class="text-danger" @click="disconnect">Se déconnecter</b-dropdown-item>
         </b-dropdown>
       </div>
@@ -81,9 +80,14 @@ export default {
 
         if(to.name === "Login" && this.$store.getters.isAuthenticated) {
           //si on est connecté et que on veut aller sur la page de connexion
-          this.$router.push("/");
-        }
+          if(this.$store.getters.isGest) {
+            this.$router.push("/admin");
+          } else {
+            this.$router.push("/");
+          }
 
+        }
+        //si pas gestionnaire et va dans admin
         if(!this.$store.getters.isGest && appService.isAdminRoute(to.name) && this.$store.getters.isAuthenticated){
           this.$router.push("/")
           // eslint-disable-next-line no-unused-vars

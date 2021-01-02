@@ -1,3 +1,6 @@
+import moment from 'moment'
+import param from '@/param/param.js'
+
 export default {
   //https://stackoverflow.com/a/40552372
   getFormData (object) {
@@ -19,4 +22,20 @@ export default {
       });
   },
 
+  getDate(date){
+    return moment(date, ["YYYY-MM-DD HH:mm:SS"], 'fr').format("DD MMM YYYY - HH:mm");
+  },
+  getShortVersion (text) {
+    if(text === null) {
+      return ''
+    } else {
+      if(text.length < param.nbCaracShortText) {
+        return text;
+      } else {
+        return text.slice(0, param.nbCaracShortText) + "...";
+      }
+
+    }
+
+  }
 }

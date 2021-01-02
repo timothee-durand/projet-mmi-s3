@@ -75,7 +75,14 @@ export default {
       ajaxService.getAllApi('blacklists').then(result => this.listeBlacklist = result).catch(error => console.log(error))
     },
     delBl(payload){
-      ajaxService.delApi("blacklists", payload.id).then(response => { console.log(response); this.getBlacklist()} ).catch(error => console.log(error));
+      this.$bvModal.msgBoxConfirm("Voulez-vous vraiment supprimer " + payload.nom + " de la blacklist ?").then(value => {
+        if(value){
+          ajaxService.delApi("blacklists", payload.id)
+              .then(response => { this.$bvModal.msgBoxOk(param.messages.success + "(" + response + ")"); this.getBlacklist()} )
+              .catch(error => this.$bvModal.msgBoxOk(param.messages.problem + "(" + error + ")"));
+        }
+      })
+
     },
     getUsers () {
       ajaxService.getAllApi('reservations').then(result => this.listeRes = result)

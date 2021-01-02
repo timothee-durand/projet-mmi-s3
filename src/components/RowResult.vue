@@ -2,7 +2,7 @@
   <b-card>
     <b-row  align-v="center" align-h="around">
       <div >
-        <img  :src="img" class="rounded-pill" width="20px"  />
+        <img v-if="!disableImg"  :src="img" class="rounded-pill" width="20px"  />
       </div>
          <p>{{nom}}</p>
         <p v-if="!disableRef">{{reference}}</p>
@@ -51,6 +51,10 @@ export default {
       }
     },
     disableDispo:{
+      type:Boolean,
+      default:false
+    },
+    disableImg:{
       type:Boolean,
       default:false
     },

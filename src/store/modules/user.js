@@ -17,6 +17,9 @@ export default {
       //regarde si il y a la propriété id a l'utilisateur stocké (objet initialisé à vide)
       return "id" in context.user;
     },
+    isAdmin(context){
+      return context.user.admin === 1;
+    }
   },
 
   mutations : {

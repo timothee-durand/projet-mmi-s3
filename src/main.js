@@ -33,11 +33,12 @@ Vue.use(Vuex)
 //ajout vue-moment
 Vue.use(require('vue-moment'));
 
-
+Vue.filter("dateFormat", utilsServices.getDate)
 
 
 //ajout google maps
 import * as GmapVue from 'gmap-vue'
+import utilsServices from '@/services/utilsServices.js'
 
 Vue.use(GmapVue, {
   load: {
