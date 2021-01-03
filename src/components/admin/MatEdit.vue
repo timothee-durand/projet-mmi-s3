@@ -172,11 +172,14 @@ export default {
 
         //console.log("add");
         let data = new FormData()
-        if (this.materiel.ref === -1) {
-          data.append('malette_id', null)
+        if (this.materiel.malette_id === "-1") {
+          data.append('malette_id', "")
+        } else {
+          data.append('malette_id', this.materiel.malette_id)
         }
         data.append('ref', this.materiel.ref)
         data.append('nom', this.materiel.nom)
+
       if(document.querySelector('#input-mat-photo').files.length !== 0) {
         data.append('photo', document.querySelector('#input-mat-photo').files[0])
       }
@@ -223,6 +226,9 @@ export default {
         this.materiel.tutos = JSON.parse(this.materiel.tutos);
         this.materiel.departement_id = this.materiel.departement.id;
         this.materiel.malette_id = this.materiel.malette.id;
+        if(this.materiel.malette.id === null) {
+          this.materiel.malette_id = -1;
+        }
         this.materiel.type_id = this.materiel.type.id;
       } else {
         this.materiel = {
