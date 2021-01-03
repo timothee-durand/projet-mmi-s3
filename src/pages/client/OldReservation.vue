@@ -1,6 +1,10 @@
 <template>
   <b-container>
-    <h2 class="mt-4">Mes réservations</h2>
+    <div class="d-flex mt-4 justify-content-between w-100 align-items-center">
+      <h2 >Mes réservations</h2>
+      <p class="m-0 d-block">Etat emprun Matériel Pro : <span v-if="valide" class="text-primary">Activé</span> <span v-if="!valide" class="text-danger">Désactivé</span> <p/>
+    </div>
+
     <row-result v-for="(pret,key) in listeEstPrete" :id="key" :key="pret.pret.id" disable-img
                 :nom="`${getDateFormated(pret.pret.date_debut)} -  ${getDateFormated(pret.pret.date_fin)}`"
                 :reference="getStringMatListe(pret.listeMat)" :dispo="getState(pret.pret.rendu)" :buttons="button"
@@ -31,6 +35,7 @@ export default {
   data () {
     return {
       listeEstPreteBase: [],
+      valide:false,
       button: [
         {
           icon: 'eye',
@@ -72,10 +77,12 @@ export default {
             return res.nom === user.nom && res.prenom === user.prenom
           }.bind(this))
           //console.log(res)
+          this.valide = res[0].valide;
           this.listeEstPreteBase = res[0].est_pretes
         }).catch(err => utilsServices.alertError(err, this))
       } else {
         ajaxService.getSingleApi('reservations', this.$store.getters.getUser.id).then(result => {
+          this.valide = result.valide;
           this.listeEstPrete = result.est_pretes
         }).catch(err => utilsServices.alertError(err, this))
       }
