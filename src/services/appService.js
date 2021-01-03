@@ -35,4 +35,12 @@ export default {
     }
   },
 
+  isUnAuthRoute(routeName){
+    if(param.routeUnauthenticatedName.findIndex(function (route){return routeName === route}) !== -1){
+      return true;
+    } else {
+      return false;
+    }
+  },
+
 }

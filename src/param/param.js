@@ -31,6 +31,12 @@ export default {
     "RoleAdmin"
   ],
 
+  routeUnauthenticatedName:[
+    "Login",
+    "Accueil",
+    "AdminContact"
+  ],
+
 
   //routes
   materiels: host +  "materiels",
