@@ -40,7 +40,7 @@
 
       <b-row class="pt-3 pb-3 pr-5 pl-5 m-0 mr-md-5 ml-md-5">
         <b-col cols="12" md="5" >
-          <div class="carre-accueil" style="background-color: #A9FF70;"></div>
+          <div class="carre-accueil " :style="'background-image:url('+require('@/assets/img/materiel_pro.jpg')+')'"></div>
         </b-col>
         <b-col cols="12" md="6" align-self="center">
           <h3>Classique et Professionnel</h3>
@@ -64,13 +64,13 @@
           </p>
         </b-col>
         <b-col cols="12" md="5" order="1" order-md="2" >
-          <div class="carre-accueil ml-auto" style="background-color: #B37CFF;"></div>
+          <div class="carre-accueil ml-auto" :style="'background-image:url('+require('@/assets/img/bu_montbe.jpg')+')'"></div>
         </b-col>
       </b-row>
 
       <b-row class="pt-3 pb-3 pr-5 pl-5 m-0 mr-md-5 ml-md-5">
         <b-col cols="12" md="5" >
-          <div class="carre-accueil m-0" style="background-color: #81CB51;"></div>
+          <div class="carre-accueil " :style="'background-image:url('+require('@/assets/img/jours_ouvres.jpg')+')'"></div>
         </b-col>
         <b-col cols="12" md="6" align-self="center">
           <h3>Combien de temps ?</h3>
