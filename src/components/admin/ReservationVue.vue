@@ -93,6 +93,7 @@
       </div>
       <hr/>
       <p class="mb-1"><strong>Validation Réservation</strong></p>
+      <p><em>L'utilisateur sera notifié.</em></p>
       <p v-if="resToEdit.valide === 0"><em>Raison invoquée pour le prêt :</em><br/>{{ resToEdit.raison_pro }}</p>
       <b-btn @click="validateRes(resToEdit.id)">{{ textValideButton }}</b-btn>
       <hr/>

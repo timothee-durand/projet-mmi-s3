@@ -60,7 +60,7 @@ export default {
     },
     initials(){
       let user = this.$store.getters.getUser;
-      return user.nom.charAt(0) + user.prenom.charAt(0);
+      return user.prenom.charAt(0) + user.nom.charAt(0) ;
     }
   },
   created () {
