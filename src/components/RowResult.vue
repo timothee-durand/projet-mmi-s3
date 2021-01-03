@@ -2,14 +2,14 @@
   <b-card>
     <b-row  align-v="center" align-h="around">
       <div >
-        <img  :src="img" class="rounded-pill" width="20px"  />
+        <img v-if="!disableImg"  :src="img" class="rounded-pill" width="20px"  />
       </div>
          <p>{{nom}}</p>
         <p v-if="!disableRef">{{reference}}</p>
         <p :class="'text-'+dispo.variant" v-if="!disableDispo">{{dispo.text}}</p>
 
         <div class="buttons">
-          <b-button v-for="button in buttons" @click="$emit(button.eventName, nom)" :key="button.icon" variant="light" size="sm" class="mr-2">
+          <b-button v-for="button in buttons" @click="$emit(button.eventName, {nom, id})" :key="button.icon" variant="light" size="sm" class="mr-2">
             <b-icon :icon="button.icon" :variant="button.variant"></b-icon>
           </b-button>
         </div>
@@ -25,7 +25,7 @@ export default {
   name: 'RowResult',
   props: {
     id:{
-      type: String,
+      type: [String,Number] ,
       required:true
     },
     img: {
@@ -34,6 +34,7 @@ export default {
     },
     nom:{
       type: String,
+      required:true,
       default:"Kit 01"
     },
     reference:{
@@ -50,6 +51,10 @@ export default {
       }
     },
     disableDispo:{
+      type:Boolean,
+      default:false
+    },
+    disableImg:{
       type:Boolean,
       default:false
     },

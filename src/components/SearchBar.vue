@@ -5,7 +5,7 @@
     <!--            Recherche -->
     <b-form inline class=" w-25" @submit.prevent="$emit('search-input', searchInput)">
       <b-input-group>
-        <b-input id="search" placeholder="Recherche" type="search" v-model="searchInput"></b-input>
+        <b-input @change="$emit('search-input', searchInput)" id="search" placeholder="Recherche" type="search" v-model="searchInput"></b-input>
         <b-button variant="primary" type="submit">
           <svg class="bi bi-search" fill="currentColor" height="1em" viewBox="0 0 16 16" width="1em"
                xmlns="http://www.w3.org/2000/svg">
@@ -56,7 +56,7 @@ export default {
       default: function () {
         return [
           {text: 'Matériel', value: 'materiels'},
-          {text: 'Type', value: 'types'},
+          {text: 'Catégories', value: 'types'},
           {text: 'Kit', value: 'malettes'},
           {text: 'Lieu', value: 'departements'},
         ];

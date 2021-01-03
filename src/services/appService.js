@@ -17,5 +17,30 @@ export default {
   //suppression
   removeLocal(){
     localStorage.removeItem(param.keyTokenLocal);
-  }
+  },
+
+  isGestRoute(routeName){
+    if(param.routeGestName.findIndex(function (route){return routeName === route}) !== -1){
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  isAdminRoute(routeName){
+    if(param.routeAdminName.findIndex(function (route){return routeName === route}) !== -1){
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  isUnAuthRoute(routeName){
+    if(param.routeUnauthenticatedName.findIndex(function (route){return routeName === route}) !== -1){
+      return true;
+    } else {
+      return false;
+    }
+  },
+
 }

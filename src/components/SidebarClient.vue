@@ -25,7 +25,7 @@ export default {
   {
     top: var(--header-height);
 
-    background-image: url("../assets/img/bg_left_menu.png");
+    background-image: url("../assets/img/bg_left_menu.jpg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;

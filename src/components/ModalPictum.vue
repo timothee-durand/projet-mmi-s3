@@ -1,10 +1,10 @@
 <template>
-  <b-modal :ref="idModal" centered  :title="title" :id="idModal" header-border-variant="light" footer-border-variant="light">
+  <b-modal :ref="idModal" centered  :title="title" :size="size" :id="idModal" header-border-variant="light" :hide-footer="hideFooter" footer-border-variant="light" @close="onCloseMethod" @show="onShowMethod">
     <slot ></slot>
     <template #modal-footer>
       <footer class="d-flex justify-content-between w-75 mx-auto">
         <b-button pill variant="outline-success" @click="callBackCancelDef">{{ textCancelButton }}</b-button>
-        <b-button pill variant="success ml-4" @click="callbackOk">{{ textOkButton }}</b-button>
+        <b-button pill variant="success ml-4" @click="$emit(callbackOk.event, callbackOk.payload)">{{ textOkButton }}</b-button>
       </footer>
     </template>
   </b-modal>
@@ -26,15 +26,40 @@ name: "ModalPictum",
       type: String,
       default:"Valider"
     },
+    size:{
+      type:String
+    },
     textCancelButton: {
       type: String,
       default:"Annuler"
     },
     callbackOk: {
-      type: Function,
-      required:true
-    },
+      type: Object,
+      default:function (){
+        return {
+          event:'okModal',
+          payload:{
 
+          }
+        }
+      }
+    },
+    hideFooter:{
+      type:Boolean,
+      default:false
+    },
+    onShowMethod:{
+      type: Function,
+      default: function (){
+
+      }
+    },
+    onCloseMethod:{
+      type: Function,
+      default: function (){
+
+      }
+    },
 
   },
   methods: {

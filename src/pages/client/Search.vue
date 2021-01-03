@@ -1,11 +1,11 @@
 <template>
     <div>
-        <CategoriesHeader sidebarVisible :categories="getTypesFiltered" :activeCat="this.$route.params.filter"></CategoriesHeader>
+        <CategoriesHeader sidebarVisible :activeCat="this.$route.params.filter"></CategoriesHeader>
         <SidebarClient>
             <!--            Recherche -->
             <form class="form-inline w-100" ref="widthSidebar">
                 <div class="input-group w-100">
-                    <input class="form-control input-group-append" id="search" placeholder="Recherche" type="search">
+                    <input class="form-control input-group-append" id="search" placeholder="Recherche" type="search" v-model="v_search">
                     <button class="btn-dark text-light input-group-prepend btn" type="submit">
                         <svg class="bi bi-search" fill="currentColor" height="1em" viewBox="0 0 16 16" width="1em"
                              xmlns="http://www.w3.org/2000/svg">
@@ -35,29 +35,29 @@
 
                 <div class="d-inline-flex w-100 justify-content-between align-items-center my-1">
                     <label class="text-light" for="byDate">Par date</label>
-                    <input class="form-check-inline m-0" id="byDate" type="checkbox" v-model="v_disableDatePicker">
+                    <input class="form-check-inline m-0" id="byDate" type="checkbox" v-model="v_useDatePicker">
                 </div>
 
                 <b-form-datepicker v-if="adaptCalendar" id="datepicker" v-model="dateFilter"
                                    :disabled="disableDatePicker"
                                    class="mb-4"></b-form-datepicker>
-                <b-calendar v-else v-model="dateFilter" locale="fr" :disabled="disableDatePicker" block
+                <b-calendar v-else v-model="dateFilter" locale="fr" nav-button-variant="light" today-variant="primary" :disabled="disableDatePicker" block
                             class="w-100 mb-4"></b-calendar>
 
                 <div class="d-inline-flex w-100 justify-content-between align-items-center my-1">
                     <label class="text-light" for="byPrem">Matériel pro</label>
-                    <input class="form-check-inline m-0" id="byPrem" type="checkbox">
+                    <input class="form-check-inline m-0" id="byPrem" type="checkbox" v-model="v_useProFilter">
                 </div>
 
             </form>
         </SidebarClient>
         <div class="containerRight ">
             <div class="container-fluid ">
-                <b-row gutter-2>
-                    <div v-for="materiel in listeMateriel" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
+                <b-row v-if="!isMalette" gutter-2>
+                    <div v-for="materiel in filterSelection" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
                         <div class="c-card shadow p-4"
                              style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
+                            <img v-if="materiel.pro === 1" src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
                             <div class="d-flex flex-row align-items-center mb-2">
                                 <!-- <b-carousel
                                         id="carousel-1"
@@ -79,16 +79,60 @@
                                 <div class="w-50"
                                      style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
                                     <h3 class="border-bottom border-dark t">{{materiel.nom}}</h3>
-                                    <p>{{materiel.usage}}</p>
+                                    <div v-html="materiel.usage"></div>
                                 </div>
                             </div>
                             <div class="d-flex flex-row justify-content-between align-items-center">
                                 <p class="d-block mb-0">Disponibilité</p>
-                                <router-link :to="{ name: 'Article', params : { id:'Hello'}}">
-                                    <b-button variant="primary">Button</b-button>
+                                <router-link :to="{ name: 'Article', params : { id:pathMaterial(materiel.id)}}">
+                                    <b-button variant="primary" class="rounded-pill">Voir plus</b-button>
                                 </router-link>
                             </div>
                         </div>
+                    </div>
+                    <div v-if="this.nbResult === 0" style="height: calc(100vh - var(--header-height) - var(--navbar-height));" class="w-100 d-flex align-items-center justify-content-center">
+                        Aucun résultat
+                    </div>
+                </b-row>
+                <b-row v-if="isMalette" gutter-2>
+                    <div v-for="materiel in filterSelection" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
+                        <div class="c-card shadow p-4"
+                             style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
+                            <img v-if="materiel.pro === 1" src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <!-- <b-carousel
+                                        id="carousel-1"
+                                        :interval="-1"
+                                        controls
+                                        indicators
+                                        background="#ababab"
+                                        img-width="1024"
+                                        img-height="480"
+                                        style="height: 100%;"
+                                        class="w-50 mr-4"
+                                >
+
+                                    <b-carousel-slide
+                                            :img-src="materiel.photo"></b-carousel-slide>
+
+                                </b-carousel> -->
+                                <img :src="materiel.photo" class="w-25 mr-4 img-fluid" alt="Responsive image">
+                                <div class="w-50"
+                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
+                                    <h3 class="border-bottom border-dark t">{{materiel.nom}}</h3>
+                                    <div v-html="materiel.usage"></div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <p class="d-block mb-0">Disponibilité</p>
+                                <router-link :to="{ name: 'Article', params : { id:pathMalette(materiel.id)}}">
+                                    <b-button variant="primary" class="rounded-pill">Voir plus</b-button>
+                                </router-link>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="this.nbResult === 0" style="height: calc(100vh - var(--header-height) - var(--navbar-height));" class="w-100 d-flex align-items-center justify-content-center">
+                        Aucun résultat
                     </div>
                 </b-row>
             </div>
@@ -100,6 +144,7 @@
     import CategoriesHeader from '@/components/CategoriesHeader'
     import SidebarClient from '@/components/SidebarClient'
     import ajaxService from '@/services/ajaxService.js'
+    import utilsServices from '@/services/utilsServices.js'
 
     export default {
         name: 'Search',
@@ -110,18 +155,19 @@
         },
         data() {
             return {
-                showDismissibleAlert: false,
-                categoriesArray: ['Kit', 'Prise de vue', 'Son', 'Eclairage', 'Accessoires'],
-                listeType: [],
                 listeMateriel: [],
+                listeMalette: [],
 
                 /* sidebar content */
                 dateFilter: null,
-                v_disableDatePicker: true,
+                v_useDatePicker: false,
+                v_useProFilter: false,
+                v_search: null,
                 sidebarInnerWidth: 0,
 
                 /*Filter*/
-                currentFilter: "none"
+                currentFilter: "none",
+                nbResult: 0,
             }
         },
         methods: {
@@ -134,30 +180,134 @@
             },
 
             //Getters
-            getTypes() {
-                ajaxService.getApi("types").then(result => {
-                    this.listeType = result;
-                    console.log(result);
-                    for( let i = 0; i < this.listeType.length; i++ )
-                    {
-                        this.categoriesArray[i] = this.listeType()[i].nom;
-                        console.log(this.categoriesArray[i]);
-                    }
-                }).catch(error => console.log(error))
-            },
             getListeMateriel() {
-                ajaxService.getApi("materiels").then(result => {
+                ajaxService.getAllApi("materiels").then(result => {
                     this.listeMateriel = result;
                     console.log(result);
                 }).catch(error => console.log(error))
             },
+            getListeMalette() {
+                ajaxService.getAllApi("malettes").then(result => {
+                    this.listeMalette = result;
+                    console.log(result);
+                }).catch(error => console.log(error))
+            },
 
+            //FILTRES
+
+            getMaterielFilteredBydate: function( array )
+            {
+                if( array ) {
+                    /*let result = [];
+                    let dateToTest = new Date(this.dateFilter);
+                    console.log("startfilter | lenght :" + array.length);
+
+                    for( let i = 0; i < array.length; i++ )
+                    {
+                        let taillePrets = array[i].prets.length;
+                        console.log(taillePrets);
+                        if( taillePrets != 0 ) {
+                            for (let y = 0; y < taillePrets; y++) {
+                                console.log(array[i]);
+                                let dateStart = array[i].prets[y].date_debut.split(' ')[0];
+                                let dateFin = array[i].prets[y].date_fin.split(' ')[0];
+
+                                console.log(dateStart);
+                                console.log(dateFin);
+                                dateStart = new Date(dateStart);
+                                dateFin = new Date(dateFin);
+
+
+                                if (dateStart < dateToTest && dateFin < dateToTest) {
+                                    console.log("Ok1");
+                                    result.push(array[i]);
+                                    y = 0;
+                                    i++;
+                                    taillePrets = array[i].prets.length;
+                                } else if (dateStart > dateToTest) {
+                                    console.log("Ok2");
+                                    result.push(array[i]);
+                                    y = 0;
+                                    i++;
+                                    taillePrets = array[i].prets.length;
+                                } else {
+                                    console.log("No no");
+                                }
+                            }
+                        }
+                    }
+                    return result;*/
+
+                    let result = [];
+                    let dateFiltre = new Date(this.dateFilter);
+                    console.log("startfilter | lenght :" + array.length);
+
+                    for( let i = 0; i < array.length; i++ ) {
+
+                        if( array[i].jour_dispo ) {
+
+                            let nbJours = array[i].jour_dispo.length;
+                            for (let y = 0; y < nbJours; y++) {
+                                let dateToTest = new Date(array[i].jour_dispo[y].date);
+                                if (dateToTest.getTime() === dateFiltre.getTime() && array[i].jour_dispo[y].disponible === true) {
+                                    console.log("Yes");
+                                    result.push(array[i]);
+                                } else {
+
+                                    console.log("No no");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            result.push(array[i]);
+                        }
+                    }
+                    return result;
+                }
+
+                return[];
+            },
+            getMaterielFilteredByPro(array)
+            {
+                if(array)
+                {
+                    let currentArray = [];
+
+                    currentArray = array;
+
+                    return currentArray.filter(function (item){
+                        return item.pro === 1;
+                    });
+                }
+                return [];
+            },
+
+            getMaterielFilteredBySearch( array )
+            {
+                if(array)
+                {
+                    return utilsServices.getByIncludes(array, this.v_search);
+                }
+                return [];
+            },
+
+            //PATHs
+
+            pathMaterial( id )
+            {
+                return id+"_Mat"
+            },
+            pathMalette( id )
+            {
+                return id+"_Mal"
+            }
 
         },
         computed:
         {
             disableDatePicker() {
-                return !this.v_disableDatePicker
+                return !this.v_useDatePicker
             },
             adaptCalendar() {
                 if (this.isMobile()) {
@@ -174,40 +324,68 @@
                 }
             },
             //Filtres
-            getTypesFiltered: function()
+
+            isMalette: function()
             {
-                if( this.listeType ) {
-                    console.log("startfilter | lenght :" + this.listeType.length);
-                    let array = [];
-                    for (let i = 0; i < this.listeType.length; i++) {
-                        array.push(this.listeType[i].nom);
-                        console.log(this.listeType[i].nom);
-                    }
-                    return [...new Set(array)];
+                if( this.$route.params.filter === "Malettes")
+                {
+                    return true;
                 }
-                else {
-                    return [];
+                else
+                {
+                    return false;
                 }
-            }
+            },
+            filterSelection: function()
+            {
+                let array;
+
+                if( this.$route.params.filter === "Malettes" )
+                {
+                    array = this.listeMalette;
+                }
+                else if( this.$route.params.filter === "Tous" )
+                {
+                    array = this.listeMalette.concat(this.listeMateriel)
+                }
+                else
+                {
+                    array = this.listeMateriel.filter(function (item){
+                        return item.type.nom.split(" ").join("") === this.$route.params.filter;
+                    }.bind(this));
+                    //array = this.listeMateriel;
+                }
+
+
+                if( this.v_search != null )
+                {
+                    array = this.getMaterielFilteredBySearch(array);
+                }
+                if( this.v_useProFilter )
+                {
+                    array = this.getMaterielFilteredByPro(array);
+                }
+                if( this.v_useDatePicker )
+                {
+                    array = this.getMaterielFilteredBydate(array);
+                }
+
+                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                this.nbResult = array.length;
+                return array;
+
+            },
         },
         beforeMount(){
 
         },
         mounted() {
-            this.getTypes();
             this.getListeMateriel();
+            this.getListeMalette();
 
             this.sidebarInnerWidth = this.$refs.widthSidebar.clientWidth;
             this.currentFilter = this.$route.params.filter;
 
-            /*console.log(this.getTypesFiltered());
-
-            for( let i = 0; i < this.getTypesFiltered.length; i++ )
-            {
-                this.categoriesArray[i] = this.getTypesFiltered()[i].nom;
-
-                console.log(this.categoriesArray[i]);
-            }*/
         }
     }
 </script>

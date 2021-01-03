@@ -1,32 +1,40 @@
 //module VueX pour stocker l'utilisateur actif
 
-const state = {
-  user:{
-    type:"GEST"
-  }
-};
-
-const getters = {
-  getUser(){
-    return this.user;
+export default {
+  state: {
+    user: {},
+    userType :""
   },
 
-  isGest(){
-    return this.type === "GEST";
+  getters: {
+    getUser (context) {
+      return context.user
+    },
+    isGest (context) {
+      return context.userType === 'GEST'
+    },
+    isAuthenticated(context){
+      //regarde si il y a la propriété id a l'utilisateur stocké (objet initialisé à vide)
+      return "id" in context.user;
+    },
+    isAdmin(context){
+      return context.user.admin === 1;
+    }
+  },
+
+  mutations : {
+    setuser (state, user) {
+      state.user = user;
+    },
+    setusertype (state, type) {
+      state.userType = type;
+    },
+    resetUser(state){
+      state.user = {};
+      state.userType = "";
+    }
   }
 }
 
-const mutations = {
-  setUser(user){
-    this.user = user;
-  },
 
 
-}
-
-
-export default [
-  state,
-  mutations,
-  getters,
-]

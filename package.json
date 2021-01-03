@@ -1,5 +1,5 @@
 {
-  "name": "projet-mmi-s3-3",
+  "name": "pictum",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,11 +12,17 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.20.1",
     "core-js": "^3.6.5",
+    "dhtmlx-scheduler": "^5.3.10",
     "gantt-schedule-timeline-calendar": "^3.6.6",
+    "gmap-vue": "^1.5.0",
+    "moment": "^2.29.1",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.12",
     "vue-axios": "^3.2.0",
+    "vue-bootstrap-datetimepicker": "^5.0.1",
+    "vue-moment": "^4.1.0",
     "vue-router": "^3.2.0",
+    "vue-wysiwyg": "^1.7.2",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
