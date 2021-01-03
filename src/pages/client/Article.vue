@@ -41,7 +41,7 @@
                     <img :src="this.selectedMateriel.photo" class="w-100 mr-4 img-fluid" alt="Responsive image">
                     <div class="mt-3 mb-3">
                         <h3>Réserver</h3>
-                        <form class="" id="datePicker">
+                        <form v-if="!existInStore" class="" id="datePicker">
                             <b-form-datepicker v-if="adaptCalendar" id="datepicker" v-model="selectedDate"
                                                :disabled="disableDatePicker"
                                                class="mb-4"></b-form-datepicker>
@@ -72,42 +72,45 @@
 
                     </div>
                     <div class="d-flex align-items-center justify-content-end w-100 flex-row mb-3">
-                        <b-button v-on:click="sendToManuel" variant="primary" class="w-auto mr-3">Manuel PDF</b-button>
-                        <b-button v-b-modal.modalTuto variant="primary" class="w-auto">Video Tutoriel</b-button>
+                        <b-button v-if="this.selectedMateriel.notice != null" v-on:click="sendToManuel" variant="primary" class="w-auto mr-3">Manuel PDF</b-button>
+                        <b-button v-if="getTutos != [''] && getTutos != [] && getTutos != null" v-b-modal.modalTuto variant="primary" class="w-auto">Video Tutoriel</b-button>
 
                         <b-modal id="modalTuto" scrollable centered title="Tutoriels disponibles" ok-only>
                             <p>
-                                This <a href="#" v-b-tooltip title="Tooltip in a modal!">Link</a> Voici la liste des tutoriels disponibles pour ce matériel.
+                                Voici la liste des tutoriels disponibles pour ce matériel.
                             </p>
-                                <div style="cursor: pointer;" v-for="(tuto, index) in this.tutos" v-on:click="sendTo(index)" :key="index" class="c-card shadow mb-3 text-dark">{{tuto}}</div>
+                                <div style="cursor: pointer;" v-for="(tuto, index) in getTutos" v-on:click="sendTo(index)" :key="index" class="c-card shadow mb-3 text-dark">{{tuto}}</div>
                         </b-modal>
 
                     </div>
                     <div class="c-card shadow mb-3">
                         <h3>Où se situe ce matériel ?</h3>
-                        <p>{{this.selectedMateriel.departement.nom}}</p>
+                        <p v-if="!isMalette">{{this.selectedMateriel.departement.nom}}</p>
+                        <p v-else>B.U.</p>
                     </div>
                 </div>
                 <div class="col-6 d-flex flex-column rightColumn px-5">
                     <div class="c-card shadow mb-3">
                         <h3>{{this.selectedMateriel.nom}}</h3>
 
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, beatae cumque dolor ea
-                            esse est fugit hic iure mollitia nihil nisi optio pariatur quo quod ratione repudiandae
-                            saepe. Alias aliquam architecto asperiores consectetur cumque deserunt ea ipsa itaque modi,
-                            nihil obcaecati officia provident quasi quibusdam ratione similique sit tempore! Error
-                            quaerat quidem ratione rem sequi. Aliquam animi autem culpa dicta, dignissimos dolorem
-
-                        </p>
                     </div>
-                    <div class="c-card shadow mb-3">
+                    <div v-if="!isMalette" class="c-card shadow mb-3">
                         <h3>Caractéristiques techniques</h3>
                         <div v-html="this.selectedMateriel.usage"></div>
                     </div>
-                    <div class="c-card shadow mb-3">
+                    <div v-if="!isMalette" class="c-card shadow mb-3">
                         <h3>Usage</h3>
                         <div v-html="this.selectedMateriel.usage"></div>
+                    </div>
+                    <div v-if="isMalette" class="c-card shadow mb-3">
+                        <h3>Contenu :</h3>
+                        <div v-for="element in contenuMalette" :key="element.id">
+                            <div class="w-100 d-flex justify-content-between"><p>{{element.nom}}</p>
+                                <router-link :to="{ name: 'Article', params : { id:pathMaterial(element.id)}}">
+                                    <b-button variant="primary" class="rounded-pill">Voir plus</b-button>
+                                </router-link>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -136,20 +139,38 @@
                 selectedMateriel : null,
                 selectedDate: null,
                 v_disableDatePicker: false,
-                tutos: null,
+                tutos: [],
+                currentId: 0,
+                currentType: "",
+                contenuMalette: null,
+
             }
         },
 
         methods:
         {
-            getMateriel() {
-                ajaxService.getAllApi("materiels").then(result => {
-                    this.materiel = result;
-                    this.selectedMateriel = utilsServices.getById(this.materiel, this.$route.params.id );
-                    this.tutos = JSON.parse(this.selectedMateriel.tutos);
-                    console.log(result);
-                    console.log(this.$route.params.filter);
-                }).catch(error => console.log(error))
+            getArticle() {
+                if( this.currentType === "Mat" ) {
+                    ajaxService.getAllApi("materiels").then(result => {
+                        this.materiel = result;
+                        this.selectedMateriel = utilsServices.getById(this.materiel, parseInt(this.currentId, 10));
+                        this.tutos = JSON.parse(this.selectedMateriel.tutos);
+                        console.log(result);
+                    }).catch(error => console.log(error))
+                }
+                else if( this.currentType === "Mal")
+                {
+                    ajaxService.getAllApi("malettes").then(result => {
+                        this.materiel = result;
+                        console.log(result);
+                        this.selectedMateriel = utilsServices.getById(this.materiel, parseInt(this.currentId, 10));
+                        console.log(this.selectedMateriel);
+                        if( this.isMalette )
+                        {
+                            this.fetchMaletteContent();
+                        }
+                    }).catch(error => console.log(error))
+                }
             },
             isMobile() {
                 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -172,12 +193,37 @@
             //Calendrier
 
             dateDisabled(ymd, date) {
-                // Disable weekends (Sunday = `0`, Saturday = `6`) and
-                // disable days that fall on the 13th of the month
-                const weekday = date.getDay()
-                //const day = date.getDate()
-                // Return `true` if the date should be disabled
-                return weekday === 0 || weekday === 0 || weekday === 2 || weekday === 3 || weekday === 4 || weekday === 5 || weekday === 6
+
+                let datesToAllow = [];
+
+                if( !this.isMalette ) {
+                    if (this.selectedMateriel.jour_dispo) {
+
+                        let nbJours = this.selectedMateriel.jour_dispo.length;
+
+                        for (let y = 0; y < nbJours; y++) {
+
+                            let dateToTest = new Date(this.selectedMateriel.jour_dispo[y].date);
+                            console.log(this.selectedMateriel.jour_dispo[y].disponible);
+                            if (this.selectedMateriel.jour_dispo[y].disponible === true) {
+
+                               datesToAllow.push(dateToTest);
+                            }
+                        }
+                    }
+                }
+
+
+                for( let i = 0; i < datesToAllow.length; i++) {
+                    let date1 = new Date(datesToAllow[i].getFullYear(),datesToAllow[i].getMonth() , datesToAllow[i].getDate());
+                    let date2 = new Date(date.getFullYear(), date.getMonth() , date.getDate());
+
+                    if(date1.getTime() === date2.getTime()){
+                        return false;
+                    }
+                }
+
+                return true;
             },
 
             //Reservation
@@ -187,6 +233,39 @@
                 console.log("ajouté à la reservation");
                 this.$store.commit("addMaterielId", this.selectedMateriel.id);
                 this.$refs['modalReserv'].hide();
+            },
+
+            //PATH
+            pathMaterial( id )
+            {
+                return id+"_Mat"
+            },
+
+            //Permet de decrypter l'id dans l'url
+            breakOptions()
+            {
+                if( this.$route.params.id ) {
+                    let response = this.$route.params.id.split("_");
+                    this.currentId = response[0];
+                    this.currentType = response[1];
+                }
+            },
+
+            //Malette
+
+            fetchMaletteContent()
+            {
+                ajaxService.getAllApi("malettes").then(result => {
+                    this.materiel = result;
+                    console.log("result");
+                    console.log(result);
+                    this.contenuMalette = [];
+                    for( let i = 0; i < this.selectedMateriel.materiels.length; i++ )
+                    {
+                        this.contenuMalette.push(this.selectedMateriel.materiels[i]);
+                    }
+
+                }).catch(error => console.log(error))
             }
         },
 
@@ -204,6 +283,34 @@
                         return "Louer cet objet pour le " + this.selectedDate.split("-").reverse().join('/') + ' ?';
                     }
                     return "Louer cet objet ?";
+                },
+                isMalette()
+                {
+                    console.log(this.currentType);
+                    if(this.currentType === "Mal")
+                        console.log("Malette = true");
+                    if(this.currentType !== "Mal")
+                        console.log("Malette = false");
+
+                    return this.currentType === "Mal"
+                },
+                getTutos()
+                {
+                    if(this.selectedMateriel && !this.isMalette )
+                    {
+                        return this.tutos;
+                    }
+                    return null;
+                },
+                existInStore()
+                {
+                    /*if( this.$store.getters.getCurrentMaterielsFromId(this.selectedMateriel.id) )
+                    {
+                        console.log("existInStore true");
+                        return true;
+                    }*/
+                    console.log("existInStore false");
+                    return false;
                 }
 
             },
@@ -212,12 +319,20 @@
             {
                 selectedDate: function()
                 {
-                    this.$refs['modalReserv'].show();
+                    if(this.selectedDate !== "1800-1-1") {
+                        this.$refs['modalReserv'].show();
+                    }
+                },
+
+                '$route.params.id' : function () {
+                    this.breakOptions();
+                    this.getArticle();
                 }
             },
 
         mounted() {
-            this.getMateriel();
+            this.breakOptions();
+            this.getArticle();
         }
     }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CategoriesHeader sidebarVisible :categories="getTypesFiltered" :activeCat="this.$route.params.filter"></CategoriesHeader>
+        <CategoriesHeader sidebarVisible :activeCat="this.$route.params.filter"></CategoriesHeader>
         <SidebarClient>
             <!--            Recherche -->
             <form class="form-inline w-100" ref="widthSidebar">
@@ -84,7 +84,7 @@
                             </div>
                             <div class="d-flex flex-row justify-content-between align-items-center">
                                 <p class="d-block mb-0">Disponibilité</p>
-                                <router-link :to="{ name: 'Article', params : { id:materiel.id}}">
+                                <router-link :to="{ name: 'Article', params : { id:pathMaterial(materiel.id)}}">
                                     <b-button variant="primary" class="rounded-pill">Voir plus</b-button>
                                 </router-link>
                             </div>
@@ -125,7 +125,7 @@
                             </div>
                             <div class="d-flex flex-row justify-content-between align-items-center">
                                 <p class="d-block mb-0">Disponibilité</p>
-                                <router-link :to="{ name: 'Article', params : { id:materiel.id}}">
+                                <router-link :to="{ name: 'Article', params : { id:pathMalette(materiel.id)}}">
                                     <b-button variant="primary" class="rounded-pill">Voir plus</b-button>
                                 </router-link>
                             </div>
@@ -155,8 +155,6 @@
         },
         data() {
             return {
-                showDismissibleAlert: false,
-                listeType: [],
                 listeMateriel: [],
                 listeMalette: [],
 
@@ -182,12 +180,6 @@
             },
 
             //Getters
-            getTypes() {
-                ajaxService.getAllApi("types").then(result => {
-                    this.listeType = result;
-                    console.log(result);
-                }).catch(error => console.log(error))
-            },
             getListeMateriel() {
                 ajaxService.getAllApi("materiels").then(result => {
                     this.listeMateriel = result;
@@ -206,7 +198,7 @@
             getMaterielFilteredBydate: function( array )
             {
                 if( array ) {
-                    let result = [];
+                    /*let result = [];
                     let dateToTest = new Date(this.dateFilter);
                     console.log("startfilter | lenght :" + array.length);
 
@@ -244,8 +236,36 @@
                             }
                         }
                     }
+                    return result;*/
+
+                    let result = [];
+                    let dateFiltre = new Date(this.dateFilter);
+                    console.log("startfilter | lenght :" + array.length);
+
+                    for( let i = 0; i < array.length; i++ ) {
+
+                        if( array[i].jour_dispo ) {
+
+                            let nbJours = array[i].jour_dispo.length;
+                            for (let y = 0; y < nbJours; y++) {
+                                let dateToTest = new Date(array[i].jour_dispo[y].date);
+                                if (dateToTest.getTime() === dateFiltre.getTime() && array[i].jour_dispo[y].disponible === true) {
+                                    console.log("Yes");
+                                    result.push(array[i]);
+                                } else {
+
+                                    console.log("No no");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            result.push(array[i]);
+                        }
+                    }
                     return result;
                 }
+
                 return[];
             },
             getMaterielFilteredByPro(array)
@@ -272,6 +292,17 @@
                 return [];
             },
 
+            //PATHs
+
+            pathMaterial( id )
+            {
+                return id+"_Mat"
+            },
+            pathMalette( id )
+            {
+                return id+"_Mal"
+            }
+
         },
         computed:
         {
@@ -296,7 +327,7 @@
 
             isMalette: function()
             {
-                if( this.$route.params.filter === "malette")
+                if( this.$route.params.filter === "Malettes")
                 {
                     return true;
                 }
@@ -305,26 +336,6 @@
                     return false;
                 }
             },
-            getTypesFiltered: function()
-            {
-                if( this.listeType ) {
-                    console.log("startfilter | lenght :" + this.listeType.length);
-                    let array = [];
-                    for (let i = 0; i < this.listeType.length; i++) {
-                        array.push(this.listeType[i].nom);
-                        console.log(this.listeType[i].nom);
-                    }
-                    let result = [...new Set(array)];
-                    result.push("Malettes");
-                    result.push("Tous");
-
-                    return result;
-                }
-                else {
-                    return [];
-                }
-            },
-
             filterSelection: function()
             {
                 let array;
@@ -339,7 +350,10 @@
                 }
                 else
                 {
-                    array = this.listeMateriel;
+                    array = this.listeMateriel.filter(function (item){
+                        return item.type.nom.split(" ").join("") === this.$route.params.filter;
+                    }.bind(this));
+                    //array = this.listeMateriel;
                 }
 
 
@@ -366,21 +380,12 @@
 
         },
         mounted() {
-            this.getTypes();
             this.getListeMateriel();
             this.getListeMalette();
 
             this.sidebarInnerWidth = this.$refs.widthSidebar.clientWidth;
             this.currentFilter = this.$route.params.filter;
 
-            /*console.log(this.getTypesFiltered());
-
-            for( let i = 0; i < this.getTypesFiltered.length; i++ )
-            {
-                this.categoriesArray[i] = this.getTypesFiltered()[i].nom;
-
-                console.log(this.categoriesArray[i]);
-            }*/
         }
     }
 </script>

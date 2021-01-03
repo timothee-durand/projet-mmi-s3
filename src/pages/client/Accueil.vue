@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CategoriesHeader :categories="getTypesFiltered" ></CategoriesHeader>
+        <CategoriesHeader></CategoriesHeader>
         <div class="" style="background-color: #dcdcdc;">
             <div class="container-fluid">
                 <b-row>
@@ -13,7 +13,6 @@
 
 <script>
     import CategoriesHeader from '@/components/CategoriesHeader'
-    import ajaxService from '@/services/ajaxService.js'
 
     export default {
         name: 'Accueil',
@@ -22,42 +21,15 @@
         },
         data() {
             return {
-                showDismissibleAlert: false,
-                listeType: [],
             }
         },
         methods: {
-            //Getters
-            getTypes() {
-                ajaxService.getAllApi("types").then(result => {
-                    this.listeType = result;
-                    console.log(result);
-                }).catch(error => console.log(error))
-            },
         },
         computed:
             {
-                //Filtres
-                getTypesFiltered: function () {
-                    if (this.listeType) {
-                        console.log("startfilter | lenght :" + this.listeType.length);
-                        let array = [];
-                        for (let i = 0; i < this.listeType.length; i++) {
-                            array.push(this.listeType[i].nom);
-                            console.log(this.listeType[i].nom);
-                        }
-                        let result = [...new Set(array)];
-                        result.push("Malettes");
-                        result.push("Tous");
-                        return result;
-                    } else {
-                        return [];
-                    }
-                }
             },
 
         mounted() {
-            this.getTypes();
         }
     }
 </script>
