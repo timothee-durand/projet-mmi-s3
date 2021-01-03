@@ -21,7 +21,9 @@ export default {
           return item.nom.toLowerCase().includes(toFind.toLowerCase());
       });
   },
-
+  getOnlyDate(date){
+    return moment(date, ["YYYY-MM-DD HH:mm:SS"], 'fr').format("DD/MM/YYYY");
+  },
   getDate(date){
     return moment(date, ["YYYY-MM-DD HH:mm:SS"], 'fr').format("DD MMM YYYY - HH:mm");
   },

@@ -17,6 +17,7 @@ import CreneauxParam_Admin from '@/pages/admin/CreneauxParam_Admin.vue'
 import Login from '@/pages/Login.vue'
 import PasswordModification from '@/pages/PasswordModification.vue'
 import CategoriesChoice from '@/pages/client/CategoriesChoice.vue'
+import OldReservation from '@/pages/client/OldReservation.vue'
 
 
 Vue.use(Router)
@@ -30,6 +31,7 @@ let router =  new Router({
     {path: '/reservation/:state', name: 'Reservation', component: Reservation},
     {path: '/article/:id', name: 'Article', component: Article},
     {path: '/categories', name: 'CategoriesChoice', component: CategoriesChoice},
+    {path: '/mes-reservations', name: 'OldReservation', component: OldReservation},
 
 
     //admin
