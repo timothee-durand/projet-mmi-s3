@@ -4,7 +4,7 @@
 
         <div class="body container-fluid">
             <div class="row">
-                <div class="col-6 px-5 leftColumn d-flex flex-column">
+                <div class="col-md-6 col-12 px-5 leftColumn d-flex flex-column">
                     <!--<b-carousel
                             id="carousel-1"
                             :interval="4000"
@@ -48,6 +48,7 @@
                             <b-calendar v-else v-model="selectedDate" today-variant="primary" selected-variant="primary" nav-button-variant="secondary" :date-disabled-fn="dateDisabled" locale="fr" :disabled="disableDatePicker" block
                                         class="w-100 "></b-calendar>
                         </form>
+                        <div v-else class="w-100 p-5 d-flex justify-content-center align-items-center c-card shadow">Cet objet a été ajouté à votre réservation.</div>
 
                         <!-- Modale de confirmation de réservation -->
                         <b-modal ref="modalReserv" id="modalReserv" centered :title="titreReservModal">
@@ -89,10 +90,9 @@
                         <p v-else>B.U.</p>
                     </div>
                 </div>
-                <div class="col-6 d-flex flex-column rightColumn px-5">
+                <div class="col-md-6 col-12 d-flex flex-column rightColumn px-5">
                     <div class="c-card shadow mb-3">
                         <h3>{{this.selectedMateriel.nom}}</h3>
-
                     </div>
                     <div v-if="!isMalette" class="c-card shadow mb-3">
                         <h3>Caractéristiques techniques</h3>
@@ -304,11 +304,11 @@
                 },
                 existInStore()
                 {
-                    /*if( this.$store.getters.getCurrentMaterielsFromId(this.selectedMateriel.id) )
+                    if( this.$store.getters.getCurrentMaterielsFromId(this.selectedMateriel.id) )
                     {
                         console.log("existInStore true");
                         return true;
-                    }*/
+                    }
                     console.log("existInStore false");
                     return false;
                 }

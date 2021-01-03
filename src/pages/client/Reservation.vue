@@ -15,218 +15,20 @@
 
     <div v-if="checkState === 'selection'" class="containerRight">
       <div class="container-fluid p-4 selectionContainer">
-      <b-row class="mb-5">
+      <b-row v-if="this.selectedMateriel" class="mb-5">
 
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
+        <div v-for="materiel in this.selectedMateriel" :key="materiel.id" class="c-card p-3 col-12 mt-3 shadow"
+             style="border-radius: 20px; background-color: #ffffff; overflow: hidden; height: 40%">
           <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
+            <img :src="materiel.photo" alt="test" class="mr-4">
+            <h3>{{materiel.nom}}</h3>
+            <div class="cardDesc h-auto usageView" style="overflow: scroll" v-html="materiel.usage"></div>
               <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
               <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
           </div>
 
         </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
 
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
-        <div class="c-card p-3 col-12 mt-3 shadow"
-             style="border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-          <div class="d-flex flex-row align-items-center justify-content-between cardContent">
-            <img src="https://picsum.photos/1024/480/?image=52" alt="test" class="mr-4">
-            <h3>There is some text here</h3>
-            <p class="cardDesc">description produit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda blanditiis
-              dicta dolorem eos in officiis provident quasi quidem ratione veritatis. Eveniet impedit in neque
-              possimus voluptate. Accusamus asperiores rem voluptatem?</p>
-            <p>x1</p>
-            <b-button variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-            <img src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
-          </div>
-
-        </div>
 
       </b-row>
       <div class="position-fixed" style="right:40px; bottom: 40px">
@@ -403,8 +205,8 @@ export default {
       currentState: "",
       motivation: "",
       competences: "",
-        materiels : [],
-        selectedMateriel : null,
+      allMateriels : [],
+      selectedMateriel: [],
     }
   },
   computed:
@@ -422,18 +224,23 @@ export default {
       //this.$router.go({ name: 'Reservation', params : { state:'selection'}});
       this.$router.push('selection')
     },
-      getMateriel() {
-          ajaxService.getAllApi("materiel").then(result => {
-              this.materiel = result;
-              this.selectedMateriel = utilsServices.getById(this.selectedMateriel, this.$route.params.filter)
-              console.log(result);
-              for( let i = 0; i < this.listeType.length; i++ )
-              {
-                  this.categoriesArray[i] = this.listeType()[i].nom;
-                  console.log(this.categoriesArray[i]);
-              }
-          }).catch(error => console.log(error))
-      },
+    getMateriel() {
+        ajaxService.getAllApi("materiels").then(result => {
+            this.allMateriels = result;
+
+          console.log(this.allMateriels);
+          let reservationIdsMaterial = this.$store.getters.getCurrentMaterielsId;
+
+            //Rechercher le materiel dans la réservation grace a l'id
+            for(let i = 0; i < reservationIdsMaterial.length; i++ )
+            {
+              this.selectedMateriel.push(utilsServices.getById(this.allMateriels, reservationIdsMaterial[i]));
+            }
+        }).catch(error => console.log(error))
+    },
+  },
+  mounted() {
+    this.getMateriel();
   }
 
 }
@@ -489,5 +296,17 @@ export default {
   {
     min-height: 70vh;
     width: 95%;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .usageView::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .usageView {
+    text-overflow: unset;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 </style>

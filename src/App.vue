@@ -6,7 +6,7 @@
 
       <div class="d-flex flex-row align-items-center" v-if="isAuth">
         <router-link to="/" class="mr-3 text-white">Accueil</router-link>
-        <router-link :to="{ name: 'Reservation', params : { state:'selection'}}" class="mr-3 text-white">Réservation</router-link>
+        <router-link :to="{ name: 'Reservation', params : { state:'selection'}}" class="mr-3 text-white"><div class="d-flex flex-row align-items-start">Réservation <div v-if="reservationExist" class="d-flex"><div class="blob" ></div></div></div></router-link>
         <b-dropdown :text="initials" toggle-class="rounded-pill button-drop-pill" no-caret right block variant="primary" >
           <div v-if="isGest">
             <b-dropdown-item >
@@ -61,7 +61,11 @@ export default {
     initials(){
       let user = this.$store.getters.getUser;
       return user.prenom.charAt(0) + user.nom.charAt(0) ;
-    }
+    },
+      reservationExist()
+      {
+          return this.$store.getters.getCurrentMaterielsId.length !== 0;
+      },
   },
   created () {
   },
@@ -113,6 +117,8 @@ export default {
 </script>
 
 <style lang="scss">
+
+    @import "./styles/custom-bootstrap.scss";
 
 :root {
   --header-height: 70px;
@@ -166,5 +172,40 @@ export default {
     height: 45px;
     text-align: center;
   }
+
+.dot {
+    height: 8px;
+    width: 8px;
+    background-color: $primary;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.blob {
+    background: $primary;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 $primary;
+    margin: 3px;
+    height: 10px;
+    width: 10px;
+    transform: scale(1);
+    animation: pulse-black 2s infinite;
+}
+@keyframes pulse-black {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba($primary, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba($primary, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba($primary, 0);
+    }
+}
 
 </style>

@@ -15,7 +15,7 @@ export default {
         getCurrentMaterielsId(context) {
             return context.materielsID;
         },
-        getCurrentMaterielsFromId: state => id => state.materielsID.find(id)
+        getCurrentMaterielsFromId: state => id => state.materielsID.find(element => element === id)
 
             /*{
                 return id => contexte.materielsID.find(id)
