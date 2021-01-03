@@ -2,7 +2,12 @@
   <div id="app">
     <header
         class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
-      <img alt="Logo Pictum" class="logo w-auto h-100" src="./assets/img/fond_sombre_st_logo.svg">
+
+      <router-link to="/" class="w-25 h-100">
+        <b-img alt="Logo Pictum" class="w-auto h-100" fluid-grow  :src="require('./assets/img/fond_sombre_st_logo.svg')"></b-img>
+      </router-link>
+
+      <router-link to="/login" v-if="!isAuth" class="text-white">Se connecter / S'inscrire</router-link>
 
       <div class="d-flex flex-row align-items-center" v-if="isAuth">
         <router-link to="/" class="mr-3 text-white">Accueil</router-link>
@@ -21,14 +26,16 @@
       </div>
     </header>
     <router-view/>
+    <footer-pictum v-if="isGestRoute"></footer-pictum>
   </div>
 </template>
-
 <script>
 import appService from '@/services/appService.js'
+import FooterPictum from '@/components/Footer.vue'
+
 export default {
   name: 'App',
-
+  components: {FooterPictum},
   data () {
     return {
       userToLogin: {
@@ -62,10 +69,13 @@ export default {
       let user = this.$store.getters.getUser;
       return user.prenom.charAt(0) + user.nom.charAt(0) ;
     },
-      reservationExist()
-      {
-          return this.$store.getters.getCurrentMaterielsId.length !== 0;
-      },
+    reservationExist()
+    {
+        return this.$store.getters.getCurrentMaterielsId.length !== 0;
+    },
+    isGestRoute(){
+      return appService.isUnAuthRoute(this.$route.name)
+    }
   },
   created () {
   },
@@ -73,7 +83,7 @@ export default {
     '$route': {
       immediate: true,
       handler(to) {
-        if((to.name !== "Login" || to.name !== "AdminContact"  )&& !this.$store.getters.isAuthenticated) {
+        if(!appService.isUnAuthRoute(to.name) && !this.$store.getters.isAuthenticated) {
           //si on ne va pas se connecter et que on est pas authentifié
           this.$router.push("/login");
         }
