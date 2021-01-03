@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="min-vh-100">
     <header
         class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
 
@@ -29,7 +29,7 @@
       </div>
     </header>
     <router-view/>
-    <footer-pictum v-if="isGestRoute"></footer-pictum>
+    <footer-pictum v-if="isGestRoute" ></footer-pictum>
   </div>
 </template>
 <script>
