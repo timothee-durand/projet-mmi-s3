@@ -18,6 +18,7 @@ import Login from '@/pages/Login.vue'
 import PasswordModification from '@/pages/PasswordModification.vue'
 import CategoriesChoice from '@/pages/client/CategoriesChoice.vue'
 import OldReservation from '@/pages/client/OldReservation.vue'
+import ConditionsUtilisation from '@/pages/ConditionsUtilisation.vue'
 
 
 Vue.use(Router)
@@ -49,6 +50,7 @@ let router =  new Router({
     {path: '/contact-admin/', name: 'AdminContact', component: Admin_Contact},
     {path: '/login/', name: 'Login', component: Login},
     {path: '/password/', name: 'Password', component: PasswordModification},
+    {path: '/conditions-utilisation', name: 'ConditionsUtilisation', component: ConditionsUtilisation},
   ]
 })
 
