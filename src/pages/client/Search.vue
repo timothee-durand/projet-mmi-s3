@@ -53,7 +53,7 @@
         </SidebarClient>
         <div class="containerRight ">
             <div class="container-fluid ">
-                <b-row v-if="!isMalette" gutter-2>
+                <b-row gutter-2>
                     <div v-for="materiel in filterSelection" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
                         <div class="c-card shadow p-4"
                              style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
@@ -83,49 +83,14 @@
                                 </div>
                             </div>
                             <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <router-link :to="{ name: 'Article', params : { id:pathMaterial(materiel.id)}}">
+                                <p v-if="reservdateDebutIsSet && isDisponible(materiel)" class="d-block mb-0 text-primary">Réservable</p>
+                                <p v-if="reservdateDebutIsSet && !isDisponible(materiel)" class="d-block mb-0 text-danger">Non Disponible le {{$store.getters.getReservdateDebut.split("-").reverse().join('/')}}</p>
+                                <p v-if="!reservdateDebutIsSet && isDisponible(materiel)" class="d-block mb-0 text-primary">Disponible dès Aujourd'hui</p>
+                                <p v-if="!reservdateDebutIsSet && !isDisponible(materiel)" class="d-block mb-0 text-danger">Non Disponible Aujourd'hui</p>
+                                <router-link v-if="!isMalette(materiel)" :to="{ name: 'Article', params : { id:pathMaterial(materiel.id)}}">
                                     <b-button variant="primary" class="rounded-pill">Voir plus</b-button>
                                 </router-link>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-if="this.nbResult === 0" style="height: calc(100vh - var(--header-height) - var(--navbar-height));" class="w-100 d-flex align-items-center justify-content-center">
-                        Aucun résultat
-                    </div>
-                </b-row>
-                <b-row v-if="isMalette" gutter-2>
-                    <div v-for="materiel in filterSelection" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
-                        <div class="c-card shadow p-4"
-                             style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img v-if="materiel.pro === 1" src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <!-- <b-carousel
-                                        id="carousel-1"
-                                        :interval="-1"
-                                        controls
-                                        indicators
-                                        background="#ababab"
-                                        img-width="1024"
-                                        img-height="480"
-                                        style="height: 100%;"
-                                        class="w-50 mr-4"
-                                >
-
-                                    <b-carousel-slide
-                                            :img-src="materiel.photo"></b-carousel-slide>
-
-                                </b-carousel> -->
-                                <img :src="materiel.photo" class="w-25 mr-4 img-fluid" alt="Responsive image">
-                                <div class="w-50"
-                                     style="overflow: hidden; display: block; text-overflow: ellipsis; height: 170px">
-                                    <h3 class="border-bottom border-dark t">{{materiel.nom}}</h3>
-                                    <div v-html="materiel.usage"></div>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <p class="d-block mb-0">Disponibilité</p>
-                                <router-link :to="{ name: 'Article', params : { id:pathMalette(materiel.id)}}">
+                                <router-link v-else :to="{ name: 'Article', params : { id:pathMalette(materiel.id)}}">
                                     <b-button variant="primary" class="rounded-pill">Voir plus</b-button>
                                 </router-link>
                             </div>
@@ -294,6 +259,17 @@
 
             //PATHs
 
+            isMalette: function(obj)
+            {
+                if( obj.materiels )
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            },
             pathMaterial( id )
             {
                 return id+"_Mat"
@@ -301,8 +277,48 @@
             pathMalette( id )
             {
                 return id+"_Mal"
-            }
+            },
 
+            isDisponible(item)
+            {
+                if (item.jour_dispo) {
+
+                    let dateReserv;
+
+                    //Si une date est sélectionnée pour la reservation comparer à cette date
+                    if(this.reservdateDebutIsSet) {
+                        dateReserv = new Date(this.$store.getters.getReservdateDebut);
+                    }
+                    //Sinon prendre la date du jour
+                    else
+                    {
+                        dateReserv = new Date();
+                    }
+
+                    //standardiser l'heure
+                    dateReserv = new Date(dateReserv.getFullYear(),dateReserv.getMonth() , dateReserv.getDate());
+
+                    let nbJours = item.jour_dispo.length;
+
+                    for (let y = 0; y < nbJours; y++) {
+
+                        let dateToTest = new Date(item.jour_dispo[y].date);
+                        dateToTest =  new Date(dateToTest.getFullYear(),dateToTest.getMonth() , dateToTest.getDate());
+                        console.log(dateToTest);
+                        console.log(dateReserv);
+                        if (dateToTest.getTime() === dateReserv.getTime()) {
+                            if(item.jour_dispo[y].disponible)
+                            {
+                                console.log("helloworld");
+
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            }
         },
         computed:
         {
@@ -325,17 +341,6 @@
             },
             //Filtres
 
-            isMalette: function()
-            {
-                if( this.$route.params.filter === "Malettes")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            },
             filterSelection: function()
             {
                 let array;
@@ -374,6 +379,22 @@
                 this.nbResult = array.length;
                 return array;
 
+            },
+            reservdateDebutIsSet()
+            {
+                if( this.$store.getters.getCurrentMaterielsId )
+                {
+                    if(this.$store.getters.getCurrentMaterielsId.length > 0)
+                    {
+
+                        if( this.$store.getters.getCurrentMaterielsId[0] === this.currentId )
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                return this.$store.getters.reservdateDebutIsSet;
             },
         },
         beforeMount(){

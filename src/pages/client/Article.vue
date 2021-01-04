@@ -41,13 +41,20 @@
                     <img :src="this.selectedMateriel.photo" class="w-100 mr-4 img-fluid" alt="Responsive image">
                     <div class="mt-3 mb-3">
                         <h3>Réserver</h3>
-                        <form v-if="!existInStore" class="" id="datePicker">
+                        <form v-if="!existInStore && !reservdateDebutIsSet" class="" id="datePicker">
                             <b-form-datepicker v-if="adaptCalendar" id="datepicker" v-model="selectedDate"
                                                :disabled="disableDatePicker"
                                                class="mb-4"></b-form-datepicker>
                             <b-calendar v-else v-model="selectedDate" today-variant="primary" selected-variant="primary" nav-button-variant="secondary" :date-disabled-fn="dateDisabled" locale="fr" :disabled="disableDatePicker" block
                                         class="w-100 "></b-calendar>
                         </form>
+                        <div v-else-if="reservdateDebutIsSet && isDisponibleAtReservDate && !existInStore" class="w-100 p-5 d-flex flex-column justify-content-center align-items-center c-card shadow">
+                            <p>Voulez-vous ajouter cet objet à votre réservation du {{this.$store.getters.getReservdateDebut.split("-").reverse().join('/')}} ?</p>
+                            <b-button v-on:click="addToReservation()" size="md" variant="primary" class="rounded-pill">ajouter</b-button>
+                        </div>
+                        <div v-else-if="reservdateDebutIsSet && !isDisponibleAtReservDate" class="w-100 p-5 d-flex flex-column justify-content-center align-items-center c-card shadow">
+                            <p class="text-danger">Cet objet n'est pas disponible pour le {{this.$store.getters.getReservdateDebut.split("-").reverse().join('/')}}.</p>
+                        </div>
                         <div v-else class="w-100 p-5 d-flex justify-content-center align-items-center c-card shadow">Cet objet a été ajouté à votre réservation.</div>
 
                         <!-- Modale de confirmation de réservation -->
@@ -65,7 +72,7 @@
                                 <b-button size="sm" variant="secondary" @click="cancel()">
                                     Annuler
                                 </b-button>
-                                <b-button size="sm" variant="success" @click="addToReservation()">
+                                <b-button size="sm" variant="primary" @click="addToReservation()">
                                     OK
                                 </b-button>
                             </template>
@@ -74,7 +81,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-end w-100 flex-row mb-3">
                         <b-button v-if="this.selectedMateriel.notice != null" v-on:click="sendToManuel" variant="primary" class="w-auto mr-3">Manuel PDF</b-button>
-                        <b-button v-if="getTutos != [''] && getTutos != [] && getTutos != null" v-b-modal.modalTuto variant="primary" class="w-auto">Video Tutoriel</b-button>
+                        <b-button v-if="tutoButtonCond" v-b-modal.modalTuto variant="primary" class="w-auto">Video Tutoriel</b-button>
 
                         <b-modal id="modalTuto" scrollable centered title="Tutoriels disponibles" ok-only>
                             <p>
@@ -153,7 +160,7 @@
                 if( this.currentType === "Mat" ) {
                     ajaxService.getAllApi("materiels").then(result => {
                         this.materiel = result;
-                        this.selectedMateriel = utilsServices.getById(this.materiel, parseInt(this.currentId, 10));
+                        this.selectedMateriel = utilsServices.getById(this.materiel, this.currentId);
                         this.tutos = JSON.parse(this.selectedMateriel.tutos);
                         console.log(result);
                     }).catch(error => console.log(error))
@@ -163,7 +170,7 @@
                     ajaxService.getAllApi("malettes").then(result => {
                         this.materiel = result;
                         console.log(result);
-                        this.selectedMateriel = utilsServices.getById(this.materiel, parseInt(this.currentId, 10));
+                        this.selectedMateriel = utilsServices.getById(this.materiel, this.currentId);
                         console.log(this.selectedMateriel);
                         if( this.isMalette )
                         {
@@ -230,8 +237,25 @@
 
             addToReservation()
             {
-                console.log("ajouté à la reservation");
-                this.$store.commit("addMaterielId", this.selectedMateriel.id);
+                if( !this.isMalette )
+                {
+                    console.log("Materiel ajouté à la reservation");
+                    this.$store.commit("addMaterielId", this.selectedMateriel.id);
+                    if(!this.reservdateDebutIsSet)
+                    {
+                        this.$store.commit("setReservdateDebutPret", this.selectedDate);
+                    }
+                }
+                else
+                {
+                    console.log("Malette ajouté à la reservation");
+                    this.$store.commit("addMaletteId", this.selectedMateriel.id);
+                    if(!this.reservdateDebutIsSet)
+                    {
+                        this.$store.commit("setReservdateDebutPret", this.selectedDate);
+                    }
+                }
+
                 this.$refs['modalReserv'].hide();
             },
 
@@ -246,7 +270,7 @@
             {
                 if( this.$route.params.id ) {
                     let response = this.$route.params.id.split("_");
-                    this.currentId = response[0];
+                    this.currentId = parseInt(response[0], 10);
                     this.currentType = response[1];
                 }
             },
@@ -266,7 +290,8 @@
                     }
 
                 }).catch(error => console.log(error))
-            }
+            },
+
         },
 
         computed:
@@ -304,13 +329,75 @@
                 },
                 existInStore()
                 {
-                    if( this.$store.getters.getCurrentMaterielsFromId(this.selectedMateriel.id) )
+                    if(!this.isMalette)
                     {
-                        console.log("existInStore true");
-                        return true;
+                        if( this.$store.getters.getCurrentMaterielsFromId(this.currentId) )
+                        {
+                            console.log("existInStore true");
+                            return true;
+                        }
                     }
+                    else
+                    {
+                        if( this.$store.getters.getCurrentMalettesFromId(this.currentId) )
+                        {
+                            console.log("existInStore true");
+                            return true;
+                        }
+                    }
+
                     console.log("existInStore false");
                     return false;
+                },
+                tutoButtonCond()
+                {
+                    if(this.getTutos !== null){
+                        if( this.getTutos[0] !== "" )
+                        {
+                            return false;
+                        }
+                        if( this.getTutos !== [] )
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    return true;
+                },
+
+                reservdateDebutIsSet()
+                {
+                    return this.$store.getters.reservdateDebutIsSet;
+                },
+
+                isDisponibleAtReservDate()
+                {
+                    if(this.reservdateDebutIsSet)
+                    {
+                        if (this.selectedMateriel.jour_dispo) {
+
+                            let dateReserv = new Date(this.$store.getters.getReservdateDebut);
+                            let nbJours = this.selectedMateriel.jour_dispo.length;
+
+                            for (let y = 0; y < nbJours; y++) {
+
+                                let dateToTest = new Date(this.selectedMateriel.jour_dispo[y].date);
+                                console.log(dateToTest);
+                                console.log(dateReserv);
+                                if (dateToTest.getTime() === dateReserv.getTime()) {
+                                    if(this.selectedMateriel.jour_dispo[y].disponible)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        return false;
+                    }
+                    return true;
                 }
 
             },

@@ -3,7 +3,7 @@
     <CategoriesHeader v-if="this.$store.getters.isAuthenticated"></CategoriesHeader>
     <div class="bg-white">
 
-      <b-row class="vh-100 pr-5 pl-5 m-0">
+      <b-row class="mainRow pr-5 pl-5 m-0">
         <b-col cols="12" md="6" class="d-flex flex-column justify-content-center">
           <div>
             <h1 class="text-uppercase mb-4">Prêt de <br/> matériel audiovisuel</h1>
@@ -121,5 +121,10 @@ h3 {
   height: 287px;
   background: no-repeat center;
   background-size: cover;
+}
+
+.mainRow
+{
+  height: calc(100vh - var(--header-height) - var(--navbar-height));
 }
 </style>
