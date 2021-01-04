@@ -23,24 +23,24 @@
           <h2 class="text-center mt-4">Empruntez votre matériel en quelques étapes !</h2>
         </b-col>
         <b-col cols="12" md="4" class="mt-4 px-md-5">
-          <div class="carre-accueil" :style="'background-image:url('+require('@/assets/img/choisissez.jpg')+')'"></div>
+          <div class="carre-accueil mx-auto" :style="'background-image:url('+require('@/assets/img/choisissez.jpg')+')'"></div>
           <p class="h4 text-center mt-3">Choisissez</p>
         </b-col>
         <b-col cols="12" md="4" class="mt-4 px-md-5">
-          <div class="carre-accueil" :style="'background-image:url('+require('@/assets/img/reservez.jpg')+')'"></div>
+          <div class="carre-accueil mx-auto" :style="'background-image:url('+require('@/assets/img/reservez.jpg')+')'"></div>
           <p class="h4 text-center mt-3">Réservez aux dates disponibles</p>
         </b-col>
         <b-col cols="12" md="4" class="mt-4 px-md-5">
-          <div class="carre-accueil" :style="'background-image:url('+require('@/assets/img/recuperez.jpg')+')'"></div>
+          <div class="carre-accueil mx-auto" :style="'background-image:url('+require('@/assets/img/recuperez.jpg')+')'"></div>
           <p class="h4 text-center mt-3">Récupérez le matériel au point de rendez-vous</p>
         </b-col>
       </b-row>
 
       <h2 class="text-center mt-4">Comment ça marche ?</h2>
 
-      <b-row class="pt-3 pb-3 pr-5 pl-5 m-0">
-        <b-col cols="12" md="5" offset-md="1">
-          <div class="carre-accueil" style="background-color: #A9FF70;"></div>
+      <b-row class="pt-3 pb-3 pr-5 pl-5 m-0 mr-md-5 ml-md-5">
+        <b-col cols="12" md="5" >
+          <div class="carre-accueil " :style="'background-image:url('+require('@/assets/img/materiel_pro.jpg')+')'"></div>
         </b-col>
         <b-col cols="12" md="6" align-self="center">
           <h3>Classique et Professionnel</h3>
@@ -55,8 +55,8 @@
         </b-col>
       </b-row>
 
-      <b-row class="pt-3 pb-3 pr-5 pl-5 m-0">
-        <b-col cols="12" md="6" align-self="center" offset-md="1" order="2" order-md="1">
+      <b-row class="pt-3 pb-3 pr-5 pl-5 m-0 mr-md-5 ml-md-5">
+        <b-col cols="12" md="6" align-self="center"  order="2" order-md="1">
           <h3>Où récupérer mon matériel ?</h3>
           <p>Il vous faudra vous rendre à la Bibliothèque Universitaire, à l’horaires de rendez-vous prévu. Le
             gestionnaire du matériel en permanence vous attendra pour vous remettre le matériel réservé et vérifier avec
@@ -64,13 +64,13 @@
           </p>
         </b-col>
         <b-col cols="12" md="5" order="1" order-md="2" >
-          <div class="carre-accueil" style="background-color: #B37CFF;"></div>
+          <div class="carre-accueil ml-auto" :style="'background-image:url('+require('@/assets/img/bu_montbe.jpg')+')'"></div>
         </b-col>
       </b-row>
 
-      <b-row class="pt-3 pb-3 pr-5 pl-5 m-0">
-        <b-col cols="12" md="5" offset-md="1">
-          <div class="carre-accueil m-0" style="background-color: #81CB51;"></div>
+      <b-row class="pt-3 pb-3 pr-5 pl-5 m-0 mr-md-5 ml-md-5">
+        <b-col cols="12" md="5" >
+          <div class="carre-accueil " :style="'background-image:url('+require('@/assets/img/jours_ouvres.jpg')+')'"></div>
         </b-col>
         <b-col cols="12" md="6" align-self="center">
           <h3>Combien de temps ?</h3>

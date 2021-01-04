@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div class="p-4 " style="min-height: 65vh">
     <h1>Bienvenue sur Pictum</h1>
     <p>Le service de gestion de prêt matériel vidéo du Campus des Portes du Jura</p>
     <div class="w-50 mx-auto">

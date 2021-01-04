@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="min-vh-100">
     <header
         class="bg-dark text-light w-100 sticky-top d-inline-flex align-items-center justify-content-between p-3 appHeader">
 
@@ -19,6 +19,9 @@
             </b-dropdown-item>
           </div>
           <b-dropdown-item >
+            <router-link to="/mes-reservations">Mes réservations</router-link>
+          </b-dropdown-item>
+          <b-dropdown-item >
             <router-link to="/password">Mot de passe</router-link>
           </b-dropdown-item>
           <b-dropdown-item class="text-danger" @click="disconnect">Se déconnecter</b-dropdown-item>
@@ -26,7 +29,7 @@
       </div>
     </header>
     <router-view/>
-    <footer-pictum v-if="isGestRoute"></footer-pictum>
+    <footer-pictum v-if="isGestRoute" ></footer-pictum>
   </div>
 </template>
 <script>

@@ -1,4 +1,10 @@
-# projet-mmi-s3-3
+# Pictum (Frontend)
+Gestion Prêt Matériel Vidéo Campus Portes du Jura
+Projet Collectif MMI
+
+Technologies : Laravel + VueJS avec BootstrapVue
+
+Projet [ici](https://pictum.pu-pm.univ-fcomte.fr/)
 
 ## Project setup
 ```

@@ -1,28 +1,28 @@
 <template>
   <footer >
     <b-row class="bg-secondary p-3 m-0" align-h="around" align-v="center">
-      <b-col cols="8" md="2" class="mt-4 mt-md-0">
+      <b-col cols="8" md="2" class="mt-4 mt-md-0 p-5">
         <b-img fluid :src="require('@/assets/img/logo_ubfc.png')"></b-img>
       </b-col>
 
-      <b-col cols="8" md="2" class="mt-4 mt-md-0">
+      <b-col cols="8" md="2" class="mt-4 mt-md-0 p-5">
         <b-img fluid-grow :src="require('@/assets/img/logo_ufc.png')"></b-img>
       </b-col>
 
-      <b-col cols="8" md="2" align-self="center" class="mt-4 mt-md-0">
+      <b-col cols="8" md="2" align-self="center" class="mt-4 mt-md-0 p-5">
         <b-img  :src="require('@/assets/img/logo_bu.png')" style="max-height: 90px;"></b-img>
       </b-col>
 
-      <b-col cols="8" md="2" class="mt-4 mt-md-0">
+      <b-col cols="8" md="2" class="mt-4 mt-md-0 p-5">
         <b-img fluid-grow :src="require('@/assets/img/logo_iut.png')"></b-img>
       </b-col>
 
-      <b-col cols="8" md="2" class="mt-4 mt-md-0">
+      <b-col cols="8" md="2" class="mt-4 mt-md-0 p-5">
         <b-img fluid-grow :src="require('@/assets/img/mmi_blanc.png')"></b-img>
       </b-col>
     </b-row>
 
-    <b-row class="bg-dark text-primary m-0 pt-4 pb-4">
+    <b-row class="bg-dark text-primary m-0 pt-5 pb-5">
       <b-col cols="12" md="3" class="ml-0 ml-md-5 mb-3 mb-md-0">
         <h5 class="w-100 pb-2 " style="border-bottom: solid 1px #B37CFF; ">Contact</h5>
         <router-link to="/contact-admin" class="text-underline">Nous contacter</router-link>

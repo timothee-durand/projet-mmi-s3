@@ -376,7 +376,7 @@ export default {
         this.listeMateriel = result.data.materiels.unique()
         this.listeRes = result.data.rdv.unique()
         if (this.listeMateriel.length === 0) {
-          this.$bvModal('Vous n\'avez pas de matériel à gérer... soit parce que vous n\'avez pas de département assigné ou parce qu\'il n\'y a pas de matériel assigné à votre département.')
+          this.$bvModal.msgBoxOk('Vous n\'avez pas de matériel à gérer... soit parce que vous n\'avez pas de département assigné ou parce qu\'il n\'y a pas de matériel assigné à votre département.')
         }
       })
     },
