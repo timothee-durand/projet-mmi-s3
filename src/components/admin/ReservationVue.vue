@@ -502,6 +502,7 @@ export default {
         this.getMat()
       })
     },
+
     addRes(){
       let data = new FormData();
       data.append("action", "few")
@@ -516,8 +517,7 @@ export default {
             this.$bvModal.hide("add-res-modal");
             this.getMat()
           }).catch(err => utilsServices.alertError(err, this));
-
-    }
+      }
 
 
   },

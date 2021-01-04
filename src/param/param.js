@@ -50,6 +50,7 @@ export default {
   creneaux: host+"creneaux",
   indisponibilites: host + "indisponibilites",
   passwordChange: host +"password/change",
+  verifyRes : host + "verify/res",
 
 
   allLDAP : host + "ldap/all",

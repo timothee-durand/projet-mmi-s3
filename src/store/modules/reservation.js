@@ -29,6 +29,11 @@ export default {
         getReservdateDebut(contexte)
         {
             return contexte.dateDebutPret;
+        },
+
+        getReservdateFin(contexte)
+        {
+            return contexte.dateFinPret;
         }
 
 

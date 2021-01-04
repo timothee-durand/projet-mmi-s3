@@ -56,8 +56,8 @@ export default {
     context.$bvModal.msgBoxOk(message + "(" + result + ")");
   },
   addDays(date, days) {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
+    var result = moment(date);
+    result.add(days, "days")
     return result;
   },
 }
