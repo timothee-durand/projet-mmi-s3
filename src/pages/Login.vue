@@ -46,25 +46,25 @@
 
       </b-form>
 
-      <b-form v-if="!inscription" class="d-flex flex-column " @submit="login">
+      <b-form v-if="!inscription" class="d-flex flex-column " @submit.prevent="login">
         <h3>Connexion</h3>
         <b-row>
           <b-col cols="4">
             <p class="mr-2">Identifiant universitaire :</p>
           </b-col>
           <b-col cols="8">
-            <b-input v-model="userToConnect.username" placeholder="mdupont" class="flex"></b-input>
+            <b-input v-model="userToConnect.username" placeholder="mdupont" class="flex" required></b-input>
           </b-col>
         </b-row>
 
         <b-row>
           <b-col cols="4"><p class="mr-2">Mot de passe :</p></b-col>
           <b-col cols="8">
-            <b-input v-model="userToConnect.password" type="password" placeholder="motdepasse"></b-input>
+            <b-input v-model="userToConnect.password" type="password" placeholder="motdepasse" required></b-input>
           </b-col>
         </b-row>
 
-        <b-btn type="submit" variant="primary">Se connecter</b-btn>
+        <b-btn type="submit" variant="primary" >Se connecter</b-btn>
 
         <b-btn v-b-modal.modal-psw-forgot size="sm" variant="outline-light" class="text-black-50 mt-4">Mot de passe oublié</b-btn>
       </b-form>
@@ -141,11 +141,12 @@ export default {
         this.$store.commit('setuser', result.user)
         this.$store.commit('setusertype', result.user_type)
 
-        if(this.$store.getters.isGest) {
-          this.$router.push("/admin");
+        if(this.$store.getters.isGest){
+          this.$router.push("/admin")
         } else {
           this.$router.push("/");
         }
+
       }).catch(err => {
         if(err.response.status === 418) {
           //si le mail n'est pas vérifié

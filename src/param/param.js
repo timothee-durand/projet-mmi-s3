@@ -51,6 +51,7 @@ export default {
   indisponibilites: host + "indisponibilites",
   passwordChange: host +"password/change",
   verifyRes : host + "verify/res",
+  verifyCaptcha : host + "verify/captcha",
 
 
   allLDAP : host + "ldap/all",
