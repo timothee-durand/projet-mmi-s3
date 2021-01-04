@@ -25,7 +25,7 @@
             <h3 style="width: 35%">{{materiel.nom}}</h3>
             <div class="cardDesc usageView" style="overflow: scroll" v-html="materiel.usage"></div>
               <b-button v-on:click="deleteItemFromReservation(materiel.id)" variant="white" v-b-tooltip.hover.left title="Retirer de la réservation" class="mr-0 ml-auto p-0"><i class="fas fa-trash text-secondary"></i></b-button>
-              <img v-if="materiel.pro === 1" src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
+              <img v-if="materiel.pro === 1" src="/assets/img/ico_pro.png" alt="premimum" class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start">
               <div v-else class="d-block ml-auto mr-0 float-right" style="width: 25px; align-self: start"></div>
           </div>
         </div>
