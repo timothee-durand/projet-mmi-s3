@@ -57,7 +57,7 @@
                     <div v-for="materiel in filterSelection" :key="materiel.id" class="p-4 col-md-6 col-12 mt-3">
                         <div class="c-card shadow p-4"
                              style="height: 270px; border-radius: 20px; background-color: #ffffff; overflow: hidden;">
-                            <img v-if="materiel.pro === 1" src="https://placekitten.com/20/20" alt="premimum" class="d-block ml-auto mb-1">
+                            <img v-if="materiel.pro === 1" v-b-tooltip.hover title="Ce materiel sera soumis à une potentielle verification de compétences" src="../../assets/img/ico_pro.png" style="width: 20px" alt="premimum" class="d-block ml-auto mb-1">
                             <div class="d-flex flex-row align-items-center mb-2">
                                 <!-- <b-carousel
                                         id="carousel-1"
