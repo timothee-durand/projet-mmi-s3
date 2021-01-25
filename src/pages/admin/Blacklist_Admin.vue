@@ -4,7 +4,7 @@
     <div class="blacklist containerRightAdmin p-4">
       <search-bar :modes="[]" :types-materiel="[]" @addMat="$bvModal.show('add-bl-modal')"></search-bar>
       <row-result v-for="bl in listeBlacklist" :key="bl.id" :nom="bl.nom + ' ' + bl.prenom " disable-dispo disable-ref
-                  img="../assets/img/person.png" :buttons="button"
+                  :img="'@/assets/img/person.png'" :buttons="button"
                   :id="bl.id" class="mt-2"
       @deleteBlacklist = "delBl"></row-result>
     </div>

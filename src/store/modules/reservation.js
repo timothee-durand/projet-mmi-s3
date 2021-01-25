@@ -31,6 +31,11 @@ export default {
             return contexte.dateDebutPret;
         },
 
+        getReservTimeDebut(contexte)
+        {
+            return contexte.timeDebutPret;
+        },
+
         getReservdateFin(contexte)
         {
             return contexte.dateFinPret;
@@ -95,6 +100,11 @@ export default {
         setReservdateDebutPret(state, date)
         {
             state.dateDebutPret = date;
+        },
+
+        setReservTimeDebutPret(state, time)
+        {
+            state.timeDebutPret = time;
         },
 
         cleanReserv(state)

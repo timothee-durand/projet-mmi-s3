@@ -47,4 +47,18 @@ export default {
     return axios.delete(param[type]+"/"+id).then(reponse => {return reponse.data} );
   },
 
+  getRdvGest(id, startDate){
+    axios.defaults.headers = {
+      'Authorization': 'Bearer ' + appService.getLocal()
+    }
+
+    let data = new FormData();
+    data.append("start_day", startDate);
+
+    return axios.post(param.gestionnaires+"/"+id+param.gesRdv,data  )
+      .then(function (response) {
+        return response.data;
+      });
+  }
+
 }

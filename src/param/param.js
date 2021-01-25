@@ -44,6 +44,7 @@ export default {
   malettes: host +  "malettes",
   departements: host +  "departements",
   gestionnaires: host +  "gestionnaires",
+  gesRdv:"/rdv",
   reservations: host +  "reservations",
   blacklists: host +  "blacklists",
   estpretes: host + "estpretes",

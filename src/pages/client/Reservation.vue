@@ -96,78 +96,16 @@
 
     <div v-else-if="checkState === 'rendez-vous'"
          class="containerRight p-5 d-flex justify-content-center align-items-center">
-      <div class="c-card windowCard shadow p-5">
-        <h2>Date de retrait du matériel</h2>
+      <RdvSelector v-for="res in resOrderByDep"
+                   :key="res.dep.id"
+                   :departement="res.dep.nom"
+                   :contient-materiel-pro="contientMaterielPro"
+                   :day-radio="dayRadio"
+                   :get-next-days="getNextDays()"
+                   :motivation="motivation"
+                   :sorted-mat="resOrderByDep"
 
-        <p>Choisissez le créneaux à partir duquel vous pouvez récupérer votre matériel.</p>
-        <label class="mr-2">{{
-            new Date($store.getters.getReservdateDebut).toLocaleDateString('fr-FR', {
-              weekday: 'long',
-              month: 'long',
-              day: '2-digit'
-            })
-          }} --</label>
-        <b-form-select
-            id="inline-form-time-picker"
-            class="mb-2 mr-sm-2 mb-sm-0"
-            style="width: min-content"
-            :options="[{ text: 'Heure', value: null }, '12h', '13h', '14h']"
-            :value="null"
-        ></b-form-select>
-        <b-form-select
-            id="inline-form-time-picker2"
-            class="mb-2 mr-sm-2 mb-sm-0"
-            style="width: min-content"
-            :options="[{ text: 'Minutes', value: null }, '00', '15', '30']"
-            :value="null"
-        ></b-form-select>
-
-        <h2 class="mt-5">Date de rendu du matériel</h2>
-        <p>Choisissez le créneaux à partir duquel vous souhaitez rendre votre matériel.</p>
-
-        <div v-for="(date, index) in getNextDays()" :key="index" class="w-100 d-flex flex-row">
-          <b-form-radio name="dayRadios" v-model="dayRadio" :value="date"
-                        class="mb-2 mr-sm-2 mb-sm-0 d-flex align-items-center w-25">
-            <div class="mr-2">{{ getFormatedDate(date)}}
-              --
-            </div>
-          </b-form-radio>
-          <b-form-select
-              id="inline-form-time-picker"
-              class="mb-2 mr-sm-2 mb-sm-0"
-              style="width: min-content"
-              :options="[{ text: 'Heure', value: null }, '12h', '13h', '14h']"
-              :value="null"
-
-          ></b-form-select>
-          <b-form-select
-              id="inline-form-time-picker2"
-              class="mb-2 mr-sm-2 mb-sm-0"
-              style="width: min-content"
-              :options="[{ text: 'Minutes', value: null }, '00', '15', '30']"
-              :value="null"
-          ></b-form-select>
-        </div>
-
-        <b-button v-if="contientMaterielPro" variant="primary" pill class="position-fixed"
-                  style="right:150px; bottom: 40px"
-                  @click="$router.push('motivation')">
-          Retour
-        </b-button>
-        <b-button v-else variant="primary" pill class="position-fixed" style="right:150px; bottom: 40px"
-                  @click="$router.push('selection')">
-          Retour
-        </b-button>
-        <b-button v-if="dayRadio !== null" variant="primary" pill class="position-fixed"
-                  style="right:40px; bottom: 40px"
-                  @click="$router.push('lieu')">
-          Continuer
-        </b-button>
-        <b-button v-b-tooltip.hover title="Merci de selectionner une date de retour et des horaires appropriés" v-else
-                  disable pill class="position-fixed" style="right:40px; bottom: 40px">
-          Continuer
-        </b-button>
-      </div>
+      />
     </div>
 
     <div v-else-if="checkState === 'lieu'" class="containerRight  p-5 d-flex justify-content-center align-items-center">
@@ -238,11 +176,13 @@ import SidebarClient from '@/components/SidebarClient'
 import ajaxService from '@/services/ajaxService.js'
 import utilsServices from '@/services/utilsServices.js'
 //import param from '@/param/param.js'
-import moment from "moment"
+import moment from 'moment'
+import RdvSelector from '@/pages/client/RdvSelector.vue'
 
 export default {
   name: 'Reservation',
   components: {
+    RdvSelector,
     'SidebarClient': SidebarClient
   },
   data () {
@@ -274,6 +214,48 @@ export default {
           }
           return false
         },
+        resOrderByDep(){
+          let reponse = {};
+          // on s'occupe déjà des matériels
+          this.selectedMateriel.forEach(function (mat) {
+            // si le département est déjà dans le tableau
+            if (mat.departement.id in reponse) {
+              //on lui ajoute le matériel
+              reponse[mat.departement.id]['mats'].push(mat)
+            } else {
+              //sinon on ajoute le département
+              reponse[mat.departement.id] = {
+                dep: mat.departement,
+                mats: [
+                  mat
+                ],
+                mals:[]
+              }
+            }
+          });
+          //ensuite on s'occupe des malettes
+          this.selectedMalette.forEach(function (mat) {
+            let key = mat.materiels[0].departement_id;
+            console.log("key", key);
+
+            // si le département est déjà dans le tableau
+            if (key in reponse) {
+              //on lui ajoute le matériel
+              reponse[key]['mals'].push(mat)
+            } else {
+              //sinon on ajoute le département
+              reponse[key] = {
+                dep: mat.materiels[0].departement,
+                mals: [
+                  mat
+                ]
+              }
+            }
+          });
+
+          return reponse
+
+        }
       },
   methods:
       {
