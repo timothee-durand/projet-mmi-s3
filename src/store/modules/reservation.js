@@ -8,6 +8,7 @@ export default {
         timeDebutPret : null,
         dateFinPret : null,
         timeFinPret : null,
+        rdvsByDep:{}
     },
 
     getters: {
@@ -105,6 +106,10 @@ export default {
         setReservTimeDebutPret(state, time)
         {
             state.timeDebutPret = time;
+        },
+
+        setRdvByDep(state, obj) {
+            state.rdvsByDep[obj.dep] = obj.rdvs;
         },
 
         cleanReserv(state)

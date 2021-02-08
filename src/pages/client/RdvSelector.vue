@@ -5,38 +5,16 @@
     <div v-if="stateOfSelection === 2">
       <p><strong>Rendez-vous de retrait du matériel :</strong> {{rdvRetrait | moment("DD/MM à HH:mm")}}</p>
       <p><strong>Rendez-vous de rendu du matériel :</strong> {{rdvRendu | moment("DD/MM à HH:mm")}}</p>
-      <b-button-group>
+      <b-button-group v-if="stateOfSelection !==3">
         <b-button @click="tryAgain" variant="outline-danger" class="w-50">
           Sélectionner d'autres horaires
         </b-button>
-        <b-button @click="tryAgain" variant="primary" class="w-50">
-          Valider ces horaires
+        <b-button @click="validateRDV" variant="primary" class="w-50">
+          Valider
         </b-button>
       </b-button-group>
-
     </div>
-
-
     <full-calendar-wrapper :events-perso="listeRdv" @selectRdv="selectEvent" v-if="stateOfSelection !== 2"></full-calendar-wrapper>
-
-    <b-button v-if="contientMaterielPro" variant="primary" pill class="position-fixed"
-              style="right:150px; bottom: 40px"
-              @click="$router.push('motivation')">
-      Retour
-    </b-button>
-    <b-button v-else variant="primary" pill class="position-fixed" style="right:150px; bottom: 40px"
-              @click="$router.push('selection')">
-      Retour
-    </b-button>
-    <b-button v-if="dayRadio !== null" variant="primary" pill class="position-fixed"
-              style="right:40px; bottom: 40px"
-              @click="$router.push('lieu')">
-      Continuer
-    </b-button>
-    <b-button v-b-tooltip.hover title="Merci de selectionner une date de retour et des horaires appropriés" v-else
-              disable pill class="position-fixed" style="right:40px; bottom: 40px">
-      Continuer
-    </b-button>
   </div>
 </template>
 <script>
@@ -202,8 +180,25 @@ export default {
     },
     tryAgain(){
       this.stateOfSelection = 0;
+    },
+    validateRDV(){
+      this.$bvModal.msgBoxConfirm("Êtes-vous sûrs de vos rendez-vous ?", {
+        okTitle:"Oui",
+        cancelTitle:"Non"
+      }).then(value=> {
+        if(value) {
+          this.$emit('rdvOK');
+          this.stateOfSelection = 3;
+          this.$store.commit("setRdvByDep", {
+            dep:this.departement,
+            rdvs:{
+              date_debut:this.rdvRetrait,
+              date_fin:this.rdvRendu
+            }
+          })
+        }
+      })
     }
-
   },
   mounted () {
     this.getRdvFromMat();

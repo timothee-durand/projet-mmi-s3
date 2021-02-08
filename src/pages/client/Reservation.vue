@@ -100,12 +100,31 @@
                    :key="res.dep.id"
                    :departement="res.dep.nom"
                    :contient-materiel-pro="contientMaterielPro"
-                   :day-radio="dayRadio"
+                   :day-radio="resRdvOk"
                    :get-next-days="getNextDays()"
                    :motivation="motivation"
                    :sorted-mat="resOrderByDep"
-
+                   class="mr-2"
+                   @rdvOK = "addRdvOk()"
       />
+      <b-button v-if="contientMaterielPro" variant="primary" pill class="position-fixed"
+                style="right:150px; bottom: 40px"
+                @click="$router.push('motivation')">
+        Retour
+      </b-button>
+      <b-button v-else variant="primary" pill class="position-fixed" style="right:150px; bottom: 40px"
+                @click="$router.push('selection')">
+        Retour
+      </b-button>
+      <b-button v-if="resRdvOk >= Object.keys(resOrderByDep).length" variant="primary" pill class="position-fixed"
+                style="right:40px; bottom: 40px"
+                @click="$router.push('lieu')">
+        Continuer
+      </b-button>
+      <b-button v-b-tooltip.hover title="Merci de selectionner une date de retour et des horaires appropriés" v-else
+                disable pill class="position-fixed" style="right:40px; bottom: 40px">
+        Continuer
+      </b-button>
     </div>
 
     <div v-else-if="checkState === 'lieu'" class="containerRight  p-5 d-flex justify-content-center align-items-center">
@@ -194,7 +213,7 @@ export default {
       allMalettes: [],
       selectedMateriel: [],
       selectedMalette: [],
-      dayRadio: null,
+      resRdvOk: 0,
     }
   },
   computed:
@@ -355,7 +374,7 @@ export default {
             let dateDebut = this.$store.getters.getReservdateDebut;
             dateDebut = dateDebut + " 12:34:00";
             data.append('date_debut', dateDebut )
-            let dateFin = moment(this.dayRadio, "").format("YYYY-MM-DD");
+            let dateFin = moment(this.resRdvOk, "").format("YYYY-MM-DD");
             dateFin = dateFin  + " 12:34:00"
             data.append('date_fin', dateFin);
 
@@ -388,7 +407,7 @@ export default {
               let dateDebut = this.$store.getters.getReservdateDebut;
               dateDebut = dateDebut + " 12:34:00";
               data.append('date_debut', dateDebut )
-              let dateFin = moment(this.dayRadio, "").format("YYYY-MM-DD");
+              let dateFin = moment(this.resRdvOk, "").format("YYYY-MM-DD");
               dateFin = dateFin  + " 12:34:00"
               data.append('date_fin', dateFin);
 
@@ -410,11 +429,20 @@ export default {
             })
 
           }
+        },
+        addRdvOk(){
+          this.resRdvOk++;
+          if(this.resRdvOk >= this.resOrderByDep.length) {
+            //si on a tout validé on avance à lieu
+            this.$router.push("lieu");
+          }
+          console.log("resorderbydep", this.resOrderByDep.length)
         }
       },
   mounted () {
     this.getMateriel()
     this.getMalette()
+    console.log(this.resOrderByDep.length)
   }
 
 }
