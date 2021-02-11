@@ -14,7 +14,7 @@
         </b-button>
       </b-button-group>
     </div>
-    <full-calendar-wrapper :events-perso="listeRdv" @selectRdv="selectEvent" v-if="stateOfSelection !== 2"></full-calendar-wrapper>
+    <full-calendar-wrapper :events-perso="listeRdv" @selectRdv="selectEvent" v-if="stateOfSelection === 0 || stateOfSelection === 1"></full-calendar-wrapper>
   </div>
 </template>
 <script>
@@ -61,6 +61,9 @@ export default {
         case 2:
           reponse = "Vous avez fini votre séletion pour "+this.departement
           break;
+        case 3:
+          reponse = "Vos rendez-vous sont validés !"
+          break;
         default:
           reponse = "ERROR WITH STATE OF SELECTION"
       }
@@ -77,6 +80,9 @@ export default {
           break;
         case 2:
           reponse = "Vérification"
+          break;
+        case 3:
+          reponse = "Validé"
           break;
         default:
           reponse = "ERROR WITH STATE OF SELECTION"
@@ -180,6 +186,7 @@ export default {
     },
     tryAgain(){
       this.stateOfSelection = 0;
+      this.getRdvFromMat();
     },
     validateRDV(){
       this.$bvModal.msgBoxConfirm("Êtes-vous sûrs de vos rendez-vous ?", {

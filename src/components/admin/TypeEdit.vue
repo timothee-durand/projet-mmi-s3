@@ -1,5 +1,5 @@
 <template>
-  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer :on-show-method="setType">
+  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer >
     <b-form enctype="multipart/form-data" @submit.prevent="send">
 
         <b-input placeholder="Nom" v-model="type.nom" class="mr-2 border-primary " required :state="type.nom.length > 4"></b-input>
@@ -110,7 +110,12 @@ export default {
     }
 
   },
-
+  mounted () {
+    this.setGestionnaires()
+    this.$root.$on("bv::modal::shown", () => {
+      this.setType()
+    })
+  }
 
 }
 </script>

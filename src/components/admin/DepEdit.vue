@@ -1,5 +1,5 @@
 <template>
-  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" :on-show-method="setDepartement" hide-footer :on-close-method="onClose">
+  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer :on-close-method="onClose">
     <b-form  @submit.prevent="send">
       <b-input-group class="mb-2">
         <b-input placeholder="Nom" v-model="departement.nom" class="mr-2 border-primary " required
@@ -165,7 +165,9 @@ export default {
   },
   mounted () {
     this.setGestionnaires()
-
+    this.$root.$on("bv::modal::shown", () => {
+      this.setDepartement()
+    })
   }
 
 }

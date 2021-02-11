@@ -1,5 +1,5 @@
 <template>
-  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer :on-show-method="setMalette">
+  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" :callback-ok="send" hide-footer>
     <b-form enctype="multipart/form-data" @submit.prevent="send">
 
       <b-input-group class="mb-2">
@@ -116,6 +116,10 @@ export default {
     }
 
   },
-
+  mounted () {
+    this.$root.$on("bv::modal::shown", () => {
+      this.setMalette()
+    })
+  }
 }
 </script>

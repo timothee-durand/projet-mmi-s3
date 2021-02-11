@@ -26,7 +26,6 @@
                   :type="modeSearch"
                   class="mt-3"></row-result>
 
-
       <modal-pictum id-modal="lock-mat-modal" title="Gestion indisponibilité matériel" hide-footer>
         <b-form @submit.prevent="sendLockMat">
           <b-input-group>
@@ -50,7 +49,6 @@
           <b-button variant="outline-primary" type="submit">Valider</b-button>
         </b-form>
       </modal-pictum>
-
 
       <mat-edit :modal="modal" id-perso="modif-mat" :mode="modeMatEdit" :callback-ok="getListe"
                 :materiel-to-edit="matSelected"/>

@@ -1,5 +1,5 @@
 <template>
-  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" hide-footer size="lg" :on-show-method="setMat">
+  <modal-pictum title="Créer/Editer" :id-modal="idPerso" text-cancel-button="Fermer" hide-footer size="lg">
     <b-form enctype="multipart/form-data" @submit.prevent="send">
       <b-input-group class="mb-2">
         <b-input placeholder="Nom" v-model="materiel.nom" class="mr-2 border-primary " required
@@ -254,6 +254,17 @@ export default {
     this.setMals()
     this.setTypes()
     this.setDepartements()
+    console.log("matedit mounted")
+
+    this.$root.$on("bv::modal::shown", () => {
+      this.setMat()
+    })
+  },
+  updated () {
+    console.log("matedit updated")
+  },
+  beforeUpdate () {
+    console.log("before matedit updated")
   }
 }
 </script>
