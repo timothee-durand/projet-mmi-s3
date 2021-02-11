@@ -111,9 +111,10 @@ export default {
 
   },
   mounted () {
-    this.setGestionnaires()
     this.$root.$on("bv::modal::shown", () => {
+      //console.log("modal-show")
       this.setType()
+
     })
   }
 
