@@ -153,7 +153,8 @@ export default {
           cancelTitle:"Non"
         }).then(value=> {
           if(value) {
-            this.addRdvDebut(payload.start)
+            this.addRdvDebut(payload.start);
+            this.$emit("updateSidebar");
           }
         })
       } else if (this.stateOfSelection === 1) {

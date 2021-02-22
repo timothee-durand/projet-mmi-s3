@@ -7,7 +7,9 @@
         <span v-if="contientMaterielPro"
               v-bind:class="{'text-white': true, activeStepper: checkifStateIs('motivation')}">Motivation</span>
         <div v-if="contientMaterielPro" class="border-left border-white mt-2 mb-2 separator"></div>
-        <span v-bind:class="{'text-white': true, activeStepper: checkifStateIs('rendez-vous')}">Rendez-vous</span>
+        <span v-bind:class="{'text-white': true, activeStepper: checkifStateIs('date-emprunt')}">Date d'emprunt</span>
+        <div class="border-left border-white mt-2 mb-2 separator"></div>
+        <span v-bind:class="{'text-white': true, activeStepper: checkifStateIs('date-rendu')}">Date de rendu</span>
         <div class="border-left border-white mt-2 mb-2 separator"></div>
         <span
             v-bind:class="{'text-white': true, activeStepper: checkifStateIs('lieu')}">Où récupérer mon matériel ?</span>
@@ -88,13 +90,13 @@
           Retour
         </b-button>
         <b-button variant="primary" pill class="position-fixed" style="right:40px; bottom: 40px"
-                  @click="$router.push('rendez-vous')">
+                  @click="$router.push('date-emprunt')">
           Continuer
         </b-button>
       </div>
     </div>
 
-    <div v-else-if="checkState === 'rendez-vous'"
+    <div v-else-if="checkState === 'date-emprunt' || checkState === 'date-rendu' "
          class="containerRight p-5 d-flex justify-content-center align-items-center">
       <RdvSelector v-for="res in resOrderByDep"
                    :key="res.dep.id"
@@ -106,6 +108,7 @@
                    :sorted-mat="resOrderByDep"
                    class="mr-2"
                    @rdvOK = "addRdvOk()"
+                   @updateSidebar = "updateSidebar()"
       />
       <b-button v-if="contientMaterielPro" variant="primary" pill class="position-fixed"
                 style="right:150px; bottom: 40px"
@@ -147,7 +150,7 @@
         </div>
       </div>
       <b-button variant="primary" pill class="position-fixed" style="right:150px; bottom: 40px"
-                @click="$router.push('rendez-vous')">
+                @click="$router.push('date-emprunt')">
         Retour
       </b-button>
       <b-button variant="primary" pill class="position-fixed" style="right:40px; bottom: 40px"
@@ -437,6 +440,12 @@ export default {
             this.$router.push("lieu");
           }
           console.log("resorderbydep", this.resOrderByDep.length)
+        },
+
+        updateSidebar()
+        {
+          this.$router.push('date-rendu');
+          console.log("hello update sidebar");
         }
       },
   mounted () {
