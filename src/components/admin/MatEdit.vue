@@ -254,18 +254,13 @@ export default {
     this.setMals()
     this.setTypes()
     this.setDepartements()
-    console.log("matedit mounted")
+ //   console.log("matedit mounted")
 
     this.$root.$on("bv::modal::shown", () => {
       this.setMat()
     })
   },
-  updated () {
-    console.log("matedit updated")
-  },
-  beforeUpdate () {
-    console.log("before matedit updated")
-  }
+
 }
 </script>
 
